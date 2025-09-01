@@ -1,0 +1,309 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ImoveisCorretor {
+  id             String   @id @default(cuid())
+  status         Boolean  @default(true)
+  nomeCliente    String
+  mensagem       String
+  codigosImoveis String[] @default([])
+  corretor       Corretor @relation(fields: [corretorId], references: [id])
+  corretorId     String
+  createdAt      DateTime @default(now())
+}
+
+model Corretor {
+  id        String            @id @default(cuid())
+  name      String
+  email     String
+  telefone  String
+  CRECI     String            @unique
+  createdAt DateTime          @default(now())
+  status    Boolean           @default(true)
+  imoveis   ImoveisCorretor[]
+}
+
+model User {
+  id       String        @id @default(cuid())
+  name     String
+  perfil   PerfilUsuario
+  telefone String
+  email    String
+  login    String        @unique
+  senha    String
+  status   Boolean       @default(true)
+}
+
+model Banners {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  subtitulo String
+  imagem    String
+  publicId  String
+  url       String
+  createdAt DateTime @default(now())
+  status    Boolean  @default(true)
+}
+
+model Slides {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  imagem    String
+  publicId  String
+  url       String
+  createdAt DateTime @default(now())
+  status    Boolean  @default(true)
+  ordem     Int
+}
+
+model Chamadas {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  subtitulo String
+  imagem    String
+  publicId  String
+  url       String
+  status    Boolean  @default(true)
+  ordem     Int
+  createdAt DateTime @default(now())
+}
+
+model MaisAcessado {
+  id     Int     @id @default(autoincrement())
+  titulo String
+  url    String
+  status Boolean @default(true)
+}
+
+model PaginasConteudo {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  ordem     Int
+  conteudo  String?
+  imagem    String?
+  publicId  String?
+  url       String?
+  tipo      String
+  isOnMenu  Boolean  @default(true)
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model Secao {
+  id               Int     @id @default(autoincrement())
+  titulo           String
+  url              String
+  sitemap          Boolean @default(true)
+  edicaoTextoFundo Boolean @default(false)
+  descricao        String
+  palavrasChave    String
+  tituloh1         String?
+  textoPagina      String?
+  imagem           String?
+  publicId         String?
+}
+
+model ConfiguracaoPagina {
+  id             Int     @id @default(autoincrement())
+  nomeSite       String?
+  CRECI          String? @unique
+  logoUrl        String?
+  facebookUrl    String?
+  instagramUrl   String?
+  youtubeUrl     String?
+  twitterUrl     String?
+  whatsappNumber String?
+  linkedInUrl    String?
+  sobreNos       String?
+
+  enderecos Endereco[]
+}
+
+model Endereco {
+  id             Int     @id @default(autoincrement())
+  rua            String?
+  bairro         String?
+  cidade         String?
+  estado         String?
+  cep            String?
+  linkGoogleMaps String?
+
+  telefone1       String?
+  isWhatsApp1     Boolean?
+  tituloTelefone1 String?
+  telefone2       String?
+  isWhatsApp2     Boolean?
+  tituloTelefone2 String?
+  telefone3       String?
+  isWhatsApp3     Boolean?
+  tituloTelefone3 String?
+
+  configuracaoId Int
+  configuracao   ConfiguracaoPagina @relation(fields: [configuracaoId], references: [id], onDelete: Cascade)
+}
+
+model Formulario {
+  id            String               @id @default(cuid())
+  tipo          tipoFormulario
+  nome          String
+  email         String
+  telefone      String
+  urlRespondida String
+  origem        OrigemFormulario     @default(ORGANICO)
+  interesse     InteresseFormulario?
+  dataEnvio     DateTime             @default(now())
+  turnoVisita   String?
+  DataVisita    DateTime?
+  codigoImovel  String?
+  mensagem      String?
+  condominio    String?
+  assunto       String?
+  finalidade    String?
+  valorDesejado Decimal?
+}
+
+enum tipoFormulario {
+  WHATSAPP
+  FINANCIAMENTO
+  INFORMACOES
+  CONTATO
+  VISITA
+  ANUNCIEIMOVEL
+  ADMIMOVEL
+  ADMCONDOMINIO
+}
+
+enum InteresseFormulario {
+  VENDA
+  LOCACAO
+}
+
+enum OrigemFormulario {
+  ORGANICO
+  YOUTUBE
+  META
+  LINKEDIN
+  INSTAGRAM
+  FACEBOOK
+  GOOGLE
+}
+
+enum PerfilUsuario {
+  ADMIN
+  CORRETOR
+  SUPERADMIN
+}
+
+model Imovel {
+  id                         String    @id @default(uuid()) @map("id")
+  Codigo                     String?   @unique
+  ValorIptu                  String?   @map("valorIptu")
+  ValorCondominio            String?   @map("valorCondominio")
+  Categoria                  String?
+  InformacaoVenda            String?   @map("informacaoVenda")
+  ObsVenda                   String?   @map("obsVenda")
+  Bairro                     String?
+  GMapsLatitude              String?   @map("gMapsLatitude")
+  GMapsLongitude             String?   @map("gMapsLongitude")
+  DescricaoWeb               String?   @map("descricaoWeb")
+  Cidade                     String?
+  ValorVenda                 Int?      @map("valorVenda")
+  ValorLocacao               Int?      @map("valorLocacao")
+  Dormitorios                String?
+  Suites                     String?
+  Vagas                      String?
+  AreaTotal                  Float?    @map("areaTotal")
+  AreaTerreno                Float?    @map("areaTerreno")
+  AreaConstruida             Float?    @map("areaConstruida")
+  Descricao                  String?
+  DataHoraAtualizacao        DateTime? @map("dataHoraAtualizacao")
+  Lancamento                 String?
+  Finalidade                 String?
+  Status                     String?
+  Empreendimento             String?
+  Endereco                   String?
+  Numero                     String?
+  Complemento                String?
+  UF                         String?
+  CEP                        String?
+  DestaqueWeb                String?   @map("destaqueWeb")
+  FotoDestaque               String?   @map("fotoDestaque")
+  Latitude                   String?
+  Longitude                  String?
+  TituloSite                 String?   @map("tituloSite")
+  FotoDestaqueEmpreendimento String?   @map("fotoDestaqueEmpreendimento")
+  VideoDestaque              String?   @map("videoDestaque")
+  Mobiliado                  String?
+
+  fotos           Foto[]
+  caracteristicas Caracteristica[]
+
+  @@index([Cidade, Status])
+  @@index([Bairro])
+  @@index([Categoria])
+  @@index([ValorVenda])
+  @@index([ValorLocacao])
+  @@index([DataHoraAtualizacao])
+  @@index([Lancamento])
+  @@index([Mobiliado])
+  @@map("imoveis")
+}
+
+model Foto {
+  id         Int     @id @default(autoincrement())
+  destaque   String?
+  codigo     String?
+  url        String?
+  urlPequena String?
+
+  imovelId String
+  imovel   Imovel @relation(fields: [imovelId], references: [id], onDelete: Cascade)
+
+  @@index([imovelId, id])
+  @@map("fotos")
+}
+
+model Caracteristica {
+  id    Int    @id @default(autoincrement())
+  nome  String
+  valor String
+
+  imovelId String
+  imovel   Imovel @relation(fields: [imovelId], references: [id], onDelete: Cascade)
+
+  @@index([imovelId])
+  @@index([nome, valor])
+  @@map("caracteristicas")
+}
+
+model Finalidade {
+  id   Int    @id @default(autoincrement())
+  nome String
+  tipo String
+}
+
+model Cidade {
+  id      Int      @id @default(autoincrement())
+  nome    String   @unique
+  bairros Bairro[]
+}
+
+model Bairro {
+  id       Int    @id @default(autoincrement())
+  nome     String
+  cidadeId Int
+  cidade   Cidade @relation(fields: [cidadeId], references: [id])
+}
