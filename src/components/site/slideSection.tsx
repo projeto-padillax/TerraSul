@@ -77,7 +77,7 @@ export default function SlideSection({ slides }: SlideSectionProps) {
               key={index}
               onClick={() => api?.scrollTo(index)}
               className={`w-4 h-4 rounded-full transition-all duration-300 cursor-pointer ${
-                currentIndex === index ? "bg-[#4f7dc3]" : "bg-[#e7e7e7]"
+                currentIndex === index ? "bg-site-primary" : "bg-[#e7e7e7]"
               }`}
               aria-label={`Ir para o slide ${index + 1}`}
               aria-current={currentIndex === index ? "true" : undefined}

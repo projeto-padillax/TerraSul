@@ -115,7 +115,7 @@ export function HeroSection(banner: HeroSectionProps) {
         ? searchData.locations[0].split(":")[0] +
           "+" +
           searchData.locations[0].split(":")[1]
-        : "Piracicaba"
+        : "porto alegre"
     }`;
 
     router.push(`${path}?${decodeURIComponent(newSearchParams.toString())}`);
@@ -129,7 +129,7 @@ export function HeroSection(banner: HeroSectionProps) {
         ? searchData.locations[0].split(":")[0] +
           "+" +
           searchData.locations[0].split(":")[1]
-        : "Piracicaba"
+        : "porto alegre"
     }`;
 
     const newSearchParams = new URLSearchParams();
@@ -147,7 +147,7 @@ export function HeroSection(banner: HeroSectionProps) {
             ? searchData.locations[0].split(":")[0] +
               "+" +
               searchData.locations[0].split(":")[1]
-            : "Piracicaba"
+            : "porto alegre"
         }/${codigo}`
       );
     } catch (error) {
@@ -182,52 +182,10 @@ export function HeroSection(banner: HeroSectionProps) {
             </p>
           )}
 
-          {/* Search tabs */}
-          <div className="flex gap-8">
-            <Link
-              href="https://www.gruposouza.leadlink.com.br/busca/comprar/cidade/piracicaba/lancamentos/s/1/"
-              className="pt-2 text-white bg-transparent text-[18.4px] font-semibold hover:font-semibold hover:border-b-[#4F7DC3] hover:border-b-2 border-b-2 border-b-transparent"
-            >
-              Lançamentos
-            </Link>
-            <Link
-              href="#"
-              className="pt-2 bg-transparent text-white text-[18.4px] font-semibold hover:font-semibold hover:border-b-[#4F7DC3] hover:border-b-2 border-b-2 border-b-transparent"
-            >
-              Portugal
-            </Link>
-            <Link
-              href="#"
-              className="pt-2 bg-transparent text-white text-[18.4px] font-semibold hover:font-semibold hover:border-b-[#4F7DC3] hover:border-b-2 border-b-2 border-b-transparent"
-            >
-              Litoral
-            </Link>
-          </div>
-
           {/* Search form */}
-          <div className="bg-white rounded-lg p-4 shadow-lg w-[full] lg:max-w-4xl mt-4 lg:w-fit">
+          <div className="bg-white rounded-lg p-4 shadow-lg w-[full] lg:max-w-4xl mt-4 md:w-fit">
             <div className="flex flex-col md:flex-row w-[full] justify-start items-center md:gap-2">
-              <div className=" flex flex-col gap-y-4 w-full md:grid md:grid-cols-5 md:gap-2">
-                <Select
-                  value={searchData.action}
-                  onValueChange={(value) =>
-                    setSearchData({ ...searchData, action: value })
-                  }
-                >
-                  <SelectTrigger
-                    id="action-trigger"
-                    aria-labelledby="action-label"
-                    title="Ação"
-                    className="lg:data-[size=default]:h-12 w-full font-medium border-0 shadow-none cursor-pointer"
-                  >
-                    <SelectValue placeholder="Comprar" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="comprar">Comprar</SelectItem>
-                    <SelectItem value="alugar">Alugar</SelectItem>
-                  </SelectContent>
-                </Select>
-
+              <div className=" flex flex-col gap-y-4 w-full md:grid md:grid-cols-4 md:gap-2">
                 <Button
                   variant="outline"
                   onClick={() => openModal("type")}
@@ -325,7 +283,7 @@ export function HeroSection(banner: HeroSectionProps) {
               </div>
               <Button
                 onClick={handleSearch}
-                className="bg-[#4f7dc3] hover:bg-[#0084d7] hover:cursor-pointer w-36 md:h-12 md:w-12 md:mt-0 mt-4 cursor-pointer"
+                className="bg-site-primary hover:bg-site-primary-hover hover:cursor-pointer w-36 md:h-12 md:w-12 md:mt-0 mt-4 cursor-pointer"
                 aria-label="Valor de/até"
               >
                 <Search className="h-6 w-6" />

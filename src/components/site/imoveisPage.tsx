@@ -119,7 +119,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         ? searchData.locations[0].split(":")[0] +
           "+" +
           searchData.locations[0].split(":")[1]
-        : "Piracicaba"
+        : "porto alegre"
     }`;
     if (searchData.action) newSearchParams.set("action", searchData.action);
     if (searchData.tipos?.length > 0)
@@ -332,7 +332,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
             ? searchData.locations[0].split(":")[0] +
               "+" +
               searchData.locations[0].split(":")[1]
-            : "Piracicaba"
+            : "porto alegre"
         }/${code}`
       );
     } catch (error) {
@@ -349,21 +349,6 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         <div className="bg-white w-[full] max-w-7xl px-4 mx-auto py-4 border-t-1 ">
           <div className="flex flex-col md:flex-row w-[full] justify-start items-center md:gap-2">
             <div className="grid grid-cols-2 gap-4 md:flex md:flex-row md:gap-2 md:flex-wrap md:justify-between w-full justify-start items-center">
-              <Select
-                value={searchData.action}
-                onValueChange={(value) => {
-                  setSearchData({ ...searchData, action: value });
-                  setPage(1); // R}eset page to 1 when action changes
-                }}
-              >
-                <SelectTrigger className="lg:data-[size=default]:h-12 px-0 w-full md:w-fit border-0 shadow-none cursor-pointer font-medium">
-                  <SelectValue placeholder="Comprar" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="comprar">Comprar</SelectItem>
-                  <SelectItem value="alugar">Alugar</SelectItem>
-                </SelectContent>
-              </Select>
 
               <Button
                 variant="outline"
@@ -416,9 +401,9 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                       }}
                       className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${
                         searchData.quartos === num.toString()
-                          ? "bg-[#4F7DC3] text-white font-bold"
+                          ? "bg-site-primary text-white font-bold"
                           : "bg-white text-black font-normal"
-                      }  hover:bg-[#4F7DC3] hover:text-white hover:font-bold`}
+                      }  hover:bg-site-primary hover:text-white hover:font-bold`}
                     >
                       {num}+
                     </button>
@@ -498,7 +483,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                 />
                 <Button
                   onClick={() => handleSearchByCode(codigo)}
-                  className="bg-transparent rounded-none h-full cursor-pointer hover:bg-[#4F7DC3] text-gray-500 hover:text-white"
+                  className="bg-transparent rounded-none h-full cursor-pointer hover:bg-site-primary text-gray-500 hover:text-white"
                 >
                   <Search className="h-4 w-4 text-current" />
                 </Button>
@@ -555,9 +540,9 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                       }}
                       className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${
                         searchData.suites === num.toString()
-                          ? "bg-[#4F7DC3] text-white font-bold"
+                          ? "bg-site-primary text-white font-bold"
                           : "bg-white text-black font-normal"
-                      }  hover:bg-[#4F7DC3] hover:text-white hover:font-bold`}
+                      }  hover:bg-site-primary hover:text-white hover:font-bold`}
                     >
                       {num}+
                     </button>
@@ -583,9 +568,9 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                       }}
                       className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${
                         searchData.vagas === num.toString()
-                          ? "bg-[#4F7DC3] text-white font-bold"
+                          ? "bg-site-primary text-white font-bold"
                           : "bg-white text-black font-normal"
-                      }  hover:bg-[#4F7DC3] hover:text-white hover:font-bold`}
+                      }  hover:bg-site-primary hover:text-white hover:font-bold`}
                     >
                       {num}+
                     </button>

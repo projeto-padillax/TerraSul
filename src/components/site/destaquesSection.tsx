@@ -104,18 +104,18 @@ export function DestaquesSection({ destaques }: DestaquesSectionProps) {
                 relative py-1 inline-block group
                 transition-colors duration-300 ease-in-out
                 cursor-pointer
-                ${activeTab === tab ? "text-[#0084d7]" : "text-gray-800"}
-                hover:text-[#005a9e]
+                ${activeTab === tab ? "text-site-primary" : "text-[#303030]"}
+                hover:text-site-primary-hover
               `}
               >
                 {tab}
                 {/* Animated bottom border with fade effect */}
                 <span
                   className={`
-                  absolute bottom-0 left-0 h-[2px] w-1/2 w-full bg-[#0084d7]
+                  absolute bottom-0 left-0 h-[2px] w-1/2 w-full bg-site-primary
                   transition-opacity duration-300 ease-in-out
                   ${activeTab === tab ? "opacity-100" : "opacity-0"}
-                  group-hover:opacity-100 group-hover:bg-[#0084d7]
+                  group-hover:opacity-100 group-hover:bg-site-primary
                 `}
                 ></span>
               </button>

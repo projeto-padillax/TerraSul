@@ -133,7 +133,7 @@ export function ValueRangeModal({ isOpen, onClose, selectedRange, onRangeChange 
 
         {/* Footer */}
         <div className="flex justify-center gap-3 pt-4 border-t">
-          <Button onClick={handleConfirm} className="bg-[#4F7DC3] hover:bg-[#0084d7] text-white">
+          <Button onClick={handleConfirm} className="bg-site-primary hover:bg-[#0084d7] text-white">
             OK
           </Button>
         </div>

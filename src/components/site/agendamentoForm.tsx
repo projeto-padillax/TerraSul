@@ -158,7 +158,7 @@ export default function AgendamentoForm({ codigo }: AgendamentoFormProps) {
                                             'min-w-[85px] rounded-md px-3 py-2 text-[12px] text-center font-semibold',
                                             'border transition-colors',
                                             isSelecionado
-                                                ? 'bg-[#4f7dc3] border-[#4f7dc3] text-white'
+                                                ? 'bg-site-primary border-site-primary-hover text-white'
                                                 : 'bg-white border-gray-400 text-gray-800 hover:bg-gray-50'
                                         ].join(' ')}
                                     >
@@ -228,7 +228,7 @@ export default function AgendamentoForm({ codigo }: AgendamentoFormProps) {
                         <button
                             type="submit"
                             disabled={isPending}
-                            className="grid place-items-center rounded-xl bg-[#4f7dc3] px-4 py-3 text-white hover:bg-[#41659c] disabled:opacity-70"
+                            className="grid place-items-center rounded-xl bg-site-primary px-4 py-3 text-white hover:bg-[#41659c] disabled:opacity-70"
                         >
                             {isPending
                                 ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

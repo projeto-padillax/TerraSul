@@ -167,7 +167,7 @@ export default function FormularioModal({
           <button
             type="submit"
             disabled={isPending}
-            className="mt-3 w-full bg-[#4f7dc3] hover:bg-[#426db0] text-white font-medium text-sm py-3 px-4 rounded-xl flex items-center gap-2 justify-center transition"
+            className="mt-3 w-full bg-site-primary hover:bg-site-primary-hover text-white font-medium text-sm py-3 px-4 rounded-xl flex items-center gap-2 justify-center transition"
           >
             {isPending ? (
               <div className="h-4 w-4 animate-spin border-2 border-white border-t-transparent rounded-full" />

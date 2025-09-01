@@ -33,7 +33,6 @@ export default function BreadCrumb() {
     const isImovelRoute = segments[0] === "imovel";
     
     if (isImovelRoute && segments.length >= 3) {
-      // Rota: /imovel/apartamento-com-86m-3-quartos-1-suite-1-vaga-no-bairro-paulista-em-piracicaba/21736
       const slugImovel = segments[1];
       const idImovel = segments[2];
       

@@ -121,7 +121,7 @@ export function TypeSelectModal({
             <div className="space-y-4">
               {/* Residenciais */}
               <div>
-                <div className="py-2 pl-3 border-b flex items-center gap-2 border-0 shadow-none bg-[#4F7DC3] rounded-md">
+                <div className="py-2 pl-3 border-b flex items-center gap-2 border-0 shadow-none bg-site-primary rounded-md">
                   <Checkbox
                     checked={allResidenciaisSelected}
                     ref={(el) => {
@@ -168,7 +168,7 @@ export function TypeSelectModal({
 
               {/* Comerciais */}
               <div>
-                <div className="py-2 pl-3 border-b flex items-center gap-2 border-0 shadow-none bg-[#4F7DC3] rounded-md">
+                <div className="py-2 pl-3 border-b flex items-center gap-2 border-0 shadow-none bg-site-primary rounded-md">
                   <Checkbox
                     checked={allComerciaisSelected}
                     ref={(el) => {
@@ -217,7 +217,7 @@ export function TypeSelectModal({
             <div className="grid grid-cols-2 gap-6">
               {/* Residenciais */}
               <div className="border rounded-lg overflow-hidden">
-                <div className="py-2 pl-3 border-b flex items-center gap-2 border-0 shadow-none bg-[#4F7DC3]">
+                <div className="py-2 pl-3 border-b flex items-center gap-2 border-0 shadow-none bg-site-primary">
                   <Checkbox
                     checked={allResidenciaisSelected}
                     ref={(el) => {
@@ -264,7 +264,7 @@ export function TypeSelectModal({
 
               {/* Comerciais */}
               <div className="border rounded-lg overflow-hidden">
-                <div className="py-2 pl-3 border-b flex items-center gap-2 border-0 shadow-none bg-[#4F7DC3]">
+                <div className="py-2 pl-3 border-b flex items-center gap-2 border-0 shadow-none bg-site-primary">
                   <Checkbox
                     checked={allComerciaisSelected}
                     ref={(el) => {
@@ -316,7 +316,7 @@ export function TypeSelectModal({
           <div className="justify-self-center">
             <Button
               onClick={handleConfirm}
-              className="order-1 sm:order-2 bg-[#4F7DC3] hover:bg-[#0084d7]"
+              className="order-1 sm:order-2 bg-site-primary hover:bg-[#0084d7]"
             >
               Confirmar Seleção
             </Button>

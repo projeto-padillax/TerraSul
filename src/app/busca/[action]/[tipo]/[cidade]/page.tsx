@@ -116,7 +116,7 @@ export async function generateMetadata({ searchParams }: Props) {
   const filtros: Filtros = {
     action: awaitedSearchParams.action ?? "comprar",
     tipo: awaitedSearchParams.tipos ? awaitedSearchParams.tipos.split("_") : [],
-    cidade: awaitedSearchParams.cidade || "Piracicaba",
+    cidade: awaitedSearchParams.cidade || "porto alegre",
     bairro: awaitedSearchParams.bairro?.split("_") || [],
     valorMin: awaitedSearchParams.valorMin || "",
     valorMax: awaitedSearchParams.valorMax || "",
@@ -137,7 +137,7 @@ export async function generateMetadata({ searchParams }: Props) {
   const titulo = buildUrl(filtros);
 
   return {
-    title: titulo + " | LeadLink",
+    title: titulo + " | TerraSul",
     description: `Lista de ${titulo}. Descubra milhares de ofertas com preços imperdíveis. Confira já!`,
   };
 }
@@ -149,7 +149,7 @@ export default async function Imoveis({ searchParams }: Props) {
   const initialFiltros: Filtros = {
     action: awaitedSearchParams.action ?? "comprar",
     tipo: awaitedSearchParams.tipos ? awaitedSearchParams.tipos.split("_") : [],
-    cidade: awaitedSearchParams.cidade || "Piracicaba",
+    cidade: awaitedSearchParams.cidade || "porto alegre",
     bairro: awaitedSearchParams.bairro?.split("_") || [],
     valorMin: awaitedSearchParams.valorMin || "",
     valorMax: awaitedSearchParams.valorMax || "",

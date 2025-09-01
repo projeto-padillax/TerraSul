@@ -49,14 +49,14 @@ export default async function Footer() {
                   className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
                   aria-label="Instagram"
                 >
-                  <FaInstagram className="w-7 h-7 text-[#4F7DC3]" />
+                  <FaInstagram className="w-7 h-7 text-site-primary" />
                 </a>
                 <a
                   href="https://www.youtube.com/@souzasouza3147"
                   className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
                   aria-label="YouTube"
                 >
-                  <FaYoutube className="w-7 h-7 text-[#4F7DC3]" />
+                  <FaYoutube className="w-7 h-7 text-site-primary" />
                 </a>
               </div>
             </div>
@@ -65,29 +65,29 @@ export default async function Footer() {
           {/* Menu Horizontal */}
           <div className="w-full pt-6 mb-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <div className="col-span-1 place-self-start md:place-self-start">
-              <h2 className="font-bold text-[#4F7DC3] mb-6">Navegação</h2>
+              <h2 className="font-bold text-site-primary mb-6">Navegação</h2>
               <nav className="flex flex-col gap-4 md:gap-8">
                 <Link
                   href="/"
-                  className="text-black hover:text-[#4F7DC3] transition-colors font-medium"
+                  className="text-black hover:text-site-primary transition-colors font-medium"
                 >
                   Página Inicial
                 </Link>
                 <Link
-                  href="/sobre"
-                  className="text-black hover:text-[#4F7DC3] transition-colors font-medium"
+                  href="/empresa"
+                  className="text-black hover:text-site-primary transition-colors font-medium"
                 >
                   Sobre a Empresa
                 </Link>
                 <Link
-                  href="/anuncie"
-                  className="text-black hover:text-[#4F7DC3] transition-colors font-medium"
+                  href="/anuncie-seu-imovel"
+                  className="text-black hover:text-site-primary transition-colors font-medium"
                 >
                   Anuncie seu Imóvel
                 </Link>
                 <Link
                   href="/contato"
-                  className="text-black hover:text-[#4F7DC3] transition-colors font-medium"
+                  className="text-black hover:text-site-primary transition-colors font-medium"
                 >
                   Contato
                 </Link>
@@ -97,7 +97,7 @@ export default async function Footer() {
             <div className="md:col-span-2 lg:col-span-3 grow-1">
               {siteConfig?.enderecos?.map((endereco, index) => (
                 <div className="flex flex-col mb-8" key={index}>
-                  <h2 className="font-bold text-[#4F7DC3] mb-2">
+                  <h2 className="font-bold text-site-primary mb-2">
                     Sede {index + 1}
                   </h2>
                   <div className="flex flex-row flex-wrap items-center text-black gap-4">
@@ -173,17 +173,17 @@ export default async function Footer() {
         </div>
         <div className="justify-center sm:justify-between pt-4 flex flex-col sm:flex-row items-center w-full pb-16 gap-2">
           <a
-            href="https://www.leadlink.com.br/templatepro/gruposouza/"
+            href="https://www.leadlink.com.br/imobiliarias/template/"
             style={{ color: "#4d4d4d", fontWeight: 400 }}
             className="text-sm"
           >
             Site desenvolvido por{" "}
-            <strong style={{ color: "#4F7DC3" }}>Lead Link</strong>
+            <strong className="text-site-primary">Lead Link</strong>
           </a>
           <div className="text-sm">
             <Link
               href="/politica-de-privacidade"
-              className="text-black hover:text-gray-300 transition-colors font-medium"
+              className="text-black hover:text-site-primary-hover transition-colors font-medium"
             >
               Política de Privacidade
             </Link>

@@ -199,7 +199,7 @@ export default async function ImovelPage({
                           .map((badge, i) => (
                             <span
                               key={i}
-                              className="border border-[#0061bc] bg-[#eaf4fe] text-black px-5 py-[6px] rounded-md text-xs font-medium"
+                              className="border border-site-primary bg-[#eaf4fe] text-black px-5 py-[6px] rounded-md text-xs font-medium"
                             >
                               {badge}
                             </span>
@@ -271,7 +271,7 @@ export default async function ImovelPage({
                         {/* Adicionado ml-4 para espaçamento */}
                         <Dot
                           size={25}
-                          className="text-[#0061bc] hidden sm:inline-block mr-2"
+                          className="text-site-primary hidden sm:inline-block mr-2"
                         />
                         <div className="flex flex-col items-center ml-1">
                           <svg
@@ -302,7 +302,7 @@ export default async function ImovelPage({
                       <div className="flex items-end ml-2">
                         <Dot
                           size={25}
-                          className="text-[#0061bc] hidden sm:inline-block mx-2"
+                          className="text-site-primary hidden sm:inline-block mx-2"
                         />
                         <div className="flex flex-col items-center ml-1">
                           <svg
@@ -377,7 +377,7 @@ export default async function ImovelPage({
                       <div className="flex items-end ml-2">
                         <Dot
                           size={25}
-                          className="text-[#0061bc] hidden sm:inline-block mx-2"
+                          className="text-site-primary hidden sm:inline-block mx-2"
                         />
                         <div className="flex flex-col items-center ml-1">
                           <svg
@@ -452,7 +452,7 @@ export default async function ImovelPage({
                       <div className="flex items-end ml-2">
                         <Dot
                           size={25}
-                          className="text-[#0061bc] hidden sm:inline-block mx-2"
+                          className="text-site-primary hidden sm:inline-block mx-2"
                         />
                         <div className="flex flex-col items-center ml-1">
                           <svg

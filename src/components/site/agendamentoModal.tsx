@@ -127,7 +127,7 @@ export default function AgendamentoModal({ open, onClose, codigoImovel }: Agenda
             <input
               {...register("nome")}
               className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-sm text-gray-900
-                         focus:border-[#4f7dc3] focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
+                         focus:border-site-primary-hover focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
             />
             {errors.nome && <p className="mt-1 text-xs text-red-500">{errors.nome.message}</p>}
           </div>
@@ -139,7 +139,7 @@ export default function AgendamentoModal({ open, onClose, codigoImovel }: Agenda
             <input
               {...register("email")}
               className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-sm text-gray-900
-                         focus:border-[#4f7dc3] focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
+                         focus:border-site-primary-hover focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
             />
             {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
           </div>
@@ -151,7 +151,7 @@ export default function AgendamentoModal({ open, onClose, codigoImovel }: Agenda
             <input
               {...register("celular")}
               className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-sm text-gray-900
-                         focus:border-[#4f7dc3] focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
+                         focus:border-site-primary-hover focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
             />
             {errors.celular && <p className="mt-1 text-xs text-red-500">{errors.celular.message}</p>}
           </div>
@@ -190,7 +190,7 @@ export default function AgendamentoModal({ open, onClose, codigoImovel }: Agenda
                         "min-w-[80px] rounded-md px-3 py-2 text-center text-[12px] font-semibold",
                         "border transition-colors",
                         selecionado
-                          ? "bg-[#4f7dc3] border-[#4f7dc3] text-white"
+                          ? "bg-site-primary border-site-primary-hover text-white"
                           : "bg-white border-gray-400 text-black hover:bg-gray-50",
                       ].join(" ")}
                     >
@@ -224,14 +224,14 @@ export default function AgendamentoModal({ open, onClose, codigoImovel }: Agenda
             <textarea
               {...register("mensagem")}
               className="min-h-[100px] w-full resize-none rounded-md border border-gray-400 bg-white px-3 pt-6 pb-2
-                         text-sm text-gray-900 focus:border-[#4f7dc3] focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
+                         text-sm text-gray-900 focus:border-site-primary-hover focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
             />
           </div>
 
           <button
             type="submit"
             disabled={isPending}
-            className="w-full rounded-md bg-[#4f7dc3] py-3 font-bold text-white hover:bg-[#41659c] disabled:opacity-70"
+            className="w-full rounded-md bg-site-primary py-3 font-bold text-white hover:bg-site-primary-hover disabled:opacity-70"
           >
             {isPending ? "Enviando..." : "ENVIAR"}
           </button>

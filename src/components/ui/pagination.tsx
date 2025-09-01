@@ -60,7 +60,7 @@ function PaginationLink({
       className={cn(
         "px-3 py-1 rounded", // keep spacing consistent
         !isActive && buttonVariants({ variant: "ghost", size }),
-        isActive && "text-[#4f7dc3] font-bold", // only color + bold
+        isActive && "text-site-primary font-bold", // only color + bold
         className
       )}
       {...props}

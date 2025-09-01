@@ -11,8 +11,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "LeadLink - Grupo Souza",
-  description: "LeadLink - Grupo Souza",
+  title: "LeadLink - TerraSul",
+  description: "TerraSul",
   icons: {
     icon: [
       { url: "https://www.template.leadlink.com.br/uploads/favicon/favicon.ico" },

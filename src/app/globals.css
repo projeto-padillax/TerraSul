@@ -41,6 +41,10 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-site-primary: var(--sitePrimary);
+  --color-site-primary-hover: var(--sitePrimaryHover);
+  --color-site-secondary: var(--siteSecondary);
+  --color-site-secondary-hover: var(--siteSecondaryHover);
 }
 
 @media (prefers-color-scheme: light) {
@@ -83,6 +87,10 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --sitePrimary: oklch(76.722% 0.1409 68.77); 
+  --sitePrimaryHover: oklch(71.312% 0.15408 63.542);
+  --siteSecondary: oklch(42.83% 0.0865 166.881); 
+  --siteSecondaryHover: oklch(39.333% 0.07871 167.238);
 }
 
 .dark {
@@ -135,7 +143,7 @@ html {
 }
 
 .data-\[placeholder\]\:text-muted-foreground[data-placeholder] {
-  color: black
+  color: black;
 }
 
 @layer utilities {

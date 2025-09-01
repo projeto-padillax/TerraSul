@@ -99,7 +99,7 @@ export default function Sidebar({ dynamicItems }: SidebarProps) {
         onClick={() => {
           setIsOpen(!isOpen);
         }}
-        className="rounded-md mr-0 text-[#303030] hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors"
+        className="rounded-md mr-0 text-[#303030] hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-site-secondary p-0.5 transition-colors"
         aria-label="Abrir menu"
       >
         <Menu className="h-6 w-6" />
@@ -129,13 +129,13 @@ export default function Sidebar({ dynamicItems }: SidebarProps) {
         </div>
 
         <div className="h-full overflow-y-auto pb-20 justify-items-center" style={{ scrollbarWidth: 'none' }}>
-          <div className="border-b border-sky-500 w-9/12 ml-4">
+          <div className="border-b border-site-primary w-9/12 ml-4">
             {fixedItems.map((item, index) => (
               <Link
                 key={index}
                 href={item.href}
                 onClick={handleLinkClick}
-                className="flex items-center justify-between py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                className="flex items-center justify-between py-3 text-gray-700 hover:text-site-primary transition-colors"
               >
                 <span className="font-medium">{item.title}</span>
               </Link>
@@ -197,7 +197,7 @@ export default function Sidebar({ dynamicItems }: SidebarProps) {
           </div> */}
 
           {dynamicItems.length > 0 && (
-            <div className="border-b border-sky-500 w-9/12 ml-4">
+            <div className="border-b border-site-primary w-9/12 ml-4">
               <div className="py-3">
                 <h3 className="font-semibold text-gray-800 text-sm uppercase tracking-wide">
                   Páginas Adicionais
@@ -207,21 +207,9 @@ export default function Sidebar({ dynamicItems }: SidebarProps) {
                 <button
                   key={item.id}
                   onClick={() => handleDynamicItemClick(item)}
-                  className="w-full flex items-center justify-between py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors text-left"
+                  className="w-full flex items-center justify-between py-3 text-gray-600 hover:text-site-primary transition-colors text-left"
                 >
                   <span>{item.titulo}</span>
-                  <div className="flex items-center">
-                    {item.tipo === "link" && (
-                      <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full mr-2">
-                        Link
-                      </span>
-                    )}
-                    {item.tipo === "pagina" && (
-                      <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full mr-2">
-                        Página
-                      </span>
-                    )}
-                  </div>
                 </button>
               ))}
             </div>
@@ -233,7 +221,7 @@ export default function Sidebar({ dynamicItems }: SidebarProps) {
                 key={index}
                 href={item.href}
                 onClick={handleLinkClick}
-                className="flex items-center justify-between py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                className="flex items-center justify-between py-3 text-gray-700 hover:text-site-primary transition-colors"
               >
                 <span>{item.title}</span>
               </Link>

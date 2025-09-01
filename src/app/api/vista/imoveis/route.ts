@@ -407,7 +407,7 @@ export async function GET(request: NextRequest) {
     const action = searchParams.get("action") ?? "comprar";
     const tipos = searchParams.get("tipos")?.split(",").filter(Boolean) || [];
     const bairros = searchParams.get("bairro")?.split(",").filter(Boolean) || [];
-    const cidade = searchParams.get("cidade") ?? "piracicaba";
+    const cidade = searchParams.get("cidade") ?? "porto alegre";
     const valorMin = Number(searchParams.get("valorMin")) || null;
     const valorMax = Number(searchParams.get("valorMax")) || null;
     const quartos = searchParams.get("quartos") || null;

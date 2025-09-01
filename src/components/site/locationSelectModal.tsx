@@ -73,19 +73,19 @@ export function LocationSelectModal({
 
         const cidadesOrdenadas: LocationOption[] = cidadesMapeadas.sort(
           (a: LocationOption, b: LocationOption) => {
-            if (a.cidade.toLowerCase() === "piracicaba") return -1;
-            if (b.cidade.toLowerCase() === "piracicaba") return 1;
+            if (a.cidade.toLowerCase() === "porto alegre") return -1;
+            if (b.cidade.toLowerCase() === "porto alegre") return 1;
             return a.cidade.localeCompare(b.cidade);
           }
         );
 
         setCidades(cidadesOrdenadas);
 
-        // já seleciona Piracicaba por padrão se existir
+        // já seleciona porto alegre por padrão se existir
         if (cidadesOrdenadas.length > 0) {
           setSelectedCidade(
             cidadesOrdenadas.find(
-              (c) => c.cidade.toLowerCase() === "piracicaba"
+              (c) => c.cidade.toLowerCase() === "porto alegre"
             )?.cidade || cidadesOrdenadas[0].cidade
           );
         }
@@ -192,7 +192,7 @@ export function LocationSelectModal({
                   return (
                     <div className="space-y-2">
                       {/* Cabeçalho da seção com checkbox */}
-                      <div className="flex items-center gap-2 bg-[#4F7DC3] text-white px-3 py-2 rounded-md">
+                      <div className="flex items-center gap-2 bg-site-primary text-white px-3 py-2 rounded-md">
                         <Checkbox
                           checked={allSelected}
                           onCheckedChange={(checked) => {
@@ -281,7 +281,7 @@ export function LocationSelectModal({
         <div className="flex justify-center pt-4 border-t">
           <Button
             onClick={handleConfirm}
-            className="bg-[#4F7DC3] hover:bg-[#0084d7] cursor-pointer"
+            className="bg-site-primary hover:bg-[#0084d7] cursor-pointer"
           >
             Confirmar Seleção
           </Button>
