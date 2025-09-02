@@ -43,7 +43,7 @@ export async function GET(
     //       Empreendimento: {
     //         equals: codigo,
     //         mode: "insensitive",
-    //       }, 
+    //       },
     //     },
     //     include: {
     //       fotos: {
@@ -98,13 +98,12 @@ async function fetchFromVista(codigo: string): Promise<VistaImovel | null> {
   const url =
     `${base}?key=${encodeURIComponent(key)}` +
     `&imovel=${encodeURIComponent(codigo)}` +
-    `&pesquisa={"fields":["Codigo","ValorIptu", "ValorCondominio", "Categoria", "InformacaoVenda", "ObsVenda",
-                          "AreaTerreno", "Bairro", "GMapsLatitude", "GMapsLongitude", "DescricaoWeb", "Cidade",
+    `&pesquisa={"fields":["Codigo","ValorIptu", "ValorCondominio", "Categoria",
+                          "AreaTerreno", "Bairro", "GMapsLatitude", "GMapsLongitude", "Cidade",
                           "ValorVenda", "ValorLocacao", "Dormitorios", "Suites", "Vagas", "AreaTotal",
                           "Caracteristicas", "InfraEstrutura", "Descricao", "DataHoraAtualizacao", "Lancamento",
-                          "Finalidade", "Status", "Empreendimento", "Endereco",
-                          "Numero", "Complemento", "UF", "CEP", "DestaqueWeb", "FotoDestaque", "Latitude", "Longitude",
-                          "TituloSite", "FotoDestaqueEmpreendimento", "VideoDestaque", "Mobiliado", "AreaConstruida",{"Foto":["Foto","FotoPequena","Destaque"]}]}`;
+                          "Status", "Empreendimento", "Endereco",
+                          "Numero", "Complemento", "UF", "CEP", "DestaqueWeb", "FotoDestaque", "Latitude", "Longitude", "FotoDestaqueEmpreendimento", "VideoDestaque",{"Foto":["Foto","FotoPequena","Destaque"]}]}`;
 
   const res = await fetch(url, {
     cache: "no-store",
@@ -212,18 +211,13 @@ function mapVistaToDb(v: VistaImovel) {
     Suites: v.Suites,
     Vagas: v.Vagas,
     AreaTotal: v.AreaTotal ? parseFloat(v.AreaTotal) : 0,
-    AreaConstruida: v.AreaPrivativa ? parseFloat(v.AreaPrivativa) : 0,
     DataHoraAtualizacao: new Date(),
 
-    DescricaoWeb: v.DescricaoWeb,
     ValorIptu: v.ValorIptu,
     ValorCondominio: v.ValorCondominio,
-    InformacaoVenda: v.InformacaoVenda,
-    ObsVenda: v.ObservacoesVenda,
     GMapsLatitude: v.GMapsLatitude,
     GMapsLongitude: v.GMapsLongitude,
     Lancamento: v.Lancamento,
-    Finalidade: v.Finalidade,
     Status: v.Status,
     Empreendimento: v.Empreendimento,
     Endereco: v.Endereco,
@@ -235,10 +229,8 @@ function mapVistaToDb(v: VistaImovel) {
     FotoDestaque: v.FotoDestaque,
     Latitude: v.Latitude,
     Longitude: v.Longitude,
-    TituloSite: v.TituloSite,
     FotoDestaqueEmpreendimento: v.FotoDestaqueEmpreendimento,
     VideoDestaque: v.VideoDestaque,
-    Mobiliado: v.Mobiliado,
 
     fotos: Object.values(v.Foto ?? {}).map((f) => ({
       codigo: f.Codigo,

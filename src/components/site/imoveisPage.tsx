@@ -60,7 +60,6 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     vagas: filtros.vagas ?? "",
     caracteristicas: filtros.caracteristicas ?? ([] as string[]),
     lancamentos: filtros.lancamentos ?? "",
-    mobiliado: filtros.mobiliado ?? "",
   });
   const [codigo, setCodigo] = useState(filtros.codigo ?? "");
   const [modals, setModals] = useState({
@@ -102,7 +101,6 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         ? searchParams.get("caracteristicas")!.split(",")
         : [],
       lancamentos: searchParams.get("lancamentos") ?? "",
-      mobiliado: searchParams.get("mobiliado") ?? "",
     };
 
     setSearchData(newData);
@@ -149,8 +147,6 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       );
     if (searchData.lancamentos != "")
       newSearchParams.set("lancamentos", searchData.lancamentos);
-    if (searchData.mobiliado != "")
-      newSearchParams.set("mobiliado", searchData.mobiliado);
     if (codigo) newSearchParams.set("codigo", codigo);
     // ... e os outros filtros
     if (sortOrder) newSearchParams.set("sort", sortOrder);
@@ -235,10 +231,6 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       titulo += `, lançamento`;
     }
 
-    // Mobiliado
-    if (searchData.mobiliado === "sim") {
-      titulo += `, mobiliado`;
-    }
 
     if (filtros.bairro && filtros.bairro[0]?.split(",").length > 1) {
       titulo += ` em alguns bairros`;
@@ -278,8 +270,8 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       : "Imóvel";
 
     const area =
-      imovel.AreaTerreno || imovel.AreaTotal || imovel.AreaConstruida
-        ? `${imovel.AreaTerreno || imovel.AreaTotal || imovel.AreaConstruida}m²`
+      imovel.AreaTerreno || imovel.AreaTotal
+        ? `${imovel.AreaTerreno || imovel.AreaTotal}m²`
         : "";
 
     const quartos =
@@ -645,7 +637,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                 />
               </div>
               <div className="flex items-center space-x-2 w-full h-12 md:w-fit justify-between">
-                <Label htmlFor="mobiliado">Mobiliado</Label>
+                {/* <Label htmlFor="mobiliado">Mobiliado</Label>
                 <Switch
                   checked={
                     searchData.mobiliado == ""
@@ -659,7 +651,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                     });
                     setPage(1); // Reset page to 1 when mobiliado changes
                   }}
-                />
+                /> */}
               </div>
             </div>
           </div>

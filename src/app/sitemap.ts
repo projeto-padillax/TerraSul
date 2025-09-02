@@ -22,12 +22,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 1,
   }))
 
-  type ImovelSitemap = Pick<Imovel, "Categoria" | "Cidade" | "Finalidade" | "DataHoraAtualizacao">;
+  type ImovelSitemap = Pick<Imovel, "Categoria" | "Cidade" | "DataHoraAtualizacao">;
 
   // Mapear os imóveis para as rotas dinâmicas.
   const imoveisRoutes = imoveis.map((imovel: ImovelSitemap) => {
     // Definir a ação de compra ou aluguel.
-    const action = imovel.Finalidade === 'Locação' ? 'alugar' : 'comprar'
+    const action = 'comprar'
 
     const categoriaSlug = imovel.Categoria ? gerarSlug(imovel.Categoria).toLowerCase() : "";
     const cidadeSlug = imovel.Cidade ? gerarSlug(imovel.Cidade) : "";

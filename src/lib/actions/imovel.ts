@@ -1,7 +1,7 @@
 import { Imovel } from "@prisma/client";
 import { prisma } from "../neon/db";
 
-type ImovelSitemap = Pick<Imovel, "Categoria" | "Cidade" | "Finalidade" | "DataHoraAtualizacao">;
+type ImovelSitemap = Pick<Imovel, "Categoria" | "Cidade" | "DataHoraAtualizacao">;
 
 export async function getAllImoveisForSitemap(): Promise<ImovelSitemap[]> {
   try {
@@ -9,7 +9,6 @@ export async function getAllImoveisForSitemap(): Promise<ImovelSitemap[]> {
       select: {
         Categoria: true,
         Cidade: true,
-        Finalidade: true,
         DataHoraAtualizacao: true,
       },
     });

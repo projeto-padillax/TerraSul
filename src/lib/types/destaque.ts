@@ -5,13 +5,10 @@ export type Destaque = {
   ValorIptu: string;
   ValorCondominio: string;
   Categoria: string;
-  InformacaoVenda: string;
-  ObsVenda: string;
   AreaTerreno: number;
   Bairro: string;
   GMapsLatitude: string;
   GMapsLongitude: string;
-  DescricaoWeb: string;
   Cidade: string;
   ValorVenda: number;
   ValorLocacao: number;
@@ -19,11 +16,9 @@ export type Destaque = {
   Suites: string;
   Vagas: string;
   AreaTotal: number;
-  AreaConstruida: number;
   Descricao: string;
   DataHoraAtualizacao: Date;
   Lancamento: string;
-  Finalidade: string;
   Status: string;
   Empreendimento: string;
   Endereco: string;
@@ -35,8 +30,6 @@ export type Destaque = {
   FotoDestaque: string;
   Latitude: string;
   Longitude: string;
-  TituloSite: string;
   FotoDestaqueEmpreendimento: string;
   VideoDestaque: string;
-  Mobiliado: string;
 };

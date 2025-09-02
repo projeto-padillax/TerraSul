@@ -55,7 +55,6 @@ export function ActionButtonsFormularios({
       "mensagem",
       "condominio",
       "assunto",
-      "finalidade",
       "valorDesejado",
       "urlRespondida",
     ] as const;
@@ -79,7 +78,6 @@ export function ActionButtonsFormularios({
       mensagem: f.mensagem ?? "",
       condominio: f.condominio ?? "",
       assunto: f.assunto ?? "",
-      finalidade: f.finalidade ?? "",
       valorDesejado: f.valorDesejado !== null && f.valorDesejado !== undefined
         ? String(f.valorDesejado)
         : "",

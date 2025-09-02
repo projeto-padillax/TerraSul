@@ -15,7 +15,6 @@ const schema = z.object({
     endereco: z.string().min(3, "Informe o endereço"),
     bairro: z.string().min(1, "Informe o bairro"),
     cidade: z.string().min(1, "Informe a cidade"),
-    finalidade: z.enum(["ALUGUEL", "VENDA", "VENDA E ALUGUEL"], "Escolha a finalidade do anúncio"),
     valorDesejado: z
         .number("Insira o valor desejado")
         .positive("Número deve ser positivo"),
@@ -41,7 +40,6 @@ export default function AnuncieForm() {
                     telefone: data.telefone,
                     mensagem: data.descricao,
                     urlRespondida: typeof window !== "undefined" ? window.location.href : "",
-                    finalidade: data.finalidade,
                     valorDesejado: data.valorDesejado,
                 });
 
@@ -105,21 +103,6 @@ export default function AnuncieForm() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-500 border-t border-gray-500">
-                    <div className={`md:col-span-2 ${cell}`}>
-                        <label className={label}>Finalidade</label>
-                        <select
-                            {...register("finalidade")}
-                            className={`${baseInput} bg-white md:bg-transparent px-0`}
-                            defaultValue=""
-                        >
-                            <option value="" disabled>Selecione</option>
-                            <option value="ALUGUEL">Aluguel</option>
-                            <option value="VENDA">Venda</option>
-                            <option value="VENDA E ALUGUEL">Venda e Aluguel</option>
-                        </select>
-                        {errors.finalidade && <p className="text-red-500 text-xs mt-1">{errors.finalidade.message}</p>}
-                    </div>
-
                     <div className={cell}>
                         <label className={label}>Valor desejado</label>
                         <div className="flex items-center gap-2">

@@ -10,15 +10,12 @@ export type VistaImovel = {
   Vagas?: string;
   AreaTotal?: string;
   AreaPrivativa?: string;
-  DescricaoWeb?: string;
   ValorIptu?: string;
   ValorCondominio?: string;
-  InformacaoVenda?: string;
   ObservacoesVenda?: string;
   GMapsLatitude?: string;
   GMapsLongitude?: string;
   Lancamento?: string;
-  Finalidade?: string;
   Status?: string;
   Empreendimento?: string;
   Endereco?: string;
@@ -30,10 +27,8 @@ export type VistaImovel = {
   FotoDestaque?: string;
   Latitude?: string;
   Longitude?: string;
-  TituloSite?: string;
   FotoDestaqueEmpreendimento?: string;
   VideoDestaque?: string;
-  Mobiliado?: string;
 
   Foto?: Record<
     string,

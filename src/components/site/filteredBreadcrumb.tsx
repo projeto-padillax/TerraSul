@@ -18,7 +18,6 @@ const TRANSLATIONS: Record<string, string> = {
   alugar: "Alugar",
   s: "Lançamentos",
   true: "Lançamentos",
-  sim: "Mobiliados",
 };
 
 export default function BreadCrumb() {

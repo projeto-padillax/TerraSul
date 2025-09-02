@@ -71,7 +71,6 @@ export default function FormularioView({ lead }: Props) {
         { label: "Data da Visita", value: formatOnlyDate(lead.DataVisita) },
         { label: "Condomínio", value: lead.condominio || null },
         { label: "Assunto", value: lead.assunto || null },
-        { label: "Finalidade", value: lead.finalidade || null },
         { label: "Valor Desejado", value: lead.valorDesejado?.toString() || null },
     ];
 

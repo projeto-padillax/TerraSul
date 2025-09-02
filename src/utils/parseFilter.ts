@@ -12,7 +12,6 @@ export interface Filtros {
   vagas?: string;
   caracteristicas?: string[];
   lancamentos?: string;
-  mobiliado?: string;
   page?: string;
   codigo?: string;
   sort?: string;
@@ -40,8 +39,6 @@ export function parseFiltros(filtros: string[]): Filtros {
       parsed.caracteristicas = filtro.slice(16).split("_");
     else if (filtro.startsWith("lançamentos-"))
       parsed.lancamentos = filtro.slice(12);
-    else if (filtro.startsWith("mobiliado-"))
-      parsed.mobiliado = filtro.slice(10);
     else if (filtro.startsWith("codigo-"))
       parsed.codigo = filtro.slice(7);
     else if (filtro.startsWith("order-"))

@@ -31,8 +31,8 @@ function toSlug(text: string): string {
     const categoria = imovel.Categoria ? capitalizar(imovel.Categoria) : "Imóvel";
 
     const area =
-      imovel.AreaTerreno || imovel.AreaTotal || imovel.AreaConstruida
-        ? `${imovel.AreaTerreno || imovel.AreaTotal || imovel.AreaConstruida}m²`
+      imovel.AreaTerreno || imovel.AreaTotal
+        ? `${imovel.AreaTerreno || imovel.AreaTotal}m²`
         : "";
 
     const quartos =
@@ -88,7 +88,7 @@ export default async function SemelhantesSection({ codigo }: { codigo: string })
                 {itens.map((imovel) => (
                     <Link
                         key={imovel.Codigo}
-                        href={`/imovel/${encodeURIComponent(toSlug(imovel.TituloSite) || toSlug(gerarTitulo(imovel)))}/${imovel.Codigo}`}
+                        href={`/imovel/${encodeURIComponent(toSlug(gerarTitulo(imovel)))}/${imovel.Codigo}`}
                         className="block"
                     >
                         <ImovelCard imovel={imovel} activeTab={activeTab} />

@@ -7,7 +7,6 @@ type Imovel = {
   id: string; // Prisma uses 'id' as the primary key from your schema
   Codigo?: string | null;
   Cidade?: string | null;
-  Finalidade?: string | null; // Match Prisma's string type for Finalidade
   Categoria?: string | null;
   Status?: string | null; // Match Prisma's string type for Status
   ValorVenda?: number | null; // Now number in Prisma
@@ -55,7 +54,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ codigo: 
         id: true, // Important for excluding itself later
         Codigo: true,
         Cidade: true,
-        Finalidade: true,
         Categoria: true,
         Status: true,
         ValorVenda: true,
@@ -84,7 +82,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ codigo: 
     const maxPrice = Math.ceil(basePrice * 1.15);
 
     const cidade = base.Cidade;
-    const finalidade = base.Finalidade;
     // const categoria = base.Categoria;
 
     // Ensure types for Prisma where clause are correct
@@ -96,7 +93,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ codigo: 
         AND: [ // Use AND to combine all conditions
           { Codigo: { not: base.Codigo } }, // Exclude the base property itself
           cidade ? { Cidade: cidade } : {}, // Only apply if cidade exists
-          finalidade ? { Finalidade: finalidade } : {}, // Only apply if finalidade exists
           { Status: { in: statusCompat as string[] } }, // Cast to string[] for Prisma 'in' operator
           {
             [priceField]: { // Dynamically set the price field

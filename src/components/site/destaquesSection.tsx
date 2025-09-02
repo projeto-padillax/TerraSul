@@ -32,8 +32,8 @@ function toSlug(text: string): string {
     const categoria = imovel.Categoria ? capitalizar(imovel.Categoria) : "Imóvel";
   console.log(categoria)
     const area =
-      imovel.AreaTerreno || imovel.AreaTotal || imovel.AreaConstruida
-        ? `${imovel.AreaTerreno || imovel.AreaTotal || imovel.AreaConstruida}m²`
+      imovel.AreaTerreno || imovel.AreaTotal
+        ? `${imovel.AreaTerreno || imovel.AreaTotal}m²`
         : "";
 
     const quartos =

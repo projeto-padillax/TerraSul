@@ -52,18 +52,17 @@ interface ImovelCaracteristicaCreateInput {
 }
 
 // --- Constantes ---
-const VISTA_BASE_URL = "https://gruposou-rest.vistahost.com.br/imoveis";
+const VISTA_BASE_URL = process.env.VISTA_REST_BASE_URL;
 const PROPERTIES_PER_PAGE = 50;
 
 // Campos para a listagem (listar)
 const LISTING_RESEARCH_FIELDS: string[] = [
-  "Codigo", "ValorIptu", "ValorCondominio", "Categoria", "InformacaoVenda", "ObsVenda",
-  "AreaTerreno", "Bairro", "GMapsLatitude", "GMapsLongitude", "DescricaoWeb", "Cidade",
+  "Codigo", "ValorIptu", "ValorCondominio", "Categoria",
+  "AreaTerreno", "Bairro", "GMapsLatitude", "GMapsLongitude", "Cidade",
   "ValorVenda", "ValorLocacao", "Dormitorios", "Suites", "Vagas", "AreaTotal",
   "Caracteristicas", "InfraEstrutura", "Descricao", "DataHoraAtualizacao", "Lancamento",
-  "Finalidade", "Status", "Empreendimento", "Endereco",
-  "Numero", "Complemento", "UF", "CEP", "DestaqueWeb", "FotoDestaque", "Latitude", "Longitude",
-  "TituloSite", "FotoDestaqueEmpreendimento", "VideoDestaque", "Mobiliado", "AreaConstruida"
+  "Status", "Empreendimento", "Endereco",
+  "Numero", "Complemento", "UF", "CEP", "DestaqueWeb", "FotoDestaque", "Latitude", "Longitude", "FotoDestaqueEmpreendimento", "VideoDestaque",
 ];
 
 // Campos para os detalhes (detalhes) - inclui a estrutura de fotos
@@ -166,10 +165,8 @@ interface VistaPropertyData {
   Vagas?: string;
   AreaTotal?: string;
   AreaTerreno?: string;
-  AreaConstruida?: string;
   DataHoraAtualizacao?: string;
   Lancamento?: string;
-  Mobiliado?: string;
   Caracteristicas?: Record<string, any>;
   Foto?: Record<string, VistaPropertyDetailPhoto>;
   CodigoImobiliaria?: string; // ✨ Add CodigoImobiliaria to the interface to be safe
@@ -229,7 +226,6 @@ const processAndUpsertProperty = async (code: string, propertyData: VistaPropert
     const valorLocacaoInt = parseToInt(restOfProperty.ValorLocacao);
     const areaTotalFloat = parseToFloat(restOfProperty.AreaTotal);
     const areaTerrenoFloat = parseToFloat(restOfProperty.AreaTerreno);
-    const areaConstruidaFloat = parseToFloat(restOfProperty.AreaConstruida);
 
     const photosUpdateOperations: any = {};
     if (photosToCreate.length > 0) {
@@ -248,7 +244,7 @@ const processAndUpsertProperty = async (code: string, propertyData: VistaPropert
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { AreaTotal, AreaTerreno, AreaConstruida, ...rest } = restOfProperty;
+    const { AreaTotal, AreaTerreno, ...rest } = restOfProperty;
 
 
     await prisma.imovel.upsert({
@@ -260,7 +256,6 @@ const processAndUpsertProperty = async (code: string, propertyData: VistaPropert
         ValorLocacao: valorLocacaoInt,
         AreaTotal: areaTotalFloat,
         AreaTerreno: areaTerrenoFloat,
-        AreaConstruida: areaConstruidaFloat,
         DataHoraAtualizacao: validDataHoraAtualizacao,
         ...photosUpdateOperations,
         ...caracteristicasUpdateOperations,
@@ -273,7 +268,6 @@ const processAndUpsertProperty = async (code: string, propertyData: VistaPropert
         ValorLocacao: valorLocacaoInt,
         AreaTotal: areaTotalFloat,
         AreaTerreno: areaTerrenoFloat,
-        AreaConstruida: areaConstruidaFloat,
         DataHoraAtualizacao: validDataHoraAtualizacao,
         fotos: {
           create: photosToCreate
@@ -415,7 +409,6 @@ export async function GET(request: NextRequest) {
     const vagas = searchParams.get("vagas") || null;
     const caracteristicas = searchParams.get("caracteristicas")?.split(",").filter(Boolean) || [];
     const lancamentosFilterValue = parseSimNao(searchParams.get("lancamentos"));
-    const mobiliadoFilterValue = parseSimNao(searchParams.get("mobiliado"));
 
     // --- Áreas ---
     const areaMin = Number(searchParams.get("areaMinima")) || null;
@@ -447,8 +440,6 @@ export async function GET(request: NextRequest) {
     if (vagas) whereClause.Vagas = { gte: String(vagas) };
     if (lancamentosFilterValue !== null)
       whereClause.Lancamento = { equals: lancamentosFilterValue, mode: "insensitive" };
-    if (mobiliadoFilterValue !== null)
-      whereClause.Mobiliado = { equals: mobiliadoFilterValue, mode: "insensitive" };
 
     // --- Valor com margem de 5% ---
     if (valorMin !== null || valorMax !== null) {
@@ -475,12 +466,6 @@ export async function GET(request: NextRequest) {
         },
         {
           AreaTerreno: {
-            ...(min !== undefined ? { gte: min } : {}),
-            ...(max !== undefined ? { lte: max } : {}),
-          },
-        },
-        {
-          AreaConstruida: {
             ...(min !== undefined ? { gte: min } : {}),
             ...(max !== undefined ? { lte: max } : {}),
           },

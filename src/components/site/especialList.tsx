@@ -60,8 +60,8 @@ export default function EspecialList({ id }: EspecialListProps) {
 
     const categoria = imovel.Categoria ? capitalizar(imovel.Categoria) : 'Imóvel'
 
-    const area = imovel.AreaTerreno || imovel.AreaTotal || imovel.AreaConstruida
-      ? `${imovel.AreaTerreno || imovel.AreaTotal || imovel.AreaConstruida}m²`
+    const area = imovel.AreaTerreno || imovel.AreaTotal
+      ? `${imovel.AreaTerreno || imovel.AreaTotal}m²`
       : ''
 
     const quartos = imovel.Dormitorios && imovel.Dormitorios !== '0'
@@ -114,7 +114,7 @@ export default function EspecialList({ id }: EspecialListProps) {
             {paraComprar.map((imovel) => (
               <Link
                 key={imovel.id}
-                href={`/imovel/${encodeURIComponent(toSlug(imovel.TituloSite || gerarTitulo(imovel)))}/${imovel.Codigo}`}
+                href={`/imovel/${encodeURIComponent(toSlug(gerarTitulo(imovel)))}/${imovel.Codigo}`}
               >
                 <ImovelCard imovel={imovel} activeTab="comprar" />
               </Link>
@@ -132,7 +132,7 @@ export default function EspecialList({ id }: EspecialListProps) {
             {paraAlugar.map((imovel) => (
               <Link
                 key={imovel.id}
-                href={`/imovel/${encodeURIComponent(toSlug(imovel.TituloSite || gerarTitulo(imovel)))}/${imovel.Codigo}`}
+                href={`/imovel/${encodeURIComponent(toSlug(gerarTitulo(imovel)))}/${imovel.Codigo}`}
               >
                 <ImovelCard imovel={imovel} activeTab="alugar" />
               </Link>

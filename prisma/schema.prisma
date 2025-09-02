@@ -171,7 +171,6 @@ model Formulario {
   mensagem      String?
   condominio    String?
   assunto       String?
-  finalidade    String?
   valorDesejado Decimal?
 }
 
@@ -213,12 +212,9 @@ model Imovel {
   ValorIptu                  String?   @map("valorIptu")
   ValorCondominio            String?   @map("valorCondominio")
   Categoria                  String?
-  InformacaoVenda            String?   @map("informacaoVenda")
-  ObsVenda                   String?   @map("obsVenda")
   Bairro                     String?
   GMapsLatitude              String?   @map("gMapsLatitude")
   GMapsLongitude             String?   @map("gMapsLongitude")
-  DescricaoWeb               String?   @map("descricaoWeb")
   Cidade                     String?
   ValorVenda                 Int?      @map("valorVenda")
   ValorLocacao               Int?      @map("valorLocacao")
@@ -227,11 +223,9 @@ model Imovel {
   Vagas                      String?
   AreaTotal                  Float?    @map("areaTotal")
   AreaTerreno                Float?    @map("areaTerreno")
-  AreaConstruida             Float?    @map("areaConstruida")
   Descricao                  String?
   DataHoraAtualizacao        DateTime? @map("dataHoraAtualizacao")
   Lancamento                 String?
-  Finalidade                 String?
   Status                     String?
   Empreendimento             String?
   Endereco                   String?
@@ -243,13 +237,12 @@ model Imovel {
   FotoDestaque               String?   @map("fotoDestaque")
   Latitude                   String?
   Longitude                  String?
-  TituloSite                 String?   @map("tituloSite")
   FotoDestaqueEmpreendimento String?   @map("fotoDestaqueEmpreendimento")
   VideoDestaque              String?   @map("videoDestaque")
-  Mobiliado                  String?
 
   fotos           Foto[]
   caracteristicas Caracteristica[]
+  infraestrutura InfraEstrutura[]
 
   @@index([Cidade, Status])
   @@index([Bairro])
@@ -258,7 +251,6 @@ model Imovel {
   @@index([ValorLocacao])
   @@index([DataHoraAtualizacao])
   @@index([Lancamento])
-  @@index([Mobiliado])
   @@map("imoveis")
 }
 
@@ -288,11 +280,17 @@ model Caracteristica {
   @@index([nome, valor])
   @@map("caracteristicas")
 }
+model InfraEstrutura {
+  id    Int    @id @default(autoincrement())
+  nome  String
+  valor String
 
-model Finalidade {
-  id   Int    @id @default(autoincrement())
-  nome String
-  tipo String
+  imovelId String
+  imovel   Imovel @relation(fields: [imovelId], references: [id], onDelete: Cascade)
+
+  @@index([imovelId])
+  @@index([nome, valor])
+  @@map("infraestrutura")
 }
 
 model Cidade {

@@ -38,8 +38,8 @@ export default function FavoritesList() {
     const categoria = imovel.Categoria ? capitalizar(imovel.Categoria) : "Imóvel";
 
     const area =
-      imovel.AreaTerreno || imovel.AreaTotal || imovel.AreaConstruida
-        ? `${imovel.AreaTerreno || imovel.AreaTotal || imovel.AreaConstruida}m²`
+      imovel.AreaTerreno || imovel.AreaTotal
+        ? `${imovel.AreaTerreno || imovel.AreaTotal}m²`
         : "";
 
     const quartos =
@@ -87,7 +87,7 @@ export default function FavoritesList() {
             {comprar.map((favorito: Destaque) => (
               <Link
                 key={favorito.id}
-                href={`/imovel/${encodeURIComponent(toSlug(favorito.TituloSite) || toSlug(gerarTitulo(favorito)))}/${favorito.Codigo}`}
+                href={`/imovel/${encodeURIComponent(toSlug(gerarTitulo(favorito)))}/${favorito.Codigo}`}
               >
                 <ImovelCard
                   imovel={favorito}
@@ -109,7 +109,7 @@ export default function FavoritesList() {
             {alugar.map((favorito: Destaque) => (
               <Link
                 key={favorito.id}
-                href={`/imovel/${encodeURIComponent(toSlug(favorito.TituloSite) || toSlug(gerarTitulo(favorito)))}/${favorito.Codigo}`}
+                href={`/imovel/${encodeURIComponent(toSlug(gerarTitulo(favorito)))}/${favorito.Codigo}`}
               >
                 <ImovelCard
                   imovel={favorito}

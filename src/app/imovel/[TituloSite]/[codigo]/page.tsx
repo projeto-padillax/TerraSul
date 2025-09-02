@@ -114,8 +114,8 @@ export default async function ImovelPage({
     categoria += status
 
     const area =
-      imovel.AreaTerreno || imovel.AreaTotal || imovel.AreaConstruida
-        ? `${imovel.AreaTerreno || imovel.AreaTotal || imovel.AreaConstruida}m²`
+      imovel.AreaTerreno || imovel.AreaTotal
+        ? `${imovel.AreaTerreno || imovel.AreaTotal}m²`
         : "";
 
     const quartos =
@@ -521,9 +521,6 @@ export default async function ImovelPage({
                 }
                 codigoImovel={imovel.Codigo}
                 valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
-                finalidade={
-                  imovel.Status as "VENDA" | "ALUGUEL" | "VENDA E ALUGUEL"
-                }
               />
             </div>
 

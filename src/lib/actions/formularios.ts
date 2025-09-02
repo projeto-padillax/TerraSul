@@ -24,7 +24,6 @@ const formularioServerSchema = z.object({
   condominio: z.string().optional(),
   assunto: z.string().optional(),
   valorDesejado: z.number().positive().optional(),
-  finalidade: z.string().optional(),
 });
 
 const idsSchema = z.array(z.cuid());
@@ -78,7 +77,6 @@ export async function createFormulario(input: FormularioInput): Promise<void> {
       mensagem: validated.mensagem,
       condominio: validated.condominio,
       assunto: validated.assunto,
-      finalidade: validated.finalidade,
       valorDesejado: validated.valorDesejado,
     },
   });

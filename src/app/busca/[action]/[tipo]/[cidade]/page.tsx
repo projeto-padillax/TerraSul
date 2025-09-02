@@ -21,7 +21,6 @@ interface Props {
     vagas?: string;
     caracteristicas?: string;
     lancamentos?: string;
-    mobiliado?: string;
     codigo?: string;
     page?: string;
     sort?: string;
@@ -88,10 +87,6 @@ const buildUrl = (filtros: Filtros) => {
     titulo += `, lançamento`;
   }
 
-  if (filtros.mobiliado === "sim") {
-    titulo += `, mobiliado`;
-  }
-
   if (filtros.codigo) {
     titulo += ` com código ${filtros.codigo}`;
   }
@@ -128,7 +123,6 @@ export async function generateMetadata({ searchParams }: Props) {
       ? awaitedSearchParams.caracteristicas.split("_")
       : [],
     lancamentos: awaitedSearchParams.lancamentos || "",
-    mobiliado: awaitedSearchParams.mobiliado || "",
     codigo: awaitedSearchParams.codigo || "",
     page: awaitedSearchParams.page || "1",
     sort: awaitedSearchParams.sort || "",
@@ -161,7 +155,6 @@ export default async function Imoveis({ searchParams }: Props) {
       ? awaitedSearchParams.caracteristicas.split("_")
       : [],
     lancamentos: awaitedSearchParams.lancamentos || "",
-    mobiliado: awaitedSearchParams.mobiliado || "",
     codigo: awaitedSearchParams.codigo || "",
     page: awaitedSearchParams.page || "1",
     sort: awaitedSearchParams.sort || "",
