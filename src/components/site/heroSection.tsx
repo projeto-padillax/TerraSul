@@ -159,19 +159,17 @@ export function HeroSection(banner: HeroSectionProps) {
     <section
       className="relative min-h-[90vh] min-h-[90svh] min-h-[90dvh] w-[100%] overflow-x-hidden bg-cover bg-center overflow-hidden object-cover justify-items-center content-center"
       style={{
-        backgroundImage: `linear-gradient(90deg, rgba(0,0,0,0.938813025210084) 0%, rgba(0,0,0,0) 60%),url(${banner.imageUrl})`,
+        backgroundImage: `linear-gradient(90deg, rgba(0,0,0,0.938813025210084) 0%, rgba(0,0,0,0) 60%),url(${banner.imageUrl ?? "https://www.terrasulimoveis.com.br/uploads/fundo.jpg"})`,
       }}
     >
       {/* <div className="absolute inset-0 bg-black bg-opacity-40"></div> */}
 
       <div
-        className={`z-10 py-8 px-8 sm:px-10 md:px-12 w-full h-full flex flex-col max-w-7xl ${
-          !banner.subtitulo ? "items-center" : ""
-        }`}
+        className={`z-10 py-8 px-8 sm:px-10 md:px-12 w-full h-full flex flex-col max-w-7xl`}
       >
         <div className="">
           <Link
-            href={banner.url}
+            href={banner.url ?? ""}
             className="text-4xl md:text-5xl font-semibold text-white mb-4 leading-tight font-[Montserrat, sans-serif]"
           >
             {banner.titulo}

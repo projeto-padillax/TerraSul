@@ -149,6 +149,7 @@ const extractProperties = (apiData: VistaApiResponse): Record<string, any> => {
  */
 async function fetchData<T>(url: string): Promise<T> {
   const response = await fetch(url, { headers: { Accept: "application/json" } });
+  console.log(response)
   if (!response.ok) {
     throw new Error(`Falha ao buscar dados de ${url}. Status: ${response.status}`);
   }
@@ -287,9 +288,9 @@ export async function POST() {
   try {
     // 1. Busca a primeira página para determinar o total de páginas
     const firstPageUrl: string = buildListingsUrl(1);
+    console.log(firstPageUrl)
     const firstPageData: VistaApiResponse = await fetchData<VistaApiResponse>(firstPageUrl);
     const totalPages: number = Number(firstPageData.paginas) || 1;
-
     let allProperties: Record<string, any> = extractProperties(firstPageData);
 
     // 2. Busca concorrentemente os dados das páginas restantes
