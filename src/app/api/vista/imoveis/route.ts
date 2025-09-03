@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/neon/db";
 import { NextRequest, NextResponse } from "next/server";
-import pLimit from 'p-limit';
+import pLimit from "p-limit";
 
 interface VistaPagination {
   pagina: number;
@@ -9,25 +8,25 @@ interface VistaPagination {
 }
 
 interface VistaResearchPayload {
-  fields: (string | Record<string, string[] | string>)[]; // Atualizado para suportar objetos aninhados como { Foto: [...] }
-  paginacao?: VistaPagination; // Opcional para detalhes
+  fields: (string | Record<string, string[] | string>)[];
+  paginacao?: VistaPagination;
 }
 
 interface VistaBaseParams {
   key: string;
-  showtotal?: string; // showtotal é usado apenas em 'listar'
+  showtotal?: string;
 }
 
 interface VistaApiResponse {
-  total?: string; // Pode ser indefinido em 'detalhes'
+  total?: string;
   paginas?: string;
   pagina?: string;
   quantidade?: string;
-  [propertyCode: string]: any; // Permite chaves dinâmicas como "12345"
+  [propertyCode: string]: any;
 }
 
 interface VistaPropertyDetailPhoto {
-  Destaque?: boolean; // Pode ser boolean da API
+  Destaque?: boolean;
   Codigo?: string;
   Foto?: string;
   FotoPequena?: string;
@@ -35,26 +34,8 @@ interface VistaPropertyDetailPhoto {
 
 interface VistaPropertyDetails {
   Foto?: Record<string, VistaPropertyDetailPhoto>;
-  [key: string]: any; // Para outros campos de detalhes
+  [key: string]: any;
 }
-
-// Interfaces para corresponder ao seu schema Prisma para inputs aninhados
-interface ImovelPhotoCreateInput {
-  destaque?: string | null;
-  codigo?: string | null;
-  url?: string | null;
-  urlPequena?: string | null;
-}
-
-interface ImovelCaracteristicaCreateInput {
-  nome: string;
-  valor: string;
-}
-
-type InfraEstruturaUncheckedCreateWithoutImovelInput = {
-  nome: string;
-  valor: string;
-};
 
 // --- Constantes ---
 const VISTA_BASE_URL = process.env.VISTA_REST_BASE_URL;
@@ -62,18 +43,59 @@ const PROPERTIES_PER_PAGE = 50;
 
 // Campos para a listagem (listar)
 const base: string[] = [
-  "Codigo", "ValorIptu", "ValorCondominio", "Categoria",
-  "AreaTerreno", "Bairro", "GMapsLatitude", "GMapsLongitude", "Cidade",
-  "ValorVenda", "ValorLocacao", "Dormitorios", "Suites", "Vagas", "AreaTotal",
-  "Caracteristicas", "InfraEstrutura", "Descricao", "DataHoraAtualizacao", "Lancamento",
-  "Status", "Empreendimento", "Endereco",
-  "Numero", "Complemento", "UF", "CEP", "DestaqueWeb", "FotoDestaque", "Latitude", "Longitude", "FotoDestaqueEmpreendimento", "VideoDestaque",
+  "Codigo",
+  "ValorIptu",
+  "ValorCondominio",
+  "Categoria",
+  "AreaTerreno",
+  "Bairro",
+  "GMapsLatitude",
+  "GMapsLongitude",
+  "Cidade",
+  "ValorVenda",
+  "ValorLocacao",
+  "Dormitorios",
+  "Suites",
+  "Vagas",
+  "AreaTotal",
+  "Caracteristicas",
+  "InfraEstrutura",
+  "Descricao",
+  "DataHoraAtualizacao",
+  "Lancamento",
+  "Status",
+  "Empreendimento",
+  "Endereco",
+  "Numero",
+  "Complemento",
+  "UF",
+  "CEP",
+  "DestaqueWeb",
+  "FotoDestaque",
+  "Latitude",
+  "Longitude",
+  "FotoDestaqueEmpreendimento",
+  "VideoDestaque",
 ];
 
 const LISTING_RESEARCH_FIELDS = [
-  ...base, 
-  { Corretor: ["Nome", "CodigoAgencia", "Agencia", "CodigoEquipe", "Foto", "AtuacaoLocacao", "AtuacaoVenda", "CRECI"]}
-]
+  ...base,
+  {
+    Corretor: [
+      "Nome",
+      "CodigoAgencia",
+      "Agencia",
+      "CodigoEquipe",
+      "Foto",
+      "AtuacaoLocacao",
+      "AtuacaoVenda",
+      "CRECI",
+      "Email",
+      "Celular",
+    ],
+  },
+];
+
 
 // Campos para os detalhes (detalhes) - inclui a estrutura de fotos
 const DETAIL_RESEARCH_FIELDS: (string | Record<string, string[]>)[] = [
@@ -181,6 +203,7 @@ interface VistaPropertyData {
   Caracteristicas?: Record<string, any>;
   Foto?: Record<string, VistaPropertyDetailPhoto>;
   CodigoImobiliaria?: string; // ✨ Add CodigoImobiliaria to the interface to be safe
+  Corretor_Codigo?: string; 
   Corretor?: Record<string, any>;
   [key: string]: any; // Permite outros campos dinâmicos da API Vista
 }
@@ -192,93 +215,74 @@ interface VistaPropertyData {
  * @param {string} code O código do imóvel.
  * @param {VistaPropertyData} propertyData Os dados iniciais do imóvel.
  */
-const processAndUpsertProperty = async (code: string, propertyData: VistaPropertyData): Promise<void> => {
+// Na função processAndUpsertProperty, substitua esta parte:
+
+const processAndUpsertProperty = async (
+  code: string,
+  propertyData: VistaPropertyData
+): Promise<void> => {
   try {
-    // ✨ Inclui também 'InfraEstrutura' no destructuring
-    const { Corretor, Caracteristicas, InfraEstrutura, Foto, DataHoraAtualizacao, Cidade, CodigoImobiliaria, ...restOfProperty } = propertyData || {};
+    const {
+      Corretor,
+      Caracteristicas,
+      InfraEstrutura,
+      Foto,
+      DataHoraAtualizacao,
+      Cidade,
+      Corretor_Codigo, // ✨ ADICIONADO: Remover este campo da estrutura
+      CodigoImobiliaria, // ✨ ADICIONADO: Remover este campo também se não estiver no schema
+      ...restOfProperty
+    } = propertyData || {};
 
     const validDataHoraAtualizacao: string =
       DataHoraAtualizacao && !isNaN(Date.parse(DataHoraAtualizacao))
         ? new Date(DataHoraAtualizacao).toISOString()
         : new Date().toISOString();
 
-    const details: VistaPropertyDetails = await fetchData<VistaPropertyDetails>(buildDetailsUrl(code)).catch(err => {
-      console.warn(`Não foi possível buscar detalhes para o imóvel ${code}: ${err.message}`);
-      return {};
-    });
+    // --- Detalhes para fotos ---
+    const details: VistaPropertyDetails = await fetchData<VistaPropertyDetails>(
+      buildDetailsUrl(code)
+    ).catch(() => ({}));
 
-    // Fotos
-    const photosToCreate: ImovelPhotoCreateInput[] = Object.values(details.Foto || {}).map((photo: VistaPropertyDetailPhoto) => ({
-      destaque: photo.Destaque !== undefined && photo.Destaque !== null ? String(photo.Destaque) : null,
+    // --- Fotos ---
+    const photosToCreate = Object.values(details.Foto || {}).map((photo) => ({
+      destaque: photo.Destaque != null ? String(photo.Destaque) : null,
       codigo: photo.Codigo ?? null,
       url: photo.Foto ?? null,
       urlPequena: photo.FotoPequena ?? null,
     }));
 
-    // Características
-    const characteristicsToCreate: ImovelCaracteristicaCreateInput[] = Object.entries(Caracteristicas || {}).map(
-      ([key, value]: [string, any]) => ({
+    // --- Características ---
+    const characteristicsToCreate = Object.entries(Caracteristicas || {}).map(
+      ([key, value]) => ({
         nome: key,
         valor: String(value),
       })
     );
 
-    // Infraestrutura ✨
-    const infraToCreate: InfraEstruturaUncheckedCreateWithoutImovelInput[] =
-      Object.entries(InfraEstrutura || {}).map(([key, value]) => ({
+    // --- Infraestrutura ---
+    const infraToCreate = Object.entries(InfraEstrutura || {}).map(
+      ([key, value]) => ({
         nome: key,
         valor: String(value),
-      }));
+      })
+    );
 
-    // Helpers de parsing
-    const parseToInt = (value: string | null | undefined): number | null => {
-      if (value === null || value === undefined || value.trim() === '') {
-        return null;
-      }
-      const parsed = parseInt(value, 10);
-      return isNaN(parsed) ? null : parsed;
-    };
+    const parseToInt = (v?: string | null) =>
+      v && v.trim() !== "" && !isNaN(Number(v)) ? parseInt(v, 10) : null;
 
-    const parseToFloat = (value: string | null | undefined): number | null => {
-      if (!value || value.trim() === '') return 0;
-      const parsed = parseFloat(value);
-      return isNaN(parsed) ? null : parsed;
-    };
+    const parseToFloat = (v?: string | null) =>
+      v && v.trim() !== "" && !isNaN(Number(v)) ? parseFloat(v) : null;
 
     const valorVendaInt = parseToInt(restOfProperty.ValorVenda);
     const valorLocacaoInt = parseToInt(restOfProperty.ValorLocacao);
     const areaTotalFloat = parseToFloat(restOfProperty.AreaTotal);
     const areaTerrenoFloat = parseToFloat(restOfProperty.AreaTerreno);
 
-    // Operações de update
-    const photosUpdateOperations: any = {};
-    if (photosToCreate.length > 0) {
-      photosUpdateOperations.fotos = {
-        deleteMany: {},
-        create: photosToCreate,
-      };
-    }
-
-    const caracteristicasUpdateOperations: any = {};
-    if (characteristicsToCreate.length > 0) {
-      caracteristicasUpdateOperations.caracteristicas = {
-        deleteMany: {},
-        create: characteristicsToCreate,
-      };
-    }
-
-    const infraestruturaUpdateOperations: any = {};
-    if (infraToCreate.length > 0) {
-      infraestruturaUpdateOperations.infraestrutura = {
-        deleteMany: {},
-        create: infraToCreate, // ✅ tipagem bate
-      };
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { AreaTotal, AreaTerreno, ...rest } = restOfProperty;
 
-    await prisma.imovel.upsert({
+    // --- Upsert do imóvel ---
+    const imovel = await prisma.imovel.upsert({
       where: { id: code },
       update: {
         ...rest,
@@ -288,9 +292,15 @@ const processAndUpsertProperty = async (code: string, propertyData: VistaPropert
         AreaTotal: areaTotalFloat,
         AreaTerreno: areaTerrenoFloat,
         DataHoraAtualizacao: validDataHoraAtualizacao,
-        ...photosUpdateOperations,
-        ...caracteristicasUpdateOperations,
-        ...infraestruturaUpdateOperations,
+        ...(photosToCreate.length
+          ? { fotos: { deleteMany: {}, create: photosToCreate } }
+          : {}),
+        ...(characteristicsToCreate.length
+          ? { caracteristicas: { deleteMany: {}, create: characteristicsToCreate } }
+          : {}),
+        ...(infraToCreate.length
+          ? { infraestrutura: { deleteMany: {}, create: infraToCreate } }
+          : {}),
       },
       create: {
         id: code,
@@ -303,10 +313,66 @@ const processAndUpsertProperty = async (code: string, propertyData: VistaPropert
         DataHoraAtualizacao: validDataHoraAtualizacao,
         fotos: { create: photosToCreate },
         caracteristicas: { create: characteristicsToCreate },
-        infraestrutura: { create: infraToCreate }, // ✅ ok
+        infraestrutura: { create: infraToCreate },
       },
+      select: { id: true, Codigo: true },
     });
-    console.log(`Imóvel ${code} processado e upserted com sucesso.`);
+
+    const imovelCodigo = (imovel as any).Codigo ?? imovel.id;
+
+    // --- Upsert do corretor ---
+    if (Corretor && Object.keys(Corretor).length > 0) {
+      const firstKey = Object.keys(Corretor)[0];
+      const c = Corretor[firstKey];
+
+      const dataCorretor = {
+        name: c.Nome || "Sem Nome",
+        email: c.Email || "",
+        telefone: c.Celular || "",
+        nomeAgencia: c.Agencia || "",
+        codigo: c.Codigo || firstKey,
+        codigoAgencia: c.CodigoAgencia || "",
+        codigoEquipe: c.CodigoEquipe || "",
+        foto: c.Foto || "",
+        atuacaoLocacao: c.AtuacaoLocacao || "",
+        atuacaoVenda: c.AtuacaoVenda || "",
+        CRECI: c.CRECI || `SEM-CRECI-${c.Codigo || firstKey}`,
+      };
+
+      const corretor = await prisma.corretor.upsert({
+        where: { CRECI: dataCorretor.CRECI },
+        update: { ...dataCorretor, status: true },
+        create: { ...dataCorretor, status: true },
+        select: { id: true },
+      });
+
+      const existing = await prisma.imoveisCorretor.findFirst({
+        where: { corretorId: corretor.id },
+        select: { id: true, codigosImoveis: true },
+      });
+
+      if (existing) {
+        if (!(existing.codigosImoveis || []).includes(imovelCodigo)) {
+          await prisma.imoveisCorretor.update({
+            where: { id: existing.id },
+            data: { codigosImoveis: { push: imovelCodigo } },
+          });
+        }
+      } else {
+        await prisma.imoveisCorretor.create({
+          data: {
+            nomeCliente: "API Vista",
+            mensagem: "Importado automaticamente",
+            codigosImoveis: [imovelCodigo],
+            corretor: { connect: { id: corretor.id } },
+            imovel: { connect: { id: imovel.id } },
+            status: true,
+          },
+        });
+      }
+    }
+
+    console.log(`Imóvel ${code} processado com sucesso.`);
   } catch (error: any) {
     console.error(`Erro ao processar imóvel ${code}:`, error.message);
   }
@@ -403,6 +469,28 @@ export async function GET(request: NextRequest) {
           },
           infraestrutura: {
             select: { nome: true, valor: true },
+          },
+          imoveisCorretor: { // <-- pivot table
+            select: {
+              codigosImoveis: true,
+              corretor: {
+                select: {
+                  id: true,
+                  codigo: true,
+                  name: true,
+                  email: true,
+                  telefone: true,
+                  nomeAgencia: true,
+                  codigoAgencia: true,
+                  codigoEquipe: true,
+                  foto: true,
+                  atuacaoLocacao: true,
+                  atuacaoVenda: true,
+                  CRECI: true,
+                  status: true,
+                },
+              },
+            },
           },
         },
       });
@@ -575,6 +663,28 @@ export async function GET(request: NextRequest) {
           },
           infraestrutura: {
             select: { nome: true, valor: true },
+          },
+          imoveisCorretor: {
+            select: {
+              codigosImoveis: true,
+              corretor: {
+                select: {
+                  id: true,
+                  codigo: true,
+                  name: true,
+                  email: true,
+                  telefone: true,
+                  nomeAgencia: true,
+                  codigoAgencia: true,
+                  codigoEquipe: true,
+                  foto: true,
+                  atuacaoLocacao: true,
+                  atuacaoVenda: true,
+                  CRECI: true,
+                  status: true,
+                },
+              },
+            },
           },
         },
       }),
