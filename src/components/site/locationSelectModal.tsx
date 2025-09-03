@@ -46,11 +46,9 @@ export function LocationSelectModal({
 
   useEffect(() => {
     if (isOpen) {
-      console.log(selectedLocations);
       setTempSelectedLocations(selectedLocations);
       if (selectedLocations.length > 0) {
-        setSelectedCidade(selectedLocations[0].split(":")[0] || ""); // Define a cidade selecionada com base na primeira localização selecionada
-        console.log(selectedCidade)
+        setSelectedCidade(selectedLocations[0].split(":")[0] || ""); 
       }
     }
   }, [isOpen, selectedLocations]);
@@ -61,7 +59,6 @@ export function LocationSelectModal({
         const res = await fetch("/api/vista/cidades");
         if (!res.ok) throw new Error("Erro ao buscar cidades");
         const data = await res.json();
-
         const cidadesMapeadas = data.cidades.map(
           (item: { cidade: string; bairros: string[] }) => ({
             cidade:
@@ -93,7 +90,6 @@ export function LocationSelectModal({
         console.error("Erro ao carregar cidades:", error);
       }
     };
-
     fetchCidades();
   }, []);
 
@@ -281,7 +277,7 @@ export function LocationSelectModal({
         <div className="flex justify-center pt-4 border-t">
           <Button
             onClick={handleConfirm}
-            className="bg-site-primary hover:bg-[#0084d7] cursor-pointer"
+            className="bg-site-primary hover:bg-site-primary-hover cursor-pointer"
           >
             Confirmar Seleção
           </Button>

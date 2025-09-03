@@ -66,23 +66,12 @@ export function HeroSection(banner: HeroSectionProps) {
       // Mapear IDs para labels amigáveis
       const typeLabels: { [key: string]: string } = {
         apartamentos: "Apartamentos",
-        "areas-empresariais": "Áreas Empresariais",
-        chacaras: "Chácaras",
-        "condominios-fechados": "Condomínios Fechados",
-        "loteamentos-condominios": "Loteamentos em Condomínios",
-        residencias: "Residências",
-        "residencias-predios-comerciais": "Residências/Prédios Comerciais",
-        sitios: "Sítios",
-        barracoes: "Barracões",
-        comerciais: "Comerciais",
-        estacionamentos: "Estacionamentos",
-        "galpoes-areas-empresariais": "Galpões e Áreas Empresariais",
-        "pontos-comerciais": "Pontos Comerciais",
-        "predios-comerciais": "Prédios Comerciais",
-        "salas-comerciais": "Salas Comerciais",
-        saloes: "Salões",
-        terrenos: "Terrenos",
-        "vagas-garagem": "Vagas de Garagem",
+        casa: "Casa",
+        "Casa em Condomínio": "Casa em Condomínio",
+        cobertura: "Cobertura",
+        comercial: "Comercial",
+        "Sitio/Chácara": "Sitio/Chácara",
+        terreno: "Terreno",
       };
       return typeLabels[searchData.tipos[0]] || searchData.tipos[0];
     }
@@ -109,7 +98,7 @@ export function HeroSection(banner: HeroSectionProps) {
 
     newSearchParams.set("page", String("1"));
     const path = `/busca/${searchData.action}/${
-      searchData.tipos.length > 0 ? searchData.tipos[0] : "imóveis"
+      searchData.tipos.length > 0 ? searchData.tipos[0].replace("/", "-") : "imóveis"
     }/${
       searchData.locations.length > 0
         ? searchData.locations[0].split(":")[0] +
@@ -123,7 +112,7 @@ export function HeroSection(banner: HeroSectionProps) {
 
   const handleAdvancedSearch = () => {
     const path = `/busca/${searchData.action}/${
-      searchData.tipos.length > 0 ? searchData.tipos[0] : "imóveis"
+      searchData.tipos.length > 0 ? searchData.tipos[0].replace("/", "-") : "imóveis"
     }/${
       searchData.locations.length > 0
         ? searchData.locations[0].split(":")[0] +
@@ -142,7 +131,7 @@ export function HeroSection(banner: HeroSectionProps) {
     if (!codigo) return;
     try {
       router.push(
-        `/imovel/${searchData.action}+${searchData.tipos[0] ?? "Imovel"}+em+${
+        `/imovel/${searchData.action}+${searchData.tipos[0].replace("/", "-") ?? "Imovel"}+em+${
           searchData.locations.length > 0
             ? searchData.locations[0].split(":")[0] +
               "+" +
@@ -159,7 +148,10 @@ export function HeroSection(banner: HeroSectionProps) {
     <section
       className="relative min-h-[90vh] min-h-[90svh] min-h-[90dvh] w-[100%] overflow-x-hidden bg-cover bg-center overflow-hidden object-cover justify-items-center content-center"
       style={{
-        backgroundImage: `linear-gradient(90deg, rgba(0,0,0,0.938813025210084) 0%, rgba(0,0,0,0) 60%),url(${banner.imageUrl ?? "https://www.terrasulimoveis.com.br/uploads/fundo.jpg"})`,
+        backgroundImage: `linear-gradient(90deg, rgba(0,0,0,0.938813025210084) 0%, rgba(0,0,0,0) 60%),url(${
+          banner.imageUrl ??
+          "https://www.terrasulimoveis.com.br/uploads/fundo.jpg"
+        })`,
       }}
     >
       {/* <div className="absolute inset-0 bg-black bg-opacity-40"></div> */}

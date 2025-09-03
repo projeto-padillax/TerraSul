@@ -59,7 +59,7 @@ export async function POST() {
       }
 
       const data = await response.json();
-
+      console.log(data)
       const bairros: string[] = (data?.Bairro ?? []).flatMap((b: string) =>
         b
           .split(",")
@@ -110,7 +110,7 @@ export async function GET() {
     const cidadesComBairros = await prisma.cidade.findMany({
       include: { bairros: true },
     });
-
+    console.log("teste123")
     const cidades = cidadesComBairros.map((c) => ({
       cidade: c.nome.toLowerCase(),
       bairros: c.bairros.map((b) => b.nome),

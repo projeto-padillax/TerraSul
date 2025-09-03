@@ -4,9 +4,9 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'www.gruposouza.com.br',
-        pathname: '/vista.imobi/fotos/**',
+        protocol: "https",
+        hostname: "cdn.vistahost.com.br",
+        pathname: "**", // aceita qualquer path desse domínio
       },
       {
         protocol: 'https',

@@ -111,7 +111,9 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   useEffect(() => {
     const newSearchParams = new URLSearchParams();
     const path = `/busca/${searchData.action}/${
-      searchData.tipos.length > 0 ? searchData.tipos[0] : "imóveis"
+      searchData.tipos.length > 0
+        ? searchData.tipos[0].replace("/", "-")
+        : "imóveis"
     }/${
       searchData.locations.length > 0
         ? searchData.locations[0].split(":")[0] +
@@ -231,7 +233,6 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       titulo += `, lançamento`;
     }
 
-
     if (filtros.bairro && filtros.bairro[0]?.split(",").length > 1) {
       titulo += ` em alguns bairros`;
     }
@@ -319,7 +320,9 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     if (!code) return;
     try {
       router.push(
-        `/imovel/${searchData.action}+${searchData.tipos[0] ?? "Imovel"}+em+${
+        `/imovel/${searchData.action}+${
+          searchData.tipos[0].replace("/", "-") ?? "Imovel"
+        }+em+${
           searchData.locations.length > 0
             ? searchData.locations[0].split(":")[0] +
               "+" +
@@ -341,7 +344,6 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         <div className="bg-white w-[full] max-w-7xl px-4 mx-auto py-4 border-t-1 ">
           <div className="flex flex-col md:flex-row w-[full] justify-start items-center md:gap-2">
             <div className="grid grid-cols-2 gap-4 md:flex md:flex-row md:gap-2 md:flex-wrap md:justify-between w-full justify-start items-center">
-
               <Button
                 variant="outline"
                 onClick={() => openModal("type")}
@@ -603,10 +605,10 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                           setSearchData((prev) => ({
                             ...prev,
                             caracteristicas: checked
-                              ? prev.caracteristicas.filter(
+                              ? [...prev.caracteristicas, type.id] // agora sim, adiciona quando checked = true
+                              : prev.caracteristicas.filter(
                                   (id) => id !== type.id
-                                )
-                              : [...prev.caracteristicas, type.id],
+                                ), // remove quando false
                           }));
                           setPage(1); // Reset page to 1 when caracteristicas changes
                         }}
