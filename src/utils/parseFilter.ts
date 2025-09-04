@@ -15,6 +15,7 @@ export interface Filtros {
   page?: string;
   codigo?: string;
   sort?: string;
+  empreendimento?: string
 }
 
 export function parseFiltros(filtros: string[]): Filtros {

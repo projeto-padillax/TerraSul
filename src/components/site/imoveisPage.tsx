@@ -60,8 +60,12 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     vagas: filtros.vagas ?? "",
     caracteristicas: filtros.caracteristicas ?? ([] as string[]),
     lancamentos: filtros.lancamentos ?? "",
+    empreendimento: filtros.empreendimento ?? "",
   });
   const [codigo, setCodigo] = useState(filtros.codigo ?? "");
+  const [empreendimento, setEmpreendimento] = useState(
+    filtros.empreendimento ?? ""
+  );
   const [modals, setModals] = useState({
     location: false,
     type: false,
@@ -101,9 +105,10 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         ? searchParams.get("caracteristicas")!.split(",")
         : [],
       lancamentos: searchParams.get("lancamentos") ?? "",
+      empreendimento: searchParams.get("empreendimento") ?? "",
     };
-    if(newData.locations.length == 0 && searchParams.has("cidade")){
-      newData.locations = [`${searchParams.get("cidade")}:all`]
+    if (newData.locations.length == 0 && searchParams.has("cidade")) {
+      newData.locations = [`${searchParams.get("cidade")}:all`];
     }
     setSearchData(newData);
     setPage(Number(searchParams.get("page") ?? 1));
@@ -153,6 +158,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       newSearchParams.set("lancamentos", searchData.lancamentos);
     if (codigo) newSearchParams.set("codigo", codigo);
     // ... e os outros filtros
+    if (empreendimento) newSearchParams.set("empreendimento", empreendimento);
     if (sortOrder) newSearchParams.set("sort", sortOrder);
     newSearchParams.set("page", String(page));
     // 2. Atualizar a URL do navegador
@@ -242,7 +248,8 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     if (filtros.cidade) {
       titulo += ` em ${filtros.cidade}`;
       if (filtros.bairro && filtros.bairro[0]?.split(",").length === 1) {
-        titulo += filtros.bairro[0] == "all" ? "" : ` no bairro ${filtros.bairro[0]}`;
+        titulo +=
+          filtros.bairro[0] == "all" ? "" : ` no bairro ${filtros.bairro[0]}`;
       }
     }
 
@@ -254,12 +261,14 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   }
 
   function toSlug(text: string): string {
-    return text
-      // .normalize("NFD") // separa acentos das letras
-      .trim() // remove espaços extras do começo/fim
-      .replace(/\s+/g, "-") // troca espaços por -
-      .replace(/-+/g, "-") // evita múltiplos hífens
-      // .toLowerCase();
+    return (
+      text
+        // .normalize("NFD") // separa acentos das letras
+        .trim() // remove espaços extras do começo/fim
+        .replace(/\s+/g, "-") // troca espaços por -
+        .replace(/-+/g, "-")
+    ); // evita múltiplos hífens
+    // .toLowerCase();
   }
 
   function gerarTitulos(imovel: Imovel) {
@@ -267,7 +276,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
     let categoria = imovel.Categoria ? imovel.Categoria : "Imóvel";
-    
+
     categoria = categoria.replaceAll(" ", "_");
     const area =
       imovel.AreaTerreno || imovel.AreaTotal
@@ -637,22 +646,25 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                   }}
                 />
               </div>
-              <div className="flex items-center space-x-2 w-full h-12 md:w-fit justify-between">
-                {/* <Label htmlFor="mobiliado">Mobiliado</Label>
-                <Switch
-                  checked={
-                    searchData.mobiliado == ""
-                      ? false
-                      : searchData.mobiliado === "sim"
-                  }
-                  onCheckedChange={(checked) => {
+              <div className="flex items-center border rounded-lg overflow-hidden w-full md:w-fit h-9 lg:h-10 lg:justify-self-end self-center">
+                <Input
+                  placeholder="Empreendimento"
+                  value={empreendimento}
+                  onChange={(e) => setEmpreendimento(e.target.value)}
+                  className="placeholder:text-black border-0 text-sm focus:ring-0 focus:outline-none focus-visible:ring-0 shadow-none text-black"
+                />
+                <Button
+                  onClick={() => {
                     setSearchData({
                       ...searchData,
-                      mobiliado: checked ? "sim" : "",
+                      empreendimento: empreendimento,
                     });
-                    setPage(1); // Reset page to 1 when mobiliado changes
+                    setPage(1);
                   }}
-                /> */}
+                  className="bg-transparent rounded-none h-full cursor-pointer hover:bg-site-primary text-gray-500 hover:text-white"
+                >
+                  <Search className="h-4 w-4 text-current" />
+                </Button>
               </div>
             </div>
           </div>
