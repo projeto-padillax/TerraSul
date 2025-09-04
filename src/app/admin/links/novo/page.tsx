@@ -7,10 +7,10 @@ export default function NovoLinkPage() {
                 <div className="mb-8">
                     <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-200">
                         <h1 className="text-3xl font-semibold text-gray-900 mb-2">
-                            Novo Banner na Home
+                            Novo Link para mais acessados
                         </h1>
                         <p className="text-lg text-gray-600">
-                            Crie um novo banner para a página inicial
+                            Crie um novo link para a página mais acessados
                         </p>
                     </div>
                 </div>
