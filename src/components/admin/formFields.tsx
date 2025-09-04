@@ -108,7 +108,7 @@ export function FormFields<T extends FieldValues>({
                 <FormControl>
                   <CldUploadWidget
                     options={{ clientAllowedFormats: ['png', 'jpeg', 'jpg', 'webp'] }}
-                    uploadPreset="grupo-souze-unsigned"
+                    uploadPreset="terrasul-unsigned"
                     onSuccess={(result) => {
                       if (result?.info && typeof result.info !== "string") {
                         const url = result.info.secure_url;

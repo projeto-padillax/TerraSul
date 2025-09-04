@@ -1,6 +1,6 @@
 // components/Footer.tsx
 import Link from "next/link";
-import { FaYoutube } from "react-icons/fa";
+import { FaFacebook, FaYoutube } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FaWhatsapp } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
@@ -32,7 +32,7 @@ export default async function Footer() {
             <div className="mb-6 lg:mb-0">
               <Link href="/">
                 <Image
-                  src={siteConfig?.logoUrl ?? "/logoGrupoSouza.png"}
+                  src={siteConfig?.logoUrl ?? "/terraSul.svg"}
                   alt={"Logo do Site"}
                   width={150}
                   height={47}
@@ -44,8 +44,15 @@ export default async function Footer() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
               <span>Siga-nos</span>
               <div className="flex space-x-3">
+                {siteConfig?.facebookUrl && (<a
+                  href={siteConfig.facebookUrl}
+                  className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
+                  aria-label="Instagram"
+                >
+                  <FaFacebook className="w-7 h-7 text-site-primary" />
+                </a>)}
                 <a
-                  href="https://www.instagram.com/gruposouza/"
+                  href="https://www.instagram.com/terrasul_imoveis/"
                   className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
                   aria-label="Instagram"
                 >

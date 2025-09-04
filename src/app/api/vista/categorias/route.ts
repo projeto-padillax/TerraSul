@@ -21,7 +21,7 @@ export async function POST() {
         pesquisa: JSON.stringify(pesquisa),
       });
 
-      return `https://gruposou-rest.vistahost.com.br/imoveis/listarConteudo?${params}`;
+      return `https://terrasul-rest.vistahost.com.br/imoveis/listarConteudo?${params}`;
     };
 
     // Requisições paralelas
@@ -58,20 +58,6 @@ export async function POST() {
     const categoriasResidencial = parseCategorias(residencialData?.Categoria);
     const categoriasComercial = parseCategorias(comercialData?.Categoria);
 
-    // Limpa a tabela antes de inserir novos dados para evitar duplicatas em cada execução
-    await prisma.finalidade.deleteMany({});
-
-    // Salva no Neon usando Prisma
-    const finalidadesParaSalvar = [
-      ...categoriasResidencial.map((nome) => ({ nome, tipo: "residencial" })),
-      ...categoriasComercial.map((nome) => ({ nome, tipo: "comercial" })),
-    ];
-
-    await prisma.finalidade.createMany({
-      data: finalidadesParaSalvar,
-      skipDuplicates: true, // Garante que não haverá duplicatas se, por algum motivo, a mesma categoria for gerada novamente
-    });
-
     return new Response(
       JSON.stringify({
         message: "Categorias armazenadas com sucesso no Neon",
@@ -82,49 +68,6 @@ export async function POST() {
     );
   } catch (error) {
     console.error("Erro no POST:", error);
-    return new Response(
-      JSON.stringify({ error: "Erro interno no servidor" }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
-  } finally {
-    await prisma.$disconnect(); // Desconecta o Prisma Client no final da requisição
-  }
-}
-
-export async function GET() {
-  try {
-    // Consulta todas as finalidades no Neon usando Prisma
-    const finalidades = await prisma.finalidade.findMany({
-      select: {
-        nome: true,
-        tipo: true,
-      },
-    });
-
-    // Filtra e organiza por tipo
-    const residencial = finalidades
-      .filter((f) => f.tipo === "residencial")
-      .map((f) => f.nome);
-    const comercial = finalidades
-      .filter((f) => f.tipo === "comercial")
-      .map((f) => f.nome);
-
-    if (!residencial.length && !comercial.length) {
-      return new Response(
-        JSON.stringify({ error: "Categorias não encontradas" }),
-        { status: 404, headers: { "Content-Type": "application/json" } }
-      );
-    }
-
-    return new Response(
-      JSON.stringify({
-        residencial: residencial,
-        comercial: comercial,
-      }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
-    );
-  } catch (error) {
-    console.error("Erro ao buscar categorias:", error);
     return new Response(
       JSON.stringify({ error: "Erro interno no servidor" }),
       { status: 500, headers: { "Content-Type": "application/json" } }

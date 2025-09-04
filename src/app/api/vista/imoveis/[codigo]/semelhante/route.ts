@@ -68,7 +68,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ codigo: 
     const base: Imovel = baseImovel as Imovel; // Cast to your Imovel type for consistency with decideModalidade
 
     const modalidade = decideModalidade(base, explicitModalidade ?? undefined);
-    const priceField = modalidade === "venda" ? "ValorVenda" : "ValorLocacao";
+    const priceField = "ValorVenda";
     const basePrice = base[priceField]; // Access directly, it's already a number or null
 
     if (basePrice === null || basePrice === undefined || basePrice <= 0) {

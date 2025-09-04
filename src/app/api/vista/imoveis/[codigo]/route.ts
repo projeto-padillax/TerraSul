@@ -94,7 +94,7 @@ async function fetchFromVista(codigo: string): Promise<VistaImovel | null> {
   const key = process.env.VISTA_KEY;
   if (!key) throw new Error("VISTA_KEY não configurada no .env");
 
-  const base = "https://gruposou-rest.vistahost.com.br/imoveis/detalhes";
+  const base = "https://terrasul-rest.vistahost.com.br/imoveis/detalhes";
   const url =
     `${base}?key=${encodeURIComponent(key)}` +
     `&imovel=${encodeURIComponent(codigo)}` +

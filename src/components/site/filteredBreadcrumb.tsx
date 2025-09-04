@@ -58,7 +58,7 @@ export default function BreadCrumb() {
         const tipoCapitalized = capitalize(tipo);
         const cidadeCapitalized = capitalize(cidade);
         items.push({
-          name: `${tipoCapitalized} em ${cidadeCapitalized}`,
+          name: `${tipoCapitalized} à venda em ${cidadeCapitalized}`,
           href: `/busca?action=comprar&tipos=${tipo}&cidade=${cidade}`,
         });
       }

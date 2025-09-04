@@ -35,7 +35,7 @@ export async function generateMetadata({
   if (imovel.Categoria) {
     title += `${capitalizar(imovel.Categoria)} `;
   }
-  if (imovel.status == "VENDA") {
+  if (imovel.Status == "VENDA") {
     title += `à venda em`;
   } else {
     title += `para alugar em`;
@@ -101,7 +101,7 @@ export default async function ImovelPage({
       str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
     let status = ""
-    if (imovel.status == "VENDA") {
+    if (imovel.Status == "VENDA") {
       status += ` à venda`;
     } else {
       status += ` para alugar`;

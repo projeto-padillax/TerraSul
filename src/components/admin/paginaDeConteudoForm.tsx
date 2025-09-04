@@ -317,7 +317,7 @@ export default function PaginaDeConteudoForm({
                                 "webp",
                               ],
                             }}
-                            uploadPreset="grupo-souze-unsigned"
+                            uploadPreset="terrasul-unsigned"
                             onSuccess={(result) => {
                               if (
                                 result?.info &&

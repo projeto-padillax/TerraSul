@@ -15,7 +15,7 @@ export async function POST() {
         ...baseParams,
         pesquisa: JSON.stringify(basePesquisa),
       });
-      return `https://gruposou-rest.vistahost.com.br/imoveis/listarConteudo?${params}`;
+      return `https://terrasul-rest.vistahost.com.br/imoveis/listarConteudo?${params}`;
     };
 
     const firstResponse = await fetch(makeUrl(), {
@@ -46,7 +46,7 @@ export async function POST() {
         pesquisa: JSON.stringify(pesquisa),
       });
 
-      const url = `https://gruposou-rest.vistahost.com.br/imoveis/listarConteudo?${params}`;
+      const url = `https://terrasul-rest.vistahost.com.br/imoveis/listarConteudo?${params}`;
 
       const response = await fetch(url, {
         method: "GET",
