@@ -26,13 +26,13 @@ export default async function Header() {
                 <Link href={"/favoritos"}>
                   <FavoriteIcon />
                 </Link>
-                <Link href="tel:+551934178190"
+                <Link href="tel:+555132577777"
                   className="flex items-center text-site-secondary hover:text-site-secondary-hover"
-                  aria-label="Ligar para o número (19) 3417-8190"
+                  aria-label="Ligar para o número (51) 3257-7777"
                 >
                   <Phone className="h-8 w-8 mr-1" />
                 </Link>
-                <Link href='https://wa.me/5519992430041'
+                <Link href='https://wa.me/555198121-4507'
                   className="flex items-center text-site-secondary hover:text-site-secondary-hover"
                   aria-label="Conversar via WhatsApp"
                 >
