@@ -14,13 +14,6 @@ import Link from "next/link";
 const capitalize = (s: string) =>
   s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 
-const TRANSLATIONS: Record<string, string> = {
-  comprar: "Comprar",
-  alugar: "Alugar",
-  s: "Lançamentos",
-  true: "Lançamentos",
-};
-
 export default function BreadCrumb() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
