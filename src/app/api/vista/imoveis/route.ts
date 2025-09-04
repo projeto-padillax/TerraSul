@@ -51,12 +51,17 @@ interface ImovelCaracteristicaCreateInput {
   valor: string;
 }
 
+type InfraEstruturaUncheckedCreateWithoutImovelInput = {
+  nome: string;
+  valor: string;
+};
+
 // --- Constantes ---
 const VISTA_BASE_URL = process.env.VISTA_REST_BASE_URL;
 const PROPERTIES_PER_PAGE = 50;
 
 // Campos para a listagem (listar)
-const LISTING_RESEARCH_FIELDS: string[] = [
+const base: string[] = [
   "Codigo", "ValorIptu", "ValorCondominio", "Categoria",
   "AreaTerreno", "Bairro", "GMapsLatitude", "GMapsLongitude", "Cidade",
   "ValorVenda", "ValorLocacao", "Dormitorios", "Suites", "Vagas", "AreaTotal",
@@ -64,6 +69,11 @@ const LISTING_RESEARCH_FIELDS: string[] = [
   "Status", "Empreendimento", "Endereco",
   "Numero", "Complemento", "UF", "CEP", "DestaqueWeb", "FotoDestaque", "Latitude", "Longitude", "FotoDestaqueEmpreendimento", "VideoDestaque",
 ];
+
+const LISTING_RESEARCH_FIELDS = [
+  ...base, 
+  { Corretor: ["Nome", "CodigoAgencia", "Agencia", "CodigoEquipe", "Foto", "AtuacaoLocacao", "AtuacaoVenda", "CRECI"]}
+]
 
 // Campos para os detalhes (detalhes) - inclui a estrutura de fotos
 const DETAIL_RESEARCH_FIELDS: (string | Record<string, string[]>)[] = [
@@ -149,7 +159,6 @@ const extractProperties = (apiData: VistaApiResponse): Record<string, any> => {
  */
 async function fetchData<T>(url: string): Promise<T> {
   const response = await fetch(url, { headers: { Accept: "application/json" } });
-  console.log(response)
   if (!response.ok) {
     throw new Error(`Falha ao buscar dados de ${url}. Status: ${response.status}`);
   }
@@ -168,9 +177,11 @@ interface VistaPropertyData {
   AreaTerreno?: string;
   DataHoraAtualizacao?: string;
   Lancamento?: string;
+  InfraEstrutura?: Record<string, any>;
   Caracteristicas?: Record<string, any>;
   Foto?: Record<string, VistaPropertyDetailPhoto>;
   CodigoImobiliaria?: string; // ✨ Add CodigoImobiliaria to the interface to be safe
+  Corretor?: Record<string, any>;
   [key: string]: any; // Permite outros campos dinâmicos da API Vista
 }
 
@@ -183,9 +194,8 @@ interface VistaPropertyData {
  */
 const processAndUpsertProperty = async (code: string, propertyData: VistaPropertyData): Promise<void> => {
   try {
-    // ✨ Include 'CodigoImobiliaria' in the destructuring
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { Caracteristicas, Foto, DataHoraAtualizacao, Cidade, CodigoImobiliaria, ...restOfProperty } = propertyData || {};
+    // ✨ Inclui também 'InfraEstrutura' no destructuring
+    const { Corretor, Caracteristicas, InfraEstrutura, Foto, DataHoraAtualizacao, Cidade, CodigoImobiliaria, ...restOfProperty } = propertyData || {};
 
     const validDataHoraAtualizacao: string =
       DataHoraAtualizacao && !isNaN(Date.parse(DataHoraAtualizacao))
@@ -197,6 +207,7 @@ const processAndUpsertProperty = async (code: string, propertyData: VistaPropert
       return {};
     });
 
+    // Fotos
     const photosToCreate: ImovelPhotoCreateInput[] = Object.values(details.Foto || {}).map((photo: VistaPropertyDetailPhoto) => ({
       destaque: photo.Destaque !== undefined && photo.Destaque !== null ? String(photo.Destaque) : null,
       codigo: photo.Codigo ?? null,
@@ -204,11 +215,22 @@ const processAndUpsertProperty = async (code: string, propertyData: VistaPropert
       urlPequena: photo.FotoPequena ?? null,
     }));
 
-    const characteristicsToCreate: ImovelCaracteristicaCreateInput[] = Object.entries(Caracteristicas || {}).map(([key, value]: [string, any]) => ({
-      nome: key,
-      valor: String(value),
-    }));
+    // Características
+    const characteristicsToCreate: ImovelCaracteristicaCreateInput[] = Object.entries(Caracteristicas || {}).map(
+      ([key, value]: [string, any]) => ({
+        nome: key,
+        valor: String(value),
+      })
+    );
 
+    // Infraestrutura ✨
+    const infraToCreate: InfraEstruturaUncheckedCreateWithoutImovelInput[] =
+      Object.entries(InfraEstrutura || {}).map(([key, value]) => ({
+        nome: key,
+        valor: String(value),
+      }));
+
+    // Helpers de parsing
     const parseToInt = (value: string | null | undefined): number | null => {
       if (value === null || value === undefined || value.trim() === '') {
         return null;
@@ -228,6 +250,7 @@ const processAndUpsertProperty = async (code: string, propertyData: VistaPropert
     const areaTotalFloat = parseToFloat(restOfProperty.AreaTotal);
     const areaTerrenoFloat = parseToFloat(restOfProperty.AreaTerreno);
 
+    // Operações de update
     const photosUpdateOperations: any = {};
     if (photosToCreate.length > 0) {
       photosUpdateOperations.fotos = {
@@ -244,15 +267,22 @@ const processAndUpsertProperty = async (code: string, propertyData: VistaPropert
       };
     }
 
+    const infraestruturaUpdateOperations: any = {};
+    if (infraToCreate.length > 0) {
+      infraestruturaUpdateOperations.infraestrutura = {
+        deleteMany: {},
+        create: infraToCreate, // ✅ tipagem bate
+      };
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { AreaTotal, AreaTerreno, ...rest } = restOfProperty;
-
 
     await prisma.imovel.upsert({
       where: { id: code },
       update: {
-        ...rest, // agora rest não contém os campos de área
-        Cidade: Cidade,
+        ...rest,
+        Cidade,
         ValorVenda: valorVendaInt,
         ValorLocacao: valorLocacaoInt,
         AreaTotal: areaTotalFloat,
@@ -260,22 +290,20 @@ const processAndUpsertProperty = async (code: string, propertyData: VistaPropert
         DataHoraAtualizacao: validDataHoraAtualizacao,
         ...photosUpdateOperations,
         ...caracteristicasUpdateOperations,
+        ...infraestruturaUpdateOperations,
       },
       create: {
         id: code,
-        ...rest, // rest sem campos de área
-        Cidade: Cidade,
+        ...rest,
+        Cidade,
         ValorVenda: valorVendaInt,
         ValorLocacao: valorLocacaoInt,
         AreaTotal: areaTotalFloat,
         AreaTerreno: areaTerrenoFloat,
         DataHoraAtualizacao: validDataHoraAtualizacao,
-        fotos: {
-          create: photosToCreate
-        },
-        caracteristicas: {
-          create: characteristicsToCreate
-        },
+        fotos: { create: photosToCreate },
+        caracteristicas: { create: characteristicsToCreate },
+        infraestrutura: { create: infraToCreate }, // ✅ ok
       },
     });
     console.log(`Imóvel ${code} processado e upserted com sucesso.`);
@@ -371,6 +399,9 @@ export async function GET(request: NextRequest) {
             orderBy: { id: "asc" },
           },
           caracteristicas: {
+            select: { nome: true, valor: true },
+          },
+          infraestrutura: {
             select: { nome: true, valor: true },
           },
         },
@@ -521,7 +552,6 @@ export async function GET(request: NextRequest) {
         break;
     }
 
-
     // --- Query ---
     const [imoveis, totalCount] = await prisma.$transaction([
       prisma.imovel.findMany({
@@ -541,6 +571,9 @@ export async function GET(request: NextRequest) {
             orderBy: { id: "asc" },
           },
           caracteristicas: {
+            select: { nome: true, valor: true },
+          },
+          infraestrutura: {
             select: { nome: true, valor: true },
           },
         },
