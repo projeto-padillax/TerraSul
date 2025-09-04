@@ -36,6 +36,23 @@ model Corretor {
   imoveis   ImoveisCorretor[]
 }
 
+model CorretorExterno {
+  id        String            @id @default(cuid())
+  name      String
+  email     String
+  telefone  String
+  nomeAgencia String
+  codigo String
+  codigoAgencia String
+  codigoEquipe String
+  foto String
+  atuacaoLocacao String
+  atuacaoVenda String
+  CRECI     String            @unique
+  createdAt DateTime          @default(now())
+  imoveis   Imovel[]
+}
+
 model User {
   id       String        @id @default(cuid())
   name     String
@@ -243,6 +260,9 @@ model Imovel {
   fotos           Foto[]
   caracteristicas Caracteristica[]
   infraestrutura InfraEstrutura[]
+
+  corretorId   String?
+  corretor     CorretorExterno? @relation(fields: [corretorId], references: [id])
 
   @@index([Cidade, Status])
   @@index([Bairro])
