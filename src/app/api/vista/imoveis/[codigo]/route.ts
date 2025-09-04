@@ -15,7 +15,6 @@ export async function GET(
       },
       include: {
         fotos: {
-          // Include related photos
           select: {
             id: true,
             destaque: true,
@@ -28,10 +27,25 @@ export async function GET(
           },
         },
         caracteristicas: {
-          // Include related characteristics
           select: {
             nome: true,
             valor: true,
+          },
+        },
+        corretor: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            telefone: true,
+            nomeAgencia: true,
+            codigo: true,
+            codigoAgencia: true,
+            codigoEquipe: true,
+            foto: true,
+            atuacaoLocacao: true,
+            atuacaoVenda: true,
+            CRECI: true,
           },
         },
       },

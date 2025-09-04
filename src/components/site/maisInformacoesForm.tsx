@@ -16,11 +16,12 @@ const schema = z.object({
 
 interface MaisInformacoesFormProps {
     codigoImovel: string
+    codigoCorretor?: string;
 }
 
 type FormData = z.infer<typeof schema>
 
-export default function MaisInformacoesForm({ codigoImovel }: MaisInformacoesFormProps) {
+export default function MaisInformacoesForm({ codigoImovel, codigoCorretor }: MaisInformacoesFormProps) {
     const [isPending, startTransition] = useTransition()
 
     const defaultMsg = `Gostaria de mais detalhes sobre o imóvel código ${codigoImovel}. Aguardo.`
@@ -46,7 +47,7 @@ export default function MaisInformacoesForm({ codigoImovel }: MaisInformacoesFor
                     mensagem: data.mensagem,
                     codigoImovel,
                     urlRespondida: typeof window !== 'undefined' ? window.location.href : '',
-                })
+                }, codigoCorretor)
                 toast.success('Mensagem enviada com sucesso!')
                 reset({ nome: '', celular: '', email: '', mensagem: defaultMsg })
             } catch (e) {

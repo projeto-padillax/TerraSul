@@ -39,9 +39,10 @@ interface AgendamentoModalProps {
   open: boolean;
   onClose: () => void;
   codigoImovel: string;
+  codigoCorretor?: string;
 }
 
-export default function AgendamentoModal({ open, onClose, codigoImovel }: AgendamentoModalProps) {
+export default function AgendamentoModal({ open, onClose, codigoImovel, codigoCorretor }: AgendamentoModalProps) {
   const [isPending, startTransition] = useTransition();
 
   const DAYS_PER_PAGE = 6; 
@@ -98,7 +99,7 @@ export default function AgendamentoModal({ open, onClose, codigoImovel }: Agenda
           mensagem: data.mensagem,
           origem: "ORGANICO",
           codigoImovel,
-        });
+        },codigoCorretor);
 
         toast.success("Agendamento enviado com sucesso!");
         reset({ nome: "", email: "", celular: "", data: datas[0], mensagem: "" });
