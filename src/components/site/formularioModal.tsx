@@ -14,6 +14,7 @@ interface FormularioModalProps {
   tipo: "whatsapp" | "financiamento";
   valorImovel?: number;
   codigoImovel: string;
+  codigoCorretor?: string;
 }
 
 export default function FormularioModal({
@@ -22,6 +23,7 @@ export default function FormularioModal({
   tipo,
   valorImovel,
   codigoImovel,
+  codigoCorretor,
 }: FormularioModalProps) {
   const schema = z
     .object({
@@ -66,7 +68,7 @@ export default function FormularioModal({
           urlRespondida: typeof window !== "undefined" ? window.location.href : "",
           codigoImovel,
           mensagem: mensagemFinal,
-        });
+        },codigoCorretor);
 
         toast.success("Mensagem enviada com sucesso!");
         reset();

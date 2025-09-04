@@ -19,6 +19,7 @@ const formSchema = z.object({
 
 interface AgendamentoFormProps {
     codigo: string
+    codigoCorretor?: string;
 }
 
 type FormData = z.infer<typeof formSchema>
@@ -39,7 +40,7 @@ function labelDia(date: Date) {
     return semFeira.trim().toLocaleUpperCase('pt-BR')
 }
 
-export default function AgendamentoForm({ codigo }: AgendamentoFormProps) {
+export default function AgendamentoForm({ codigo, codigoCorretor }: AgendamentoFormProps) {
     const [startOffset, setStartOffset] = useState(1)
     const datas = getDiasUteis(addDays(new Date(), startOffset), 8)
     const [dataSelecionada, setDataSelecionada] = useState<Date>(datas[0])
@@ -65,7 +66,7 @@ export default function AgendamentoForm({ codigo }: AgendamentoFormProps) {
                     DataVisita: data.data,
                     origem: 'ORGANICO',
                     codigoImovel: codigo,
-                })
+                }, codigoCorretor)
                 toast.success('Agendamento enviado com sucesso!')
                 reset({ nome: '', celular: '', email: '', data: datas[0] })
                 setDataSelecionada(datas[0])

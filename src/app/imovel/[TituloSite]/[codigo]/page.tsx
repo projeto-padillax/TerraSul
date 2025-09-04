@@ -491,7 +491,7 @@ export default async function ImovelPage({
                   infraestrutura={imovel.InfraEstrutura}
                 />
 
-                <AgendamentoForm codigo={imovel.Codigo} />
+                <AgendamentoForm codigo={imovel.Codigo} codigoCorretor={imovel.corretor?.codigo} />
 
                 <MidiaBox
                   imagens={imagensGaleria}
@@ -521,6 +521,7 @@ export default async function ImovelPage({
                 }
                 codigoImovel={imovel.Codigo}
                 valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
+                corretor={imovel.corretor}
               />
             </div>
 

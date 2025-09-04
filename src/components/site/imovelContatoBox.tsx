@@ -5,16 +5,19 @@ import MaisInformacoesForm from './maisInformacoesForm'
 import FormularioModal from './formularioModal'
 import { useState } from 'react'
 import AgendamentoModal from './agendamentoModal'
+import { CorretorExterno } from '@prisma/client'
 
 interface ImovelContatoBoxProps {
     financiamento?: boolean
     codigoImovel: string
     valor: number
+    corretor?: CorretorExterno
 }
 
 export default function ImovelContatoBox({
     codigoImovel,
     valor,
+    corretor,
 }: ImovelContatoBoxProps) {
     const isVenda = true
 
@@ -34,7 +37,7 @@ export default function ImovelContatoBox({
                     <div className="flex items-start gap-4">
                         <div className="w-[70px] h-[70px] rounded-md overflow-hidden">
                             <Image
-                                src="/perfil.jpg"
+                                src={corretor?.foto || "/terraSulLogo.png"}
                                 alt="Corretor"
                                 width={70}
                                 height={70}
@@ -43,7 +46,7 @@ export default function ImovelContatoBox({
                         </div>
                         <div>
                             <p className="text-sm font-semibold text-[#111827] tracking-wide uppercase mb-3">
-                                Nome Corretor
+                                {corretor?.name || "Terra Sul"}
                             </p>
 
                             <div className="text-[12px] text-black flex items-center gap-5">
@@ -88,7 +91,7 @@ export default function ImovelContatoBox({
                     </div>
 
                     <div className="mt-2 sm:mt-2">
-                        <MaisInformacoesForm codigoImovel={codigoImovel} />
+                        <MaisInformacoesForm codigoImovel={codigoImovel} codigoCorretor={corretor?.codigo} />
                     </div>
 
                     <button
@@ -133,6 +136,7 @@ export default function ImovelContatoBox({
                     tipo={tipoModal}
                     valorImovel={valor}
                     codigoImovel={codigoImovel}
+                    codigoCorretor={corretor?.codigo}
                 />
             )}
 
@@ -140,6 +144,7 @@ export default function ImovelContatoBox({
                 open={abrirAgendamento}
                 onClose={() => setAbrirAgendamento(false)}
                 codigoImovel={codigoImovel}
+                codigoCorretor={corretor?.codigo}
             />
         </div>
     )

@@ -8,6 +8,7 @@ import {
   InteresseFormulario,
   Formulario,
 } from "@prisma/client";
+import { sendEmailFormulario } from "../mail/sendEmail";
 
 const formularioServerSchema = z.object({
   tipo: z.enum(tipoFormulario),
@@ -59,7 +60,7 @@ export async function findFormulario(id: string): Promise<Formulario | null> {
   });
 }
 
-export async function createFormulario(input: FormularioInput): Promise<void> {
+export async function createFormulario(input: FormularioInput, codigoCorretor?: string): Promise<void> {
   const validated = formularioServerSchema.parse(input);
 
   await prisma.formulario.create({
@@ -80,6 +81,13 @@ export async function createFormulario(input: FormularioInput): Promise<void> {
       valorDesejado: validated.valorDesejado,
     },
   });
+
+  if (codigoCorretor == "78" || codigoCorretor == undefined){
+    await sendEmailFormulario(validated,true)
+  }
+  else{
+    await sendEmailFormulario(validated,false);
+  }
 }
 
 export async function deleteFormularios(ids: string[]): Promise<void> {
