@@ -48,7 +48,7 @@ export function LocationSelectModal({
     if (isOpen) {
       setTempSelectedLocations(selectedLocations);
       if (selectedLocations.length > 0) {
-        setSelectedCidade(selectedLocations[0].split(":")[0] || ""); 
+        setSelectedCidade(selectedLocations[0].split(":")[0] || "");
       }
     }
   }, [isOpen, selectedLocations]);
@@ -168,8 +168,33 @@ export function LocationSelectModal({
           {cidadeAtual && (
             <>
               {(() => {
-                const principais = bairrosFiltrados.slice(0, 12);
-                const outros = bairrosFiltrados.slice(12);
+                const principais = [
+                  'Aberta dos Morros',
+                  'Alphaville',
+                  'Cavalhada',
+                  'Cristal',
+                  'Espírito Santo',
+                  'Golden Lake',
+                  'Guarujá',
+                  'Hípica',
+                  'Ipanema',
+                  'Jardim Isabel',
+                  'Menino Deus',
+                  'Nonoai',
+                  'Pedra Redonda',
+                  'Santa Tereza',
+                  'Sétimo Céu',
+                  'Teresópolis',
+                  'Terraville',
+                  'Tristeza',
+                  'Vila Assunção',
+                  'Vila Conceição',
+                  'Vila Nova'
+                ]
+
+                const outros = bairrosFiltrados
+                  .filter((bairro) => !principais.includes(bairro))
+                  .sort((a, b) => a.localeCompare(b, "pt-BR"));
 
                 const renderSecao = (titulo: string, lista: string[]) => {
                   if (lista.length === 0) return null;
@@ -226,26 +251,21 @@ export function LocationSelectModal({
                       </div>
 
                       {/* Lista de bairros */}
-                      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-2 bg-white p-3 rounded-md">
+                      <div className="columns-1 sm:columns-3 lg:columns-4 gap-4 bg-white p-3 rounded-md">
                         {lista.map((bairro) => {
                           const locationKey = `${selectedCidade}:${bairro}`;
                           return (
                             <div
                               key={bairro}
-                              className="flex items-center gap-2"
+                              className="break-inside-avoid flex items-center gap-2 mb-2"
                             >
                               <Checkbox
                                 id={locationKey}
                                 checked={tempSelectedLocations.some(
-                                  (loc) =>
-                                    loc.toLowerCase() ===
-                                    locationKey.toLowerCase()
+                                  (loc) => loc.toLowerCase() === locationKey.toLowerCase()
                                 )}
                                 onCheckedChange={(checked) =>
-                                  handleLocationChange(
-                                    locationKey,
-                                    checked as boolean
-                                  )
+                                  handleLocationChange(locationKey, checked as boolean)
                                 }
                               />
                               <label
