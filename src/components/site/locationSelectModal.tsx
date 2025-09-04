@@ -95,7 +95,15 @@ export function LocationSelectModal({
 
   const handleLocationChange = (locationKey: string, checked: boolean) => {
     if (checked) {
-      setTempSelectedLocations([...tempSelectedLocations, locationKey]);
+      let novasSelecoes = [...tempSelectedLocations, locationKey];
+
+      if (!locationKey.toLowerCase().includes(":all")) {
+        novasSelecoes = novasSelecoes.filter(
+          (loc) => !loc.toLowerCase().includes(":all")
+        );
+      }
+
+      setTempSelectedLocations(novasSelecoes);
     } else {
       setTempSelectedLocations(
         tempSelectedLocations.filter(
@@ -106,7 +114,6 @@ export function LocationSelectModal({
   };
 
   const handleConfirm = () => {
-    console.log(tempSelectedLocations);
     onSelectionChange(tempSelectedLocations);
     onClose();
   };

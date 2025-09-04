@@ -20,7 +20,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function PoliticaDePrivacidade() {
   const secao = await getSecao(5);
-  console.log(secao)
   if (!secao) return null;
 
   return (

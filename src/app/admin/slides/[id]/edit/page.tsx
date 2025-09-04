@@ -8,7 +8,6 @@ interface EditSlidePageProps {
 
 export default async function EditSlidePage({ params }: EditSlidePageProps) {
     const slideId = await params.then(p => parseInt(p.id));
-    console.log(slideId)
     if (isNaN(slideId)) {
         notFound();
     }

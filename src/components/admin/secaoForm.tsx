@@ -236,7 +236,7 @@ export default function SecaoForm({ secao, mode }: SecaoFormProps) {
                                   "webp",
                                 ],
                               }}
-                              uploadPreset="terrasul-unsigned"
+                              uploadPreset="grupo-souze-unsigned"
                               onSuccess={(result) => {
                                 if (
                                   result?.info &&

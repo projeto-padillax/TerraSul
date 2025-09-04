@@ -30,7 +30,6 @@ function toSlug(text: string): string {
       str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
     const categoria = imovel.Categoria ? capitalizar(imovel.Categoria) : "Imóvel";
-  console.log(categoria)
     const area =
       imovel.AreaTerreno || imovel.AreaTotal
         ? `${imovel.AreaTerreno || imovel.AreaTotal}m²`
@@ -86,6 +85,8 @@ export function DestaquesSection({ destaques }: DestaquesSectionProps) {
         setTodosImoveis([]);
     }
   }, [activeTab, destaques]);
+
+  if (todosImoveis.length === 0) return null;
 
   return (
     <section className="py-8 justify-items-center">

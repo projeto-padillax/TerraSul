@@ -34,7 +34,6 @@ export function ValueRangeModal({ isOpen, onClose, selectedRange, onRangeChange 
   ]
 
   const handleConfirm = () => {
-    console.log(tempRange)
     onRangeChange(tempRange)
     onClose()
   }

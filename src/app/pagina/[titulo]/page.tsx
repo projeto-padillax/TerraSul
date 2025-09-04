@@ -13,7 +13,6 @@ export default async function DynamicPage({ params }: DynamicPageProps) {
   const tituloOriginal = await params.then((p) => p.titulo);
   const titulo = decodeURIComponent(tituloOriginal).replaceAll("-", " ");
   const pageData = await getPaginaByTitle(titulo);
-  console.log(pageData);
   if (!pageData) notFound();
 
   return (

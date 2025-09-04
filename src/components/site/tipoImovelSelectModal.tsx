@@ -22,22 +22,11 @@ export function TypeSelectModal({
   selectedTypes,
   onSelectionChange,
 }: TypeSelectModalProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isMobile, setIsMobile] = useState(false);
   const [tempSelectedTypes, setTempSelectedTypes] = useState<string[]>([]);
 
   useEffect(() => {
-    if (isOpen) {
-      setTempSelectedTypes(selectedTypes);
-    }
+    setTempSelectedTypes(selectedTypes);
   }, [isOpen, selectedTypes]);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 650);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   const residenciaisTypes = [
     { id: "apartamento", label: "Apartamento" },
@@ -59,7 +48,6 @@ export function TypeSelectModal({
 
   const handleConfirm = () => {
     onSelectionChange(tempSelectedTypes);
-    // console.log("Selected Types:", tempSelectedTypes);
     onClose();
   };
 

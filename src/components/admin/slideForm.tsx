@@ -47,7 +47,6 @@ export default function SlideForm({ slide, mode }: SlideFormProps) {
     const [previewImage, setPreviewImage] = useState<string>(
         slide?.imagem ?? ""
     );
-    console.log(previewImage)
 
     const isEditing = mode === "edit" && slide;
 

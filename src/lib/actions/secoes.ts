@@ -53,7 +53,6 @@ export async function updateSecao(id: number, data: SecaoInput) {
 
   // Revalida path da página admin correspondente
   revalidatePath("/admin/secoes");
-  console.log(`Secao atualizada:`, updatedSecao.id);
 
   return updatedSecao;
 }

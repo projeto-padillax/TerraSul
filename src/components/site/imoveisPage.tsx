@@ -102,7 +102,9 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         : [],
       lancamentos: searchParams.get("lancamentos") ?? "",
     };
-
+    if(newData.locations.length == 0 && searchParams.has("cidade")){
+      newData.locations = [`${searchParams.get("cidade")}:all`]
+    }
     setSearchData(newData);
     setPage(Number(searchParams.get("page") ?? 1));
     setSortOrder(searchParams.get("sort") ?? "");
@@ -240,7 +242,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     if (filtros.cidade) {
       titulo += ` em ${filtros.cidade}`;
       if (filtros.bairro && filtros.bairro[0]?.split(",").length === 1) {
-        titulo += ` no bairro ${filtros.bairro[0]}`;
+        titulo += filtros.bairro[0] == "all" ? "" : ` no bairro ${filtros.bairro[0]}`;
       }
     }
 
@@ -253,23 +255,20 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
 
   function toSlug(text: string): string {
     return text
-      .normalize("NFD") // separa acentos das letras
-      .replace(/[\u0300-\u036f]/g, "") // remove acentos
-      .replace(/[^a-zA-Z0-9\s-]/g, "") // remove caracteres especiais
+      // .normalize("NFD") // separa acentos das letras
       .trim() // remove espaços extras do começo/fim
       .replace(/\s+/g, "-") // troca espaços por -
       .replace(/-+/g, "-") // evita múltiplos hífens
-      .toLowerCase();
+      // .toLowerCase();
   }
 
   function gerarTitulos(imovel: Imovel) {
     const capitalizar = (str: string) =>
       str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
-    const categoria = imovel.Categoria
-      ? capitalizar(imovel.Categoria)
-      : "Imóvel";
-
+    let categoria = imovel.Categoria ? imovel.Categoria : "Imóvel";
+    
+    categoria = categoria.replaceAll(" ", "_");
     const area =
       imovel.AreaTerreno || imovel.AreaTotal
         ? `${imovel.AreaTerreno || imovel.AreaTotal}m²`
@@ -305,7 +304,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       return [categoria, localizacao].filter(Boolean).join(" ");
     }
 
-    return [categoria, detalhes, localizacao].filter(Boolean).join(", ");
+    return [categoria, detalhes, localizacao].filter(Boolean).join(" ");
   }
 
   const openModal = (modalType: "location" | "type") => {
@@ -794,16 +793,20 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         isOpen={modals.location}
         onClose={() => closeModal("location")}
         selectedLocations={searchData.locations}
-        onSelectionChange={(location) =>
-          setSearchData({ ...searchData, locations: location })
-        }
+        onSelectionChange={(location) => {
+          setSearchData({ ...searchData, locations: location });
+          setPage(1);
+        }}
       />
 
       <TypeSelectModal
         isOpen={modals.type}
         onClose={() => closeModal("type")}
         selectedTypes={searchData.tipos}
-        onSelectionChange={(tipos) => setSearchData({ ...searchData, tipos })}
+        onSelectionChange={(tipos) => {
+          setSearchData({ ...searchData, tipos });
+          setPage(1);
+        }}
       />
     </div>
   );

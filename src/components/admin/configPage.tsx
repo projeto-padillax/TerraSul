@@ -142,7 +142,6 @@ export default function SiteConfigForm({
   });
 
   const onSubmit = (values: SiteConfigSchema) => {
-    console.log("teste")
     startTransition(async () => {
       if (!defaultValues) {
         await createConfiguracaoPagina(values);
