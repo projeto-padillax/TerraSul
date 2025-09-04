@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { prisma } from "@/lib/neon/db";
 import { NextRequest, NextResponse } from "next/server";
 import pLimit from "p-limit";
@@ -296,83 +298,83 @@ const processAndUpsertProperty = async (
 
     // Prepara corretor
     let corretorId: string | null = null;
-   if (Corretor) {
-  const corretorValues = Object.values(Corretor);
-  if (corretorValues.length > 0) {
-    const corretorData: any = corretorValues[0];
-      const corretor = await prisma.corretorExterno.upsert({
-        where: { CRECI: corretorData.CRECI },
+    if (Corretor) {
+      const corretorValues = Object.values(Corretor);
+      if (corretorValues.length > 0) {
+        const corretorData: any = corretorValues[0];
+        const corretor = await prisma.corretorExterno.upsert({
+          where: { CRECI: corretorData.CRECI },
+          update: {
+            name: corretorData.Nome,
+            email: corretorData.Email,
+            telefone: corretorData.Celular,
+            nomeAgencia: corretorData.Agencia,
+            codigo: corretorData.Codigo,
+            codigoAgencia: corretorData.CodigoAgencia,
+            codigoEquipe: corretorData.CodigoEquipe,
+            foto: corretorData.Foto,
+            atuacaoLocacao: corretorData.AtuacaoLocacao,
+            atuacaoVenda: corretorData.AtuacaoVenda,
+          },
+          create: {
+            id: corretorData.Codigo,
+            name: corretorData.Nome,
+            email: corretorData.Email,
+            telefone: corretorData.Celular,
+            nomeAgencia: corretorData.Agencia,
+            codigo: corretorData.Codigo,
+            codigoAgencia: corretorData.CodigoAgencia,
+            codigoEquipe: corretorData.CodigoEquipe,
+            foto: corretorData.Foto,
+            atuacaoLocacao: corretorData.AtuacaoLocacao,
+            atuacaoVenda: corretorData.AtuacaoVenda,
+            CRECI: corretorData.CRECI,
+          },
+        });
+        corretorId = corretor.id;
+      }
+
+      // Upsert imóvel
+      await prisma.imovel.upsert({
+        where: { id: code },
         update: {
-          name: corretorData.Nome,
-          email: corretorData.Email,
-          telefone: corretorData.Celular,
-          nomeAgencia: corretorData.Agencia,
-          codigo: corretorData.Codigo,
-          codigoAgencia: corretorData.CodigoAgencia,
-          codigoEquipe: corretorData.CodigoEquipe,
-          foto: corretorData.Foto,
-          atuacaoLocacao: corretorData.AtuacaoLocacao,
-          atuacaoVenda: corretorData.AtuacaoVenda,
+          ...restOfProperty,
+          Cidade,
+          ValorVenda: valorVendaInt,
+          ValorLocacao: valorLocacaoInt,
+          AreaTotal: areaTotalFloat,
+          AreaTerreno: areaTerrenoFloat,
+          DataHoraAtualizacao: validDataHoraAtualizacao,
+          corretorId,
+          fotos:
+            photosToCreate.length > 0
+              ? { deleteMany: {}, create: photosToCreate }
+              : undefined,
+          caracteristicas:
+            characteristicsToCreate.length > 0
+              ? { deleteMany: {}, create: characteristicsToCreate }
+              : undefined,
+          infraestrutura:
+            infraToCreate.length > 0
+              ? { deleteMany: {}, create: infraToCreate }
+              : undefined,
         },
         create: {
-          id: corretorData.Codigo,
-          name: corretorData.Nome,
-          email: corretorData.Email,
-          telefone: corretorData.Celular,
-          nomeAgencia: corretorData.Agencia,
-          codigo: corretorData.Codigo,
-          codigoAgencia: corretorData.CodigoAgencia,
-          codigoEquipe: corretorData.CodigoEquipe,
-          foto: corretorData.Foto,
-          atuacaoLocacao: corretorData.AtuacaoLocacao,
-          atuacaoVenda: corretorData.AtuacaoVenda,
-          CRECI: corretorData.CRECI,
+          id: code,
+          ...restOfProperty,
+          Cidade,
+          ValorVenda: valorVendaInt,
+          ValorLocacao: valorLocacaoInt,
+          AreaTotal: areaTotalFloat,
+          AreaTerreno: areaTerrenoFloat,
+          DataHoraAtualizacao: validDataHoraAtualizacao,
+          corretorId,
+          fotos: { create: photosToCreate },
+          caracteristicas: { create: characteristicsToCreate },
+          infraestrutura: { create: infraToCreate },
         },
       });
-      corretorId = corretor.id;
     }
-
-    // Upsert imóvel
-    await prisma.imovel.upsert({
-      where: { id: code },
-      update: {
-        ...restOfProperty,
-        Cidade,
-        ValorVenda: valorVendaInt,
-        ValorLocacao: valorLocacaoInt,
-        AreaTotal: areaTotalFloat,
-        AreaTerreno: areaTerrenoFloat,
-        DataHoraAtualizacao: validDataHoraAtualizacao,
-        corretorId,
-        fotos:
-          photosToCreate.length > 0
-            ? { deleteMany: {}, create: photosToCreate }
-            : undefined,
-        caracteristicas:
-          characteristicsToCreate.length > 0
-            ? { deleteMany: {}, create: characteristicsToCreate }
-            : undefined,
-        infraestrutura:
-          infraToCreate.length > 0
-            ? { deleteMany: {}, create: infraToCreate }
-            : undefined,
-      },
-      create: {
-        id: code,
-        ...restOfProperty,
-        Cidade,
-        ValorVenda: valorVendaInt,
-        ValorLocacao: valorLocacaoInt,
-        AreaTotal: areaTotalFloat,
-        AreaTerreno: areaTerrenoFloat,
-        DataHoraAtualizacao: validDataHoraAtualizacao,
-        corretorId,
-        fotos: { create: photosToCreate },
-        caracteristicas: { create: characteristicsToCreate },
-        infraestrutura: { create: infraToCreate },
-      },
-    });
-  }
 
     console.log(`Imóvel ${code} processado e upserted com sucesso.`);
   } catch (error: any) {

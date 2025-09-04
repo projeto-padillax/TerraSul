@@ -32,4 +32,5 @@ export type Destaque = {
   Longitude: string;
   FotoDestaqueEmpreendimento: string;
   VideoDestaque: string;
+  corretorId: string;
 };

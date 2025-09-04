@@ -22,6 +22,7 @@ export function TypeSelectModal({
   selectedTypes,
   onSelectionChange,
 }: TypeSelectModalProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isMobile, setIsMobile] = useState(false);
   const [tempSelectedTypes, setTempSelectedTypes] = useState<string[]>([]);
 
