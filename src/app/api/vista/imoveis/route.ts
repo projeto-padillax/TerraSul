@@ -512,6 +512,7 @@ export async function GET(request: NextRequest) {
     const vagas = searchParams.get("vagas") || null;
     const caracteristicas = searchParams.get("caracteristicas")?.split(",").filter(Boolean) || [];
     const lancamentosFilterValue = parseSimNao(searchParams.get("lancamentos"));
+    const empreendimento = searchParams.get("empreendimento") || null;
 
     // --- Áreas ---
     const areaMin = Number(searchParams.get("areaMinima")) || null;
@@ -532,7 +533,7 @@ export async function GET(request: NextRequest) {
     const whereClause: any = {
       Status: isAluguel ? "ALUGUEL" : "VENDA",
     };
-
+    if (empreendimento) whereClause.Empreendimento = { equals: empreendimento, mode: "insensitive" };
     if (cidade) whereClause.Cidade = { equals: cidade, mode: "insensitive" };
     if (bairros.length > 0 && !(bairros.length === 1 && bairros[0].toLowerCase() === "all")) {
       whereClause.Bairro = { in: bairros, mode: "insensitive" };
