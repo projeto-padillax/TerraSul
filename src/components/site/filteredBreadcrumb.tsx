@@ -132,7 +132,7 @@ export default function BreadCrumb() {
     
 
       items.push({
-        name: tipoName + `a venda em ${capitalize(cityName ?? "Porto Alegre")}`,
+        name: tipoName + ` a venda em ${capitalize(cityName ?? "Porto Alegre")}`,
         href: `/busca/comprar/${
             tipoName.replace("/", "-") ?? "Imovel"
           }/${encodeURIComponent(cityName)}?action=comprar&tipos=${encodeURIComponent(tipoName)}&cidade=${cityName}&page=1`,
