@@ -37,24 +37,24 @@ export async function sendEmailFormulario(data: FormularioInput, isCodigo78: boo
         </tbody>
       </table>
 
-      <p style="margin-top: 40px; font-size: 12px; color: #999;">Este e-mail foi gerado automaticamente pelo site Terra Sul.</p>
+      <p style="margin-top: 40px; font-size: 12px; color: #999;">Este e-mail foi gerado automaticamente pelo site TerraSul.</p>
     </div>
   </div>
 `;
 
   if (isCodigo78 || isCodigo78 == undefined){
     await transporter.sendMail({
-    from: `"Lead Terra Sul" <${process.env.MAIL_USER}>`,
+    from: `"Lead TerraSul" <${process.env.MAIL_USER}>`,
     to: process.env.MAIL_TO_DEFAULT,
-    subject: `Lead Terra Sul`,
+    subject: `Lead TerraSul`,
     html: htmlBody,
   });
   }
   else{
     await transporter.sendMail({
-      from: `"Lead Terra Sul" <${process.env.MAIL_USER}>`,
+      from: `"Lead TerraSul" <${process.env.MAIL_USER}>`,
       to: process.env.MAIL_TO_DEFAULT2,
-      subject: `Lead Terra Sul`,
+      subject: `Lead TerraSul`,
       html: htmlBody,
     });
   }

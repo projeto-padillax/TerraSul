@@ -73,7 +73,7 @@ export default async function Footer() {
           <div className="w-full pt-6 mb-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <div className="col-span-1 place-self-start md:place-self-start">
               <h2 className="font-bold text-site-primary mb-6">Navegação</h2>
-              <nav className="flex flex-col gap-4 md:gap-8">
+              <nav className="flex flex-col gap-4 md:gap-8 text-sm">
                 <Link
                   href="/"
                   className="text-black hover:text-site-primary transition-colors font-medium"
@@ -108,7 +108,7 @@ export default async function Footer() {
                     Sede {index + 1}
                   </h2>
                   <div className="flex flex-row flex-wrap items-center text-black gap-4">
-                    <span className="w-max">{endereco.rua}</span>
+                    <span className="w-max text-sm">{endereco.rua}</span>
                     {endereco.telefone1 && (
                       <Link
                         href={
@@ -116,11 +116,11 @@ export default async function Footer() {
                             ? `https://wa.me/55${endereco.telefone1}`
                             : ""
                         }
-                        className="flex items-center justify-start w-max"
+                        className="flex items-center justify-start w-max text-sm"
                       >
-                        <span className="lg:ml-2 flex items-center gap-0.5">
+                        <span className="lg:ml-2 flex items-center gap-0.5 text-sm">
                           {endereco.tituloTelefone1 != "" ? (
-                            <strong>{endereco.tituloTelefone1}</strong>
+                            <strong className="text-sm">{endereco.tituloTelefone1}</strong>
                           ) : endereco.isWhatsApp1 ? (
                             <FaWhatsapp></FaWhatsapp>
                           ) : (
@@ -137,11 +137,11 @@ export default async function Footer() {
                             ? `https://wa.me/55${endereco.telefone2}`
                             : ""
                         }
-                        className="flex items-center justify-start w-max"
+                        className="flex items-center justify-start w-max text-sm"
                       >
-                        <span className="lg:ml-2 flex items-center gap-0.5">
+                        <span className="lg:ml-2 flex items-center gap-0.5 text-sm">
                           {endereco.tituloTelefone2 != "" ? (
-                            <strong>{endereco.tituloTelefone2}</strong>
+                            <strong className="text-sm">{endereco.tituloTelefone2}</strong>
                           ) : endereco.isWhatsApp2 ? (
                             <FaWhatsapp></FaWhatsapp>
                           ) : (
@@ -158,11 +158,11 @@ export default async function Footer() {
                             ? `https://wa.me/55${endereco.telefone3}`
                             : "#"
                         }
-                        className="flex items-center justify-start w-max"
+                        className="flex items-center justify-start w-max text-sm"
                       >
-                        <span className="lg:ml-2 flex items-center gap-0.5">
+                        <span className="lg:ml-2 flex items-center gap-0.5 text-sm">
                           {endereco.tituloTelefone3 != "" ? (
-                            <strong>{endereco.tituloTelefone3}</strong>
+                            <strong className="text-sm">{endereco.tituloTelefone3}</strong>
                           ) : endereco.isWhatsApp3 ? (
                             <FaWhatsapp></FaWhatsapp>
                           ) : (
@@ -181,16 +181,16 @@ export default async function Footer() {
         <div className="justify-center sm:justify-between pt-4 flex flex-col sm:flex-row items-center w-full pb-16 gap-2">
           <a
             href="https://www.leadlink.com.br/imobiliarias/template/"
-            style={{ color: "#4d4d4d", fontWeight: 400 }}
+            style={{ color: "#303030", fontWeight: 400 }}
             className="text-sm"
           >
             Site desenvolvido por{" "}
             <strong className="text-site-primary">Lead Link</strong>
           </a>
-          <div className="text-sm">
+          <div className="text-sm text-[#303030]">
             <Link
               href="/politica-de-privacidade"
-              className="text-black hover:text-site-primary-hover transition-colors font-medium"
+              className="text-[#303030] hover:text-site-primary-hover transition-colors font-medium text-sm"
             >
               Política de Privacidade
             </Link>

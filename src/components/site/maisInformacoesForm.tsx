@@ -58,7 +58,7 @@ export default function MaisInformacoesForm({ codigoImovel, codigoCorretor }: Ma
     }
 
     const baseInput =
-        'w-full bg-transparent outline-none border-0 focus:ring-0 placeholder:text-[#9aa2b1] text-[15px] text-gray-900'
+        'w-full bg-transparent outline-none border-0 focus:ring-0 placeholder:text-[#9aa2b1] text-sm text-gray-900'
     const cell = 'p-4 sm:p-2'
     const label = 'block text-[11px] font-semibold tracking-wide text-gray-800 uppercase mb-1'
 

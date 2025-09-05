@@ -199,7 +199,7 @@ export default async function ImovelPage({
                           .map((badge, i) => (
                             <span
                               key={i}
-                              className="border border-site-primary bg-[#eaf4fe] text-black px-5 py-[6px] rounded-md text-xs font-medium"
+                              className="border border-site-primary bg-[#FFF8E6] text-black px-5 py-[6px] rounded-md text-xs font-medium"
                             >
                               {badge}
                             </span>
@@ -247,7 +247,7 @@ export default async function ImovelPage({
                         }`}
                     >
                       <FavoriteButton property={imovel} />
-                      <span className="font-bold">Salvar</span>
+                      <span >Salvar</span>
                     </div>
                   </div>
 

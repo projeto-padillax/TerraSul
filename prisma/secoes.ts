@@ -59,7 +59,7 @@ export const Secoes = [{
     imagem: "",
     publicId: "",
     tituloh1: "Política de Privacidade",
-    textoPagina: `A privacidade dos visitantes do site da Terra Sul é muito importante para nós. Esta página descreve quais informações pessoais coletamos e como as utilizamos.
+    textoPagina: `A privacidade dos visitantes do site da TerraSul é muito importante para nós. Esta página descreve quais informações pessoais coletamos e como as utilizamos.
 
 <strong>Coleta de Informações</strong>
 Quando você visita nosso site, podemos coletar informações sobre seu navegador, endereço IP e páginas visitadas. Também podemos armazenar informações fornecidas voluntariamente, como nome, email, telefone e preferências de imóveis.
@@ -86,6 +86,6 @@ Se você tiver alguma dúvida sobre nossa política de privacidade, entre em con
     sitemap: false,
     edicaoTextoFundo: false,
     descricao: "Imóveis Favoritos",
-    palavrasChave: "Imoveis favoritos Terra Sul"
+    palavrasChave: "Imoveis favoritos TerraSul"
 }
 ];

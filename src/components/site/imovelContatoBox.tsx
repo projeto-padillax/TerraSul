@@ -46,7 +46,7 @@ export default function ImovelContatoBox({
                         </div>
                         <div>
                             <p className="text-sm font-semibold text-[#111827] tracking-wide uppercase mb-3">
-                                {corretor?.name || "Terra Sul"}
+                                {corretor?.name || "TerraSul"}
                             </p>
 
                             <div className="text-[12px] text-black flex items-center gap-5">

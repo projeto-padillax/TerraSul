@@ -41,8 +41,8 @@ export default async function CategoryCards() {
                     />
 
                     <CardContent className="absolute bottom-0 z-10 p-4 text-white">
-                      <p className="text-sm opacity-90">{category.titulo}</p>
-                      <h3 className="text-lg font-semibold mb-1 font-sans">
+                      <p className="text-lg font-semibold mb-1 font-sans">{category.titulo}</p>
+                      <h3 className="text-sm opacity-90">
                         {category.subtitulo}
                       </h3>
                     </CardContent>

@@ -16,7 +16,7 @@ export async function MostSearched() {
             <Link
               href={item.url}
               key={item.id}
-              className="hover:text-site-primary text-[#303030] cursor-pointer hover:underline text-lg w-fit justify-self-center md:justify-self-start"
+              className="hover:text-site-primary text-[#303030] cursor-pointer hover:underline text-sm w-fit justify-self-center md:justify-self-start"
             >
               {item.titulo}
             </Link>

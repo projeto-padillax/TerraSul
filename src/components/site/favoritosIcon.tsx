@@ -13,7 +13,7 @@ export default function FavoriteIcon() {
   return (
     <div className="relative w-8 h-8 cursor-pointer">
         { /* hover nao ta funcionando */}
-      <Heart className="text-site-secondary hover:text-site-primary-hover w-8 h-8 border border-transparent rounded-full transition-colors duration-200" /> 
+      <Heart className="text-[#303030] hover:text-site-secondary-hover w-8 h-8 border border-transparent rounded-full transition-colors duration-200" /> 
       <div className="absolute -top-1 -right-1 bg-site-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
         {favorites.length}
       </div>

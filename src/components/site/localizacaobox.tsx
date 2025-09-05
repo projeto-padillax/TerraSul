@@ -63,7 +63,7 @@ export default function LocalizacaoBox({
         enderecoTextoFormatado.map((parte, index) => (
           <span key={index} className="flex items-center">
             <span
-              className="inline-block border-b-2 text-[#303030] border-[#303030] pb-0.5 cursor-pointer hover:text-gray-500 hover:border-gray-500 transition-colors duration-200"
+              className="inline-block text-muted-foreground border-b text-sm border-muted-foreground/30 pb-0.5 cursor-pointer hover:text-foreground transition-colors duration-200"
               onClick={() => console.log(`Clicou em: ${parte}`)}
             >
               {parte}
