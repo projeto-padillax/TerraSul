@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer'
 import { FormularioInput } from "../actions/formularios";
 
 export async function sendEmailFormulario(data: FormularioInput, isCodigo78: boolean) {

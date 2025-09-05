@@ -533,7 +533,7 @@ export async function GET(request: NextRequest) {
     const whereClause: any = {
       Status: isAluguel ? "ALUGUEL" : "VENDA",
     };
-    if (empreendimento) whereClause.Empreendimento = { equals: empreendimento, mode: "insensitive" };
+    if (empreendimento) whereClause.Empreendimento = { contains: empreendimento, mode: "insensitive" };
     if (cidade) whereClause.Cidade = { equals: cidade, mode: "insensitive" };
     if (bairros.length > 0 && !(bairros.length === 1 && bairros[0].toLowerCase() === "all")) {
       whereClause.Bairro = { in: bairros, mode: "insensitive" };
@@ -557,22 +557,30 @@ export async function GET(request: NextRequest) {
     }
 
     // --- Área com margem de 5% ---
+   // --- Área com margem de 5% ---
     if (areaMin !== null || areaMax !== null) {
       const min = areaMin ? areaMin * 0.95 : undefined;
       const max = areaMax ? areaMax * 1.05 : undefined;
 
       whereClause.OR = [
         {
+          // Prioriza AreaTotal
           AreaTotal: {
             ...(min !== undefined ? { gte: min } : {}),
             ...(max !== undefined ? { lte: max } : {}),
           },
         },
         {
-          AreaTerreno: {
-            ...(min !== undefined ? { gte: min } : {}),
-            ...(max !== undefined ? { lte: max } : {}),
-          },
+          // Só usa AreaTerreno quando não houver AreaTotal
+          AND: [
+            { AreaTotal: null },
+            {
+              AreaTerreno: {
+                ...(min !== undefined ? { gte: min } : {}),
+                ...(max !== undefined ? { lte: max } : {}),
+              },
+            },
+          ],
         },
       ];
     }
