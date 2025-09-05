@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { X, Menu, CodeXml } from "lucide-react";
+import { X } from "lucide-react";
 import { PaginasConteudo } from "@prisma/client";
 
 interface SidebarProps {
