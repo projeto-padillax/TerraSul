@@ -14,22 +14,22 @@ interface DestaquesSectionProps {
   };
 }
 
-function toSlug(text: string): string {
-    return text
-      .normalize("NFD") // separa acentos das letras
-      .replace(/[\u0300-\u036f]/g, "") // remove acentos
-      .replace(/[^a-zA-Z0-9\s-]/g, "") // remove caracteres especiais
-      .trim() // remove espaços extras do começo/fim
-      .replace(/\s+/g, "-") // troca espaços por -
-      .replace(/-+/g, "-") // evita múltiplos hífens
-      .toLowerCase();
+  function toSlug(text: string): string {
+    return (
+      text
+        // .normalize("NFD") // separa acentos das letras
+        .trim() // remove espaços extras do começo/fim
+        .replace(/\s+/g, "-") // troca espaços por -
+        .replace(/-+/g, "-")
+    ); // evita múltiplos hífens
+    // .toLowerCase();
   }
 
   function gerarTitulo (imovel: Imovel) {
     const capitalizar = (str: string) =>
       str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
-    const categoria = imovel.Categoria ? capitalizar(imovel.Categoria) : "Imóvel";
+    const categoria = imovel.Categoria ? imovel.Categoria : "Imóvel";
     const area =
       imovel.AreaTerreno || imovel.AreaTotal
         ? `${imovel.AreaTerreno || imovel.AreaTotal}m²`

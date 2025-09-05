@@ -429,12 +429,22 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                   <SelectValue placeholder="Valor de" className="text-black" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="0">R$ 0</SelectItem>
-                  <SelectItem value="50000">R$ 50 mil</SelectItem>
-                  <SelectItem value="100000">R$ 100 mil</SelectItem>
-                  <SelectItem value="200000">R$ 200 mil</SelectItem>
-                  <SelectItem value="500000">R$ 500 mil</SelectItem>
-                  <SelectItem value="1000000">R$ 1 milhão</SelectItem>
+                    <SelectItem value="0">R$ 0</SelectItem>
+                    <SelectItem value="200000">R$ 200.000</SelectItem>
+                    <SelectItem value="300000">R$ 300.000</SelectItem>
+                    <SelectItem value="400000">R$ 400.000</SelectItem>
+                    <SelectItem value="500000">R$ 500.000</SelectItem>
+                    <SelectItem value="600000">R$ 600.000</SelectItem>
+                    <SelectItem value="700000">R$ 700.000</SelectItem>
+                    <SelectItem value="800000">R$ 800.000</SelectItem>
+                    <SelectItem value="900000">R$ 900.000</SelectItem>
+                    <SelectItem value="1000000">R$ 1.000.000</SelectItem>
+                    <SelectItem value="1500000">R$ 1.500.000</SelectItem>
+                    <SelectItem value="2000000">R$ 2.000.000</SelectItem>
+                    <SelectItem value="2500000">R$ 2.500.000</SelectItem>
+                    <SelectItem value="3000000">R$ 3.000.000</SelectItem>
+                    <SelectItem value="4000000">R$ 4.000.000</SelectItem>
+                    <SelectItem value="5000000">R$ 5.000.000</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -454,12 +464,23 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                   <SelectValue placeholder="Valor até" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="100000">R$ 100 mil</SelectItem>
-                  <SelectItem value="200000">R$ 200 mil</SelectItem>
-                  <SelectItem value="500000">R$ 500 mil</SelectItem>
-                  <SelectItem value="1000000">R$ 1 milhão</SelectItem>
-                  <SelectItem value="2000000">R$ 2 milhões</SelectItem>
-                  <SelectItem value="999999999">Sem limite</SelectItem>
+                    <SelectItem value="0">R$ 0</SelectItem>
+                    <SelectItem value="200000">R$ 200.000</SelectItem>
+                    <SelectItem value="300000">R$ 300.000</SelectItem>
+                    <SelectItem value="400000">R$ 400.000</SelectItem>
+                    <SelectItem value="500000">R$ 500.000</SelectItem>
+                    <SelectItem value="600000">R$ 600.000</SelectItem>
+                    <SelectItem value="700000">R$ 700.000</SelectItem>
+                    <SelectItem value="800000">R$ 800.000</SelectItem>
+                    <SelectItem value="900000">R$ 900.000</SelectItem>
+                    <SelectItem value="1000000">R$ 1.000.000</SelectItem>
+                    <SelectItem value="1500000">R$ 1.500.000</SelectItem>
+                    <SelectItem value="2000000">R$ 2.000.000</SelectItem>
+                    <SelectItem value="2500000">R$ 2.500.000</SelectItem>
+                    <SelectItem value="3000000">R$ 3.000.000</SelectItem>
+                    <SelectItem value="4000000">R$ 4.000.000</SelectItem>
+                    <SelectItem value="5000000">R$ 5.000.000</SelectItem>
+                    <SelectItem value="999999999">+ R$ 6.000.000</SelectItem>
                 </SelectContent>
               </Select>
               {/* Botão Filtros */}

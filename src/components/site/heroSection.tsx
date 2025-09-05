@@ -98,7 +98,9 @@ export function HeroSection(banner: HeroSectionProps) {
 
     newSearchParams.set("page", String("1"));
     const path = `/busca/${searchData.action}/${
-      searchData.tipos.length > 0 ? searchData.tipos[0].replace("/", "-") : "imóveis"
+      searchData.tipos.length > 0
+        ? searchData.tipos[0].replace("/", "-")
+        : "imóveis"
     }/${
       searchData.locations.length > 0
         ? searchData.locations[0].split(":")[0] +
@@ -112,7 +114,9 @@ export function HeroSection(banner: HeroSectionProps) {
 
   const handleAdvancedSearch = () => {
     const path = `/busca/${searchData.action}/${
-      searchData.tipos.length > 0 ? searchData.tipos[0].replace("/", "-") : "imóveis"
+      searchData.tipos.length > 0
+        ? searchData.tipos[0].replace("/", "-")
+        : "imóveis"
     }/${
       searchData.locations.length > 0
         ? searchData.locations[0].split(":")[0] +
@@ -131,7 +135,9 @@ export function HeroSection(banner: HeroSectionProps) {
     if (!codigo) return;
     try {
       router.push(
-        `/imovel/${searchData.action}+${searchData.tipos[0].replace("/", "-") ?? "Imovel"}+em+${
+        `/imovel/${searchData.action}+${
+          searchData.tipos[0].replace("/", "-") ?? "Imovel"
+        }+em+${
           searchData.locations.length > 0
             ? searchData.locations[0].split(":")[0] +
               "+" +
@@ -212,6 +218,9 @@ export function HeroSection(banner: HeroSectionProps) {
                       }`}
                     >
                       Localização
+                      {searchData.locations.length > 0
+                        ? `(${searchData.locations.length})`
+                        : ""}
                     </span>
                   </div>
                   <ChevronDown className="h-4 w-4 text-muted-foreground opacity-50" />
@@ -236,11 +245,21 @@ export function HeroSection(banner: HeroSectionProps) {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="0">R$ 0</SelectItem>
-                    <SelectItem value="50000">R$ 50 mil</SelectItem>
-                    <SelectItem value="100000">R$ 100 mil</SelectItem>
-                    <SelectItem value="200000">R$ 200 mil</SelectItem>
-                    <SelectItem value="500000">R$ 500 mil</SelectItem>
-                    <SelectItem value="1000000">R$ 1 milhão</SelectItem>
+                    <SelectItem value="200000">R$ 200.000</SelectItem>
+                    <SelectItem value="300000">R$ 300.000</SelectItem>
+                    <SelectItem value="400000">R$ 400.000</SelectItem>
+                    <SelectItem value="500000">R$ 500.000</SelectItem>
+                    <SelectItem value="600000">R$ 600.000</SelectItem>
+                    <SelectItem value="700000">R$ 700.000</SelectItem>
+                    <SelectItem value="800000">R$ 800.000</SelectItem>
+                    <SelectItem value="900000">R$ 900.000</SelectItem>
+                    <SelectItem value="1000000">R$ 1.000.000</SelectItem>
+                    <SelectItem value="1500000">R$ 1.500.000</SelectItem>
+                    <SelectItem value="2000000">R$ 2.000.000</SelectItem>
+                    <SelectItem value="2500000">R$ 2.500.000</SelectItem>
+                    <SelectItem value="3000000">R$ 3.000.000</SelectItem>
+                    <SelectItem value="4000000">R$ 4.000.000</SelectItem>
+                    <SelectItem value="5000000">R$ 5.000.000</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -262,12 +281,23 @@ export function HeroSection(banner: HeroSectionProps) {
                     <SelectValue placeholder="Valor até" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="100000">R$ 100 mil</SelectItem>
-                    <SelectItem value="200000">R$ 200 mil</SelectItem>
-                    <SelectItem value="500000">R$ 500 mil</SelectItem>
-                    <SelectItem value="1000000">R$ 1 milhão</SelectItem>
-                    <SelectItem value="2000000">R$ 2 milhões</SelectItem>
-                    <SelectItem value="999999999">Sem limite</SelectItem>
+                    <SelectItem value="0">R$ 0</SelectItem>
+                    <SelectItem value="200000">R$ 200.000</SelectItem>
+                    <SelectItem value="300000">R$ 300.000</SelectItem>
+                    <SelectItem value="400000">R$ 400.000</SelectItem>
+                    <SelectItem value="500000">R$ 500.000</SelectItem>
+                    <SelectItem value="600000">R$ 600.000</SelectItem>
+                    <SelectItem value="700000">R$ 700.000</SelectItem>
+                    <SelectItem value="800000">R$ 800.000</SelectItem>
+                    <SelectItem value="900000">R$ 900.000</SelectItem>
+                    <SelectItem value="1000000">R$ 1.000.000</SelectItem>
+                    <SelectItem value="1500000">R$ 1.500.000</SelectItem>
+                    <SelectItem value="2000000">R$ 2.000.000</SelectItem>
+                    <SelectItem value="2500000">R$ 2.500.000</SelectItem>
+                    <SelectItem value="3000000">R$ 3.000.000</SelectItem>
+                    <SelectItem value="4000000">R$ 4.000.000</SelectItem>
+                    <SelectItem value="5000000">R$ 5.000.000</SelectItem>
+                    <SelectItem value="999999999">+ R$ 6.000.000</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

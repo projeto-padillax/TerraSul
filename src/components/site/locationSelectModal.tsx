@@ -176,28 +176,32 @@ export function LocationSelectModal({
             <>
               {(() => {
                 const principais = [
-                  'Aberta dos Morros',
-                  'Alphaville',
-                  'Cavalhada',
-                  'Cristal',
-                  'Espírito Santo',
-                  'Golden Lake',
-                  'Guarujá',
-                  'Hípica',
-                  'Ipanema',
-                  'Jardim Isabel',
-                  'Menino Deus',
-                  'Nonoai',
-                  'Pedra Redonda',
-                  'Santa Tereza',
-                  'Sétimo Céu',
-                  'Teresópolis',
-                  'Terraville',
-                  'Tristeza',
-                  'Vila Assunção',
-                  'Vila Conceição',
-                  'Vila Nova'
-                ]
+                  "Aberta dos Morros",
+                  "Alphaville",
+                  "Cavalhada",
+                  "Cristal",
+                  "Espírito Santo",
+                  "Golden Lake",
+                  "Guarujá",
+                  "Hípica",
+                  "Ipanema",
+                  "Jardim Isabel",
+                  "Menino Deus",
+                  "Nonoai",
+                  "Pedra Redonda",
+                  "Santa Tereza",
+                  "Sétimo Céu",
+                  "Teresópolis",
+                  "Terraville",
+                  "Tristeza",
+                  "Vila Assunção",
+                  "Vila Conceição",
+                  "Vila Nova",
+                ];
+
+                const principaisFiltrados = principais.filter((bairro) =>
+                  bairro.toLowerCase().includes(searchTerm.toLowerCase())
+                );
 
                 const outros = bairrosFiltrados
                   .filter((bairro) => !principais.includes(bairro))
@@ -269,10 +273,15 @@ export function LocationSelectModal({
                               <Checkbox
                                 id={locationKey}
                                 checked={tempSelectedLocations.some(
-                                  (loc) => loc.toLowerCase() === locationKey.toLowerCase()
+                                  (loc) =>
+                                    loc.toLowerCase() ===
+                                    locationKey.toLowerCase()
                                 )}
                                 onCheckedChange={(checked) =>
-                                  handleLocationChange(locationKey, checked as boolean)
+                                  handleLocationChange(
+                                    locationKey,
+                                    checked as boolean
+                                  )
                                 }
                               />
                               <label
@@ -291,7 +300,7 @@ export function LocationSelectModal({
 
                 return (
                   <>
-                    {renderSecao("Principais Bairros", principais)}
+                    {renderSecao("Principais Bairros", principaisFiltrados)}
                     {outros.length > 0 && renderSecao("Outros Bairros", outros)}
                   </>
                 );

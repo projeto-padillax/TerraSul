@@ -44,14 +44,14 @@ export default function EspecialList({ id }: EspecialListProps) {
   }, [id])
 
   function toSlug(text: string): string {
-    return text
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-zA-Z0-9\s-]/g, '')
-      .trim()
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .toLowerCase()
+    return (
+      text
+        // .normalize("NFD") // separa acentos das letras
+        .trim() // remove espaços extras do começo/fim
+        .replace(/\s+/g, "-") // troca espaços por -
+        .replace(/-+/g, "-")
+    ); // evita múltiplos hífens
+    // .toLowerCase();
   }
 
   function gerarTitulo(imovel: Destaque) {

@@ -108,7 +108,7 @@ export default async function ImovelPage({
     }
 
     let categoria = imovel.Categoria
-      ? capitalizar(imovel.Categoria.split("/")[0])
+      ? imovel.Categoria.split("/")[0]
       : "Imóvesssl";
 
     categoria += status
