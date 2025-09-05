@@ -42,7 +42,7 @@ export default async function Footer() {
 
             {/* Telefones e Redes Sociais */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-              <span>Siga-nos</span>
+              <span className="text-sm">Siga-nos</span>
               <div className="flex space-x-3">
                 {siteConfig?.facebookUrl && (<a
                   href={siteConfig.facebookUrl}
@@ -76,25 +76,25 @@ export default async function Footer() {
               <nav className="flex flex-col gap-4 md:gap-8 text-sm">
                 <Link
                   href="/"
-                  className="text-black hover:text-site-primary transition-colors font-medium"
+                  className="text-[#303030] hover:text-site-primary transition-colors text-sm"
                 >
                   Página Inicial
                 </Link>
                 <Link
                   href="/empresa"
-                  className="text-black hover:text-site-primary transition-colors font-medium"
+                  className="text-[#303030] hover:text-site-primary transition-colors text-sm"
                 >
                   Sobre a Empresa
                 </Link>
                 <Link
                   href="/anuncie-seu-imovel"
-                  className="text-black hover:text-site-primary transition-colors font-medium"
+                  className="text-[#303030] hover:text-site-primary transition-colors text-sm"
                 >
                   Anuncie seu Imóvel
                 </Link>
                 <Link
                   href="/contato"
-                  className="text-black hover:text-site-primary transition-colors font-medium"
+                  className="text-[#303030] hover:text-site-primary transition-colors text-sm"
                 >
                   Contato
                 </Link>
@@ -107,7 +107,7 @@ export default async function Footer() {
                   <h2 className="font-bold text-site-primary mb-2">
                     Sede {index + 1}
                   </h2>
-                  <div className="flex flex-row flex-wrap items-center text-black gap-4">
+                  <div className="flex flex-row flex-wrap items-center text-[#303030] gap-4">
                     <span className="w-max text-sm">{endereco.rua}</span>
                     {endereco.telefone1 && (
                       <Link
@@ -137,9 +137,9 @@ export default async function Footer() {
                             ? `https://wa.me/55${endereco.telefone2}`
                             : ""
                         }
-                        className="flex items-center justify-start w-max text-sm"
+                        className="flex items-center justify-start w-max text-sm text-[#303030]"
                       >
-                        <span className="lg:ml-2 flex items-center gap-0.5 text-sm">
+                        <span className="lg:ml-2 flex items-center gap-0.5 text-sm text-[#303030]">
                           {endereco.tituloTelefone2 != "" ? (
                             <strong className="text-sm">{endereco.tituloTelefone2}</strong>
                           ) : endereco.isWhatsApp2 ? (
@@ -158,9 +158,9 @@ export default async function Footer() {
                             ? `https://wa.me/55${endereco.telefone3}`
                             : "#"
                         }
-                        className="flex items-center justify-start w-max text-sm"
+                        className="flex items-center justify-start w-max text-sm text-[#303030]"
                       >
-                        <span className="lg:ml-2 flex items-center gap-0.5 text-sm">
+                        <span className="lg:ml-2 flex items-center gap-0.5 text-sm text-[#303030]">
                           {endereco.tituloTelefone3 != "" ? (
                             <strong className="text-sm">{endereco.tituloTelefone3}</strong>
                           ) : endereco.isWhatsApp3 ? (
@@ -181,8 +181,7 @@ export default async function Footer() {
         <div className="justify-center sm:justify-between pt-4 flex flex-col sm:flex-row items-center w-full pb-16 gap-2">
           <a
             href="https://www.leadlink.com.br/imobiliarias/template/"
-            style={{ color: "#303030", fontWeight: 400 }}
-            className="text-sm"
+            className="text-sm text-[#303030]"
           >
             Site desenvolvido por{" "}
             <strong className="text-site-primary">Lead Link</strong>
@@ -190,7 +189,7 @@ export default async function Footer() {
           <div className="text-sm text-[#303030]">
             <Link
               href="/politica-de-privacidade"
-              className="text-[#303030] hover:text-site-primary-hover transition-colors font-medium text-sm"
+              className="text-[#303030] hover:text-site-primary-hover transition-colors text-sm"
             >
               Política de Privacidade
             </Link>
