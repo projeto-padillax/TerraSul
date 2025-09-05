@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { X, Menu } from "lucide-react";
+import { X, Menu, CodeXml } from "lucide-react";
 import { PaginasConteudo } from "@prisma/client";
 
 interface SidebarProps {
@@ -102,7 +102,22 @@ export default function Sidebar({ dynamicItems }: SidebarProps) {
         className="rounded-md mr-0 text-[#303030] hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-site-secondary p-0.5 transition-colors"
         aria-label="Abrir menu"
       >
-        <Menu className="h-6 w-6" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="35"
+          height="35"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="text-gray-600"
+        >
+          <line x1="4" y1="6" x2="20" y2="6" />
+          <line x1="8" y1="12" x2="20" y2="12" />
+          <line x1="4" y1="18" x2="20" y2="18" />
+        </svg>
       </button>
       {isOpen && (
         <div
@@ -128,7 +143,10 @@ export default function Sidebar({ dynamicItems }: SidebarProps) {
           </button>
         </div>
 
-        <div className="h-full overflow-y-auto pb-20 justify-items-center" style={{ scrollbarWidth: 'none' }}>
+        <div
+          className="h-full overflow-y-auto pb-20 justify-items-center"
+          style={{ scrollbarWidth: "none" }}
+        >
           <div className="border-b border-site-primary w-9/12 ml-4">
             {fixedItems.map((item, index) => (
               <Link
@@ -177,7 +195,7 @@ export default function Sidebar({ dynamicItems }: SidebarProps) {
               </Link>
             ))}
           </div> */}
-{/* 
+          {/* 
           <div className="border-b border-sky-500 w-9/12 ml-4">
             <div className="py-3">
               <h3 className="font-semibold text-gray-800 text-sm uppercase tracking-wide">
