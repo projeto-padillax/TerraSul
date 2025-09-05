@@ -116,6 +116,11 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   }, [searchParams]);
 
   useEffect(() => {
+    if (empreendimento) {
+      handleSearchByName(empreendimento)
+      return
+    }
+
     const newSearchParams = new URLSearchParams();
     const path = `/busca/${searchData.action}/${
       searchData.tipos.length > 0
@@ -158,11 +163,14 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       newSearchParams.set("lancamentos", searchData.lancamentos);
     if (codigo) newSearchParams.set("codigo", codigo);
     // ... e os outros filtros
-    if (empreendimento) newSearchParams.set("empreendimento", empreendimento);
     if (sortOrder) newSearchParams.set("sort", sortOrder);
     newSearchParams.set("page", String(page));
-    // 2. Atualizar a URL do navegador
-    router.push(`${path}?${decodeURIComponent(newSearchParams.toString())}`);
+
+    router.push(
+      `${decodeURIComponent(path)}?${decodeURIComponent(
+        newSearchParams.toString()
+      )}`
+    );
 
     const fetchImoveis = async () => {
       setLoading(true);
@@ -346,6 +354,37 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     }
   };
 
+  const handleSearchByName = async (name: string) => {
+    if (!name) return;
+    try {
+      setLoading(true);
+      const path = `/busca/${searchData.action}/${
+        searchData.tipos.length > 0
+          ? searchData.tipos[0].replace("/", "-")
+          : "imóveis"
+      }/${
+        searchData.locations.length > 0
+          ? searchData.locations[0].split(":")[0] +
+            "+" +
+            searchData.locations[0].split(":")[1]
+          : "porto alegre"
+      }`;
+      router.push(`${decodeURIComponent(path)}?action=comprar&empreendimento=${name}&page=1`);
+      const res = await fetch(`/api/vista/imoveis?action=comprar&empreendimento=${name}&page=1`);
+      const data = await res.json();
+      setImoveis(data.imoveis);
+      setTotalPages(data.totalPages);
+      setTotalImoveis(data.totalItems);
+      gerarTitulo(data.totalItems);
+      // ... (atualize totalPages e totalImoveis)
+    } catch (error) {
+      console.error("Falha ao buscar imóveis:", error);
+      setImoveis([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <div className="w-full content-center shadow-lg shadow-gray-200">
@@ -400,6 +439,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                               : num.toString(),
                         });
                         setPage(1);
+                        setEmpreendimento("");
                       }}
                       className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${
                         searchData.quartos === num.toString()
@@ -422,6 +462,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                       valueRange: { ...searchData.valueRange, min: value },
                     });
                     setPage(1);
+                    setEmpreendimento("");
                   } // Reset page to 1 when value range changes
                 }
               >
@@ -429,22 +470,22 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                   <SelectValue placeholder="Valor de" className="text-black" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">R$ 0</SelectItem>
-                    <SelectItem value="200000">R$ 200.000</SelectItem>
-                    <SelectItem value="300000">R$ 300.000</SelectItem>
-                    <SelectItem value="400000">R$ 400.000</SelectItem>
-                    <SelectItem value="500000">R$ 500.000</SelectItem>
-                    <SelectItem value="600000">R$ 600.000</SelectItem>
-                    <SelectItem value="700000">R$ 700.000</SelectItem>
-                    <SelectItem value="800000">R$ 800.000</SelectItem>
-                    <SelectItem value="900000">R$ 900.000</SelectItem>
-                    <SelectItem value="1000000">R$ 1.000.000</SelectItem>
-                    <SelectItem value="1500000">R$ 1.500.000</SelectItem>
-                    <SelectItem value="2000000">R$ 2.000.000</SelectItem>
-                    <SelectItem value="2500000">R$ 2.500.000</SelectItem>
-                    <SelectItem value="3000000">R$ 3.000.000</SelectItem>
-                    <SelectItem value="4000000">R$ 4.000.000</SelectItem>
-                    <SelectItem value="5000000">R$ 5.000.000</SelectItem>
+                  <SelectItem value="0">R$ 0</SelectItem>
+                  <SelectItem value="200000">R$ 200.000</SelectItem>
+                  <SelectItem value="300000">R$ 300.000</SelectItem>
+                  <SelectItem value="400000">R$ 400.000</SelectItem>
+                  <SelectItem value="500000">R$ 500.000</SelectItem>
+                  <SelectItem value="600000">R$ 600.000</SelectItem>
+                  <SelectItem value="700000">R$ 700.000</SelectItem>
+                  <SelectItem value="800000">R$ 800.000</SelectItem>
+                  <SelectItem value="900000">R$ 900.000</SelectItem>
+                  <SelectItem value="1000000">R$ 1.000.000</SelectItem>
+                  <SelectItem value="1500000">R$ 1.500.000</SelectItem>
+                  <SelectItem value="2000000">R$ 2.000.000</SelectItem>
+                  <SelectItem value="2500000">R$ 2.500.000</SelectItem>
+                  <SelectItem value="3000000">R$ 3.000.000</SelectItem>
+                  <SelectItem value="4000000">R$ 4.000.000</SelectItem>
+                  <SelectItem value="5000000">R$ 5.000.000</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -457,6 +498,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                       valueRange: { ...searchData.valueRange, max: value },
                     });
                     setPage(1);
+                    setEmpreendimento("");
                   } // Reset page to 1 when value range changes
                 }
               >
@@ -464,23 +506,23 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                   <SelectValue placeholder="Valor até" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="0">R$ 0</SelectItem>
-                    <SelectItem value="200000">R$ 200.000</SelectItem>
-                    <SelectItem value="300000">R$ 300.000</SelectItem>
-                    <SelectItem value="400000">R$ 400.000</SelectItem>
-                    <SelectItem value="500000">R$ 500.000</SelectItem>
-                    <SelectItem value="600000">R$ 600.000</SelectItem>
-                    <SelectItem value="700000">R$ 700.000</SelectItem>
-                    <SelectItem value="800000">R$ 800.000</SelectItem>
-                    <SelectItem value="900000">R$ 900.000</SelectItem>
-                    <SelectItem value="1000000">R$ 1.000.000</SelectItem>
-                    <SelectItem value="1500000">R$ 1.500.000</SelectItem>
-                    <SelectItem value="2000000">R$ 2.000.000</SelectItem>
-                    <SelectItem value="2500000">R$ 2.500.000</SelectItem>
-                    <SelectItem value="3000000">R$ 3.000.000</SelectItem>
-                    <SelectItem value="4000000">R$ 4.000.000</SelectItem>
-                    <SelectItem value="5000000">R$ 5.000.000</SelectItem>
-                    <SelectItem value="999999999">+ R$ 6.000.000</SelectItem>
+                  <SelectItem value="0">R$ 0</SelectItem>
+                  <SelectItem value="200000">R$ 200.000</SelectItem>
+                  <SelectItem value="300000">R$ 300.000</SelectItem>
+                  <SelectItem value="400000">R$ 400.000</SelectItem>
+                  <SelectItem value="500000">R$ 500.000</SelectItem>
+                  <SelectItem value="600000">R$ 600.000</SelectItem>
+                  <SelectItem value="700000">R$ 700.000</SelectItem>
+                  <SelectItem value="800000">R$ 800.000</SelectItem>
+                  <SelectItem value="900000">R$ 900.000</SelectItem>
+                  <SelectItem value="1000000">R$ 1.000.000</SelectItem>
+                  <SelectItem value="1500000">R$ 1.500.000</SelectItem>
+                  <SelectItem value="2000000">R$ 2.000.000</SelectItem>
+                  <SelectItem value="2500000">R$ 2.500.000</SelectItem>
+                  <SelectItem value="3000000">R$ 3.000.000</SelectItem>
+                  <SelectItem value="4000000">R$ 4.000.000</SelectItem>
+                  <SelectItem value="5000000">R$ 5.000.000</SelectItem>
+                  <SelectItem value="999999999">+ R$ 6.000.000</SelectItem>
                 </SelectContent>
               </Select>
               {/* Botão Filtros */}
@@ -490,6 +532,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                 onClick={() => {
                   setShowFilters(!showFilters);
                   setPage(1);
+                  setEmpreendimento("");
                 }}
               >
                 Filtros
@@ -526,6 +569,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                 onValueChange={(value) => {
                   setSearchData({ ...searchData, area: value });
                   setPage(1); // Reset page to 1 when area changes
+                  setEmpreendimento("");
                 }}
               >
                 <SelectTrigger className="data-[size=default]:h-12 p-0 border-0 shadow-none cursor-pointer w-full md:w-fit font-medium">
@@ -560,6 +604,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                               : num.toString(),
                         });
                         setPage(1); // Reset page to 1 when suites changes
+                        setEmpreendimento("");
                       }}
                       className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${
                         searchData.suites === num.toString()
@@ -588,6 +633,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                               : num.toString(),
                         });
                         setPage(1);
+                        setEmpreendimento("");
                       }}
                       className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${
                         searchData.vagas === num.toString()
@@ -626,6 +672,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                             : [...prev.caracteristicas, type.id],
                         }));
                         setPage(1); // Reset page to 1 when caracteristicas changes
+                        setEmpreendimento("");
                       }}
                     >
                       <Checkbox
@@ -640,6 +687,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                                 ), // remove quando false
                           }));
                           setPage(1); // Reset page to 1 when caracteristicas changes
+                          setEmpreendimento("");
                         }}
                         onClick={(e) => e.stopPropagation()}
                       />
@@ -664,6 +712,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                       lancamentos: checked ? "s" : "",
                     });
                     setPage(1); // Reset page to 1 when lancamentos changes
+                    setEmpreendimento("");
                   }}
                 />
               </div>
@@ -675,13 +724,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                   className="placeholder:text-black border-0 text-sm focus:ring-0 focus:outline-none focus-visible:ring-0 shadow-none text-black"
                 />
                 <Button
-                  onClick={() => {
-                    setSearchData({
-                      ...searchData,
-                      empreendimento: empreendimento,
-                    });
-                    setPage(1);
-                  }}
+                  onClick={() => handleSearchByName(empreendimento)}
                   className="bg-transparent rounded-none h-full cursor-pointer hover:bg-site-primary text-gray-500 hover:text-white"
                 >
                   <Search className="h-4 w-4 text-current" />
@@ -829,6 +872,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         onSelectionChange={(location) => {
           setSearchData({ ...searchData, locations: location });
           setPage(1);
+          setEmpreendimento("");
         }}
       />
 
@@ -839,6 +883,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         onSelectionChange={(tipos) => {
           setSearchData({ ...searchData, tipos });
           setPage(1);
+          setEmpreendimento("");
         }}
       />
     </div>
