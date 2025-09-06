@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "../neon/db";
 
 const enderecoSchema = z.object({
+  titulo: z.string().optional(),
   rua: z.string().max(200, "Rua deve ter no máximo 200 caracteres.").optional(),
   bairro: z
     .string()
@@ -98,6 +99,7 @@ export async function getConfiguracaoPagina(): Promise<configuracaoSchema | null
         enderecos: {
           select: {
             id: true,
+            titulo: true,
             rua: true,
             bairro: true,
             cidade: true,
@@ -133,6 +135,7 @@ export async function getConfiguracaoPagina(): Promise<configuracaoSchema | null
       whatsappNumber: record.whatsappNumber ?? "",
       sobreNos: record.sobreNos ?? "",
       enderecos: record.enderecos.map((endereco) => ({
+        titulo: endereco.titulo ?? "",
         rua: endereco.rua ?? "",
         bairro: endereco.bairro ?? "",
         cidade: endereco.cidade ?? "",
@@ -166,6 +169,7 @@ export async function GetEnderecos() {
         enderecos: {
           select: {
             id: true,
+            titulo: true,
             rua: true,
             bairro: true,
             cidade: true,
@@ -236,6 +240,7 @@ export async function createConfiguracaoPagina(
         sobreNos: validatedData.sobreNos ?? "",
         enderecos: {
           create: validatedData.enderecos.map((endereco) => ({
+            titulo: endereco.titulo,
             rua: endereco.rua,
             bairro: endereco.bairro,
             cidade: endereco.cidade,
@@ -297,6 +302,7 @@ export async function updateConfiguracaoPagina(
         sobreNos: validatedData.sobreNos ?? "",
         enderecos: {
           create: validatedData.enderecos.map((endereco) => ({
+            titulo: endereco.titulo,
             rua: endereco.rua,
             bairro: endereco.bairro,
             cidade: endereco.cidade,

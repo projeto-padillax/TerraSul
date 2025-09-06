@@ -151,6 +151,7 @@ model ConfiguracaoPagina {
 
 model Endereco {
   id             Int     @id @default(autoincrement())
+  titulo         String?
   rua            String?
   bairro         String?
   cidade         String?

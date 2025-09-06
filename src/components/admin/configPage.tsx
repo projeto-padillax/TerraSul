@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 const enderecoSchema = z.object({
+  titulo: z.string().optional(),
   rua: z.string().optional(),
   bairro: z.string().optional(),
   cidade: z.string().optional(),
@@ -116,6 +117,7 @@ export default function SiteConfigForm({
       whatsappNumber: "",
       enderecos: [
         {
+          titulo: "",
           rua: "",
           bairro: "",
           cidade: "",
@@ -321,6 +323,19 @@ export default function SiteConfigForm({
           <Card key={field.id} className="mb-6">
             <CardContent className="p-6 space-y-4">
               <h2 className="text-lg font-semibold">Endereço {index + 1}</h2>
+
+              <FormField
+                control={form.control}
+                name={`enderecos.${index}.titulo`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Titulo Endereço</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value ?? ""} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}
@@ -600,6 +615,7 @@ export default function SiteConfigForm({
             variant="outline"
             onClick={() =>
               append({
+                titulo: "",
                 rua: "",
                 bairro: "",
                 cidade: "",

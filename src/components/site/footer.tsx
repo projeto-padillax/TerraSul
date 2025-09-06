@@ -6,6 +6,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
 import Image from "next/image";
 import { getConfiguracaoPagina } from "@/lib/actions/config";
+import { config } from "zod/v4/core";
 
 export default async function Footer() {
   const siteConfig = await getConfiguracaoPagina();
@@ -105,7 +106,7 @@ export default async function Footer() {
               {siteConfig?.enderecos?.map((endereco, index) => (
                 <div className="flex flex-col mb-8" key={index}>
                   <h2 className="font-bold text-site-primary mb-2">
-                    Sede {index + 1}
+                    {endereco.titulo || "Sede"} {index + 1}
                   </h2>
                   <div className="flex flex-row flex-wrap items-center text-[#303030] gap-4">
                     <span className="w-max text-sm">{endereco.rua}</span>

@@ -112,7 +112,7 @@ export default function Sidebar({ dynamicItems }: SidebarProps) {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="text-gray-600"
+          className="text-[#303030]"
         >
           <line x1="4" y1="6" x2="20" y2="6" />
           <line x1="8" y1="12" x2="20" y2="12" />
