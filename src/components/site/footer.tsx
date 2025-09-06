@@ -6,7 +6,6 @@ import { FaWhatsapp } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
 import Image from "next/image";
 import { getConfiguracaoPagina } from "@/lib/actions/config";
-import { config } from "zod/v4/core";
 
 export default async function Footer() {
   const siteConfig = await getConfiguracaoPagina();
