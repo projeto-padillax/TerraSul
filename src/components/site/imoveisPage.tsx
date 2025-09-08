@@ -117,8 +117,8 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
 
   useEffect(() => {
     if (empreendimento) {
-      handleSearchByName(empreendimento)
-      return
+      handleSearchByName(empreendimento);
+      return;
     }
 
     const newSearchParams = new URLSearchParams();
@@ -335,17 +335,29 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   const handleSearchByCode = async (code: string) => {
     if (!code) return;
     try {
-      router.push(
-        `/imovel/${searchData.action}+${
-          searchData.tipos[0].replace("/", "-") ?? "Imovel"
-        }+em+${
-          searchData.locations.length > 0
-            ? searchData.locations[0].split(":")[0] +
-              "+" +
-              searchData.locations[0].split(":")[1]
-            : "porto alegre"
-        }/${code}`
-      );
+      if (!searchData) {
+        console.error("searchData não definido");
+        return;
+      }
+
+      const tipo =
+        searchData.tipos && searchData.tipos.length > 0
+          ? searchData.tipos[0].replace("/", "-")
+          : "Imovel";
+
+      const location =
+        searchData.locations && searchData.locations.length > 0
+          ? searchData.locations[0].split(":")[0] +
+            "+" +
+            searchData.locations[0].split(":")[1]
+          : "porto alegre";
+
+      if (!code) {
+        console.error("code não definido");
+        return;
+      }
+
+      router.push(`/imovel/comprar+${tipo}+em+${location}/${code}`);
     } catch (error) {
       console.error("Falha ao buscar imóveis:", error);
       setImoveis([]);
@@ -358,6 +370,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     if (!name) return;
     try {
       setLoading(true);
+      
       const path = `/busca/${searchData.action}/${
         searchData.tipos.length > 0
           ? searchData.tipos[0].replace("/", "-")
@@ -369,8 +382,14 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
             searchData.locations[0].split(":")[1]
           : "porto alegre"
       }`;
-      router.push(`${decodeURIComponent(path)}?action=comprar&empreendimento=${name}&page=1`);
-      const res = await fetch(`/api/vista/imoveis?action=comprar&empreendimento=${name}&page=1`);
+      router.push(
+        `${decodeURIComponent(
+          path
+        )}?action=comprar&empreendimento=${name}&page=1`
+      );
+      const res = await fetch(
+        `/api/vista/imoveis?action=comprar&empreendimento=${name}&page=1`
+      );
       const data = await res.json();
       setImoveis(data.imoveis);
       setTotalPages(data.totalPages);

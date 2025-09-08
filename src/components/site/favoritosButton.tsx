@@ -24,7 +24,7 @@ export default function FavoriteButton({ property }: Props) {
 
   return (
     <button
-      className="z-50"
+      className=""
       onClick={(e) => {
         e.preventDefault();
         toggleFavorite();

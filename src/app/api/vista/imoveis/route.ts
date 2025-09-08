@@ -78,6 +78,7 @@ const base: string[] = [
   "Longitude",
   "FotoDestaqueEmpreendimento",
   "VideoDestaque",
+  "AreaUtil"
 ];
 
 const LISTING_RESEARCH_FIELDS = [

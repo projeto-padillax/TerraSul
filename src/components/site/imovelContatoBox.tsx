@@ -37,7 +37,7 @@ export default function ImovelContatoBox({
                     <div className="flex items-start gap-4">
                         <div className="w-[70px] h-[70px] rounded-md overflow-hidden">
                             <Image
-                                src={corretor?.foto || "/terraSulLogo.png"}
+                                src={corretor?.foto || "/logo.svg"}
                                 alt="Corretor"
                                 width={70}
                                 height={70}
@@ -83,7 +83,7 @@ export default function ImovelContatoBox({
                         {isVenda && (
                             <button
                                 onClick={() => abrirModal('financiamento')}
-                                className="text-[12px] border-b border-grey-300 pb-[1px] text-black hover:text-black hover:border-black transition lg:w-min"
+                                className="text-[12px] border-b border-grey-300 pb-[1px] text-black hover:text-black hover:border-black transition lg:w-fit"
                             >
                                 Simular financiamento
                             </button>

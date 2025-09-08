@@ -116,7 +116,7 @@ async function fetchFromVista(codigo: string): Promise<VistaImovel | null> {
                           "AreaTerreno", "Bairro", "GMapsLatitude", "GMapsLongitude", "Cidade",
                           "ValorVenda", "ValorLocacao", "Dormitorios", "Suites", "Vagas", "AreaTotal",
                           "Caracteristicas", "InfraEstrutura", "Descricao", "DataHoraAtualizacao", "Lancamento",
-                          "Status", "Empreendimento", "Endereco",
+                          "Status", "Empreendimento", "Endereco", "AreaUtil",
                           "Numero", "Complemento", "UF", "CEP", "DestaqueWeb", "FotoDestaque", "Latitude", "Longitude", "FotoDestaqueEmpreendimento", "VideoDestaque",{"Foto":["Foto","FotoPequena","Destaque"]}]}`;
 
   const res = await fetch(url, {

@@ -109,7 +109,11 @@ export function HeroSection(banner: HeroSectionProps) {
         : "porto alegre"
     }`;
     // console.log(path)
-    router.push(`${decodeURIComponent(path)}?${decodeURIComponent(newSearchParams.toString())}`);
+    router.push(
+      `${decodeURIComponent(path)}?${decodeURIComponent(
+        newSearchParams.toString()
+      )}`
+    );
   };
 
   const handleAdvancedSearch = () => {
@@ -134,17 +138,29 @@ export function HeroSection(banner: HeroSectionProps) {
   const handleSearchByCode = async () => {
     if (!codigo) return;
     try {
-      router.push(
-        `/imovel/${searchData.action}+${
-          searchData.tipos[0].replace("/", "-") ?? "Imovel"
-        }+em+${
-          searchData.locations.length > 0
-            ? searchData.locations[0].split(":")[0] +
-              "+" +
-              searchData.locations[0].split(":")[1]
-            : "porto alegre"
-        }/${codigo}`
-      );
+      if (!searchData) {
+        console.error("searchData não definido");
+        return;
+      }
+
+      const tipo =
+        searchData.tipos && searchData.tipos.length > 0
+          ? searchData.tipos[0].replace("/", "-")
+          : "Imovel";
+
+      const location =
+        searchData.locations && searchData.locations.length > 0
+          ? searchData.locations[0].split(":")[0] +
+            "+" +
+            searchData.locations[0].split(":")[1]
+          : "porto alegre";
+
+      if (!codigo) {
+        console.error("codigo não definido");
+        return;
+      }
+
+      router.push(`/imovel/comprar+${tipo}+em+${location}/${codigo}`);
     } catch (error) {
       console.error("Falha ao buscar imóveis:", error);
     }

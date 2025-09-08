@@ -241,6 +241,7 @@ model Imovel {
   Vagas                      String?
   AreaTotal                  Float?    @map("areaTotal")
   AreaTerreno                Float?    @map("areaTerreno")
+  AreaUtil                   Float?    @map("areaUtil") 
   Descricao                  String?
   DataHoraAtualizacao        DateTime? @map("dataHoraAtualizacao")
   Lancamento                 String?
