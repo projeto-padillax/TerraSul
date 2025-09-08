@@ -240,10 +240,10 @@ export default async function ImovelPage({
 
                     <div
                       className={`flex items-center gap-1 ${!hasBadges &&
-                          (!imovel.ValorCondominio || parseFloat(imovel.ValorCondominio) === 0) &&
-                          (!imovel.ValorIptu || parseFloat(imovel.ValorIptu) === 0)
-                          ? ''
-                          : 'ml-4'
+                        (!imovel.ValorCondominio || parseFloat(imovel.ValorCondominio) === 0) &&
+                        (!imovel.ValorIptu || parseFloat(imovel.ValorIptu) === 0)
+                        ? ''
+                        : 'ml-4'
                         }`}
                     >
                       <FavoriteButton property={imovel} />
@@ -496,8 +496,10 @@ export default async function ImovelPage({
                 <MidiaBox
                   imagens={imagensGaleria}
                   videos={
-                    imovel.VideoDestaque && imovel.VideoDestaque.trim() !== ""
-                      ? [imovel.VideoDestaque]
+                    Array.isArray(imovel?.videos)
+                      ? imovel.videos
+                        .filter((v: { video: string; }): v is { video: string } => typeof v.video === "string" && v.video.trim() !== "")
+                        .map((v: { video: string; }) => ({ url: v.video }))
                       : []
                   }
                 />

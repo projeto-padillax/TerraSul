@@ -33,7 +33,8 @@ export async function GET(
             descricao: true,
             codigo: true,
             tipo: true,
-            exibirNoSire: true,
+            video: true,
+            exibirNoSite: true,
           },
         },
         caracteristicas: {

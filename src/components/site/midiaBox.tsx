@@ -7,11 +7,27 @@ import { Camera, PlayCircle } from "lucide-react";
 
 interface MidiaBoxProps {
   imagens: { Foto: string }[];
-  videos?: { url: string; thumb: string }[];
+  videos?: { url: string }[];
 }
+
+type Midia = {
+  type: "image" | "video";
+  src: string;
+};
 
 export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
   const [modalAberta, setModalAberta] = useState(false);
+  const [midiasSelecionadas, setMidiasSelecionadas] = useState<Midia[] | null>(null);
+
+  const handleAbrirGaleria = (tipo: "image" | "video") => {
+    const midiasFiltradas: Midia[] =
+      tipo === "image"
+        ? imagens.map((img) => ({ type: "image", src: img.Foto }))
+        : videos.map((vid) => ({ type: "video", src: vid.url }));
+
+    setMidiasSelecionadas(midiasFiltradas);
+    setModalAberta(true);
+  };
 
   return (
     <>
@@ -23,21 +39,22 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
             <div
               key={`video-${i}`}
               className="relative group overflow-hidden rounded-lg shadow-md cursor-pointer"
-              onClick={() => setModalAberta(true)}
+              onClick={() => handleAbrirGaleria("video")}
             >
               <Image
-                src={video.thumb}
-                alt="Vídeo"
-                width={800}
-                height={450}
-                className="w-full h-45 object-cover group-hover:scale-105 transition-transform duration-300"
+                src={imagens[1]?.Foto ?? "/fallback.jpg"}
+                alt={`Thumb do vídeo ${i + 1}`}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
               />
-              <div className="absolute inset-0 bg-black/30" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <button className="bg-white text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md pointer-events-none">
+              <div className="w-full h-64 bg-black flex items-center justify-center rounded-lg">
+                <PlayCircle size={48} className="text-white" />
+              </div>
+              <div className="absolute inset-0 bg-black/20 flex items-center justify-center pointer-events-none">
+                <div className="bg-white/80 text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md">
                   <PlayCircle size={18} />
                   Vídeo
-                </button>
+                </div>
               </div>
             </div>
           ))}
@@ -46,19 +63,19 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
             <div
               key={`foto-${i}`}
               className="relative group overflow-hidden rounded-lg shadow-md cursor-pointer"
-              onClick={() => setModalAberta(true)}
+              onClick={() => handleAbrirGaleria("image")}
             >
               <Image
                 src={img.Foto}
                 alt="Foto"
                 width={800}
                 height={450}
-                className="w-full h-45 object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute inset-0 bg-black/30" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <button className="bg-white text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md pointer-events-none">
-                  <Camera size={18}/>
+                  <Camera size={18} />
                   Fotos
                 </button>
               </div>
@@ -67,8 +84,14 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
         </div>
       </section>
 
-      {modalAberta && (
-        <GaleriaModal imagens={imagens} onClose={() => setModalAberta(false)} />
+      {modalAberta && midiasSelecionadas && (
+        <GaleriaModal
+          midias={midiasSelecionadas}
+          onClose={() => {
+            setModalAberta(false);
+            setMidiasSelecionadas(null);
+          }}
+        />
       )}
     </>
   );

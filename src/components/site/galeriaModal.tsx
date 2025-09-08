@@ -1,21 +1,26 @@
 "use client";
 
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, PlayCircle } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
+type Midia = {
+    type: "image" | "video";
+    src: string;
+};
+
 interface GaleriaModalProps {
-    imagens: { Foto: string }[];
+    midias: Midia[];
     onClose: () => void;
 }
 
-export default function GaleriaModal({ imagens, onClose }: GaleriaModalProps) {
+export default function GaleriaModal({ midias, onClose }: GaleriaModalProps) {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-    const selectedImage = selectedIndex !== null ? imagens[selectedIndex].Foto : null;
+    const selectedItem = selectedIndex !== null ? midias[selectedIndex] : null;
 
     const handleNext = () => {
-        if (selectedIndex !== null && selectedIndex < imagens.length - 1) {
+        if (selectedIndex !== null && selectedIndex < midias.length - 1) {
             setSelectedIndex(selectedIndex + 1);
         }
     };
@@ -37,19 +42,28 @@ export default function GaleriaModal({ imagens, onClose }: GaleriaModalProps) {
                     }
                 }}
                 className="absolute top-4 right-4 text-black hover:text-red-500 z-50"
-                title={selectedIndex !== null ? "Fechar imagem" : "Fechar galeria"}
+                title={selectedIndex !== null ? "Fechar item" : "Fechar galeria"}
             >
                 <X size={28} />
             </button>
 
-            {selectedImage ? (
+            {selectedItem ? (
                 <div className="w-full h-full relative flex items-center justify-center">
-                    <Image
-                        src={selectedImage}
-                        alt="Imagem ampliada"
-                        fill
-                        className="object-contain"
-                    />
+                    {selectedItem.type === "image" ? (
+                        <Image
+                            src={selectedItem.src}
+                            alt="Imagem ampliada"
+                            fill
+                            className="object-contain"
+                        />
+                    ) : (
+                        <iframe
+                            src={`https://www.youtube.com/embed/${selectedItem.src}?rel=0&controls=1`}
+                            className="w-[90vw] h-[60vh] sm:w-[60vw] sm:h-[70vh] rounded-lg"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        />
+                    )}
 
                     {selectedIndex !== null && selectedIndex > 0 && (
                         <button
@@ -60,7 +74,7 @@ export default function GaleriaModal({ imagens, onClose }: GaleriaModalProps) {
                             <ChevronLeft size={32} />
                         </button>
                     )}
-                    {selectedIndex !== null && selectedIndex < imagens.length - 1 && (
+                    {selectedIndex !== null && selectedIndex < midias.length - 1 && (
                         <button
                             onClick={handleNext}
                             className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/70 hover:bg-white rounded-full p-2 shadow z-50"
@@ -73,21 +87,27 @@ export default function GaleriaModal({ imagens, onClose }: GaleriaModalProps) {
             ) : (
                 <div className="w-full h-full p-6 overflow-y-auto">
                     <h2 className="text-black text-xl font-semibold mb-6">
-                        {imagens.length} fotos
+                        {midias.length} {midias[0]?.type === "video" ? "vídeos" : "fotos"}
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {imagens.map((img, index) => (
+                        {midias.map((item, index) => (
                             <div
                                 key={index}
                                 onClick={() => setSelectedIndex(index)}
-                                className="cursor-pointer relative aspect-[4/3] rounded overflow-hidden"
+                                className="cursor-pointer relative aspect-[4/3] rounded overflow-hidden bg-black"
                             >
-                                <Image
-                                    src={img.Foto}
-                                    alt={`Imagem ${index + 1}`}
-                                    fill
-                                    className="object-cover"
-                                />
+                                {item.type === "image" ? (
+                                    <Image
+                                        src={item.src}
+                                        alt={`Imagem ${index + 1}`}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                ) : (
+                                    <div className="relative w-full h-full bg-black flex items-center justify-center">
+                                        <PlayCircle size={42} className="text-white opacity-80" />
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>
