@@ -29,36 +29,71 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
     setModalAberta(true);
   };
 
+  const [videoAberto, setVideoAberto] = useState(false);
+
   return (
     <>
       <section className="mt-8">
         <h2 className="text-[#4d4d4d] text-xl font-bold mb-4">Mídias</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {videos.map((video, i) => (
+          {videos.length === 1 ? (
             <div
-              key={`video-${i}`}
-              className="relative group overflow-hidden rounded-lg shadow-md cursor-pointer"
-              onClick={() => handleAbrirGaleria("video")}
+              key="video-unico"
+              className="relative overflow-hidden rounded-lg shadow-md h-64 cursor-pointer"
+              onClick={() => setVideoAberto(true)}
             >
-              <Image
-                src={imagens[1]?.Foto ?? "/fallback.jpg"}
-                alt={`Thumb do vídeo ${i + 1}`}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-              <div className="w-full h-64 bg-black flex items-center justify-center rounded-lg">
-                <PlayCircle size={48} className="text-white" />
-              </div>
-              <div className="absolute inset-0 bg-black/20 flex items-center justify-center pointer-events-none">
-                <div className="bg-white/80 text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md">
-                  <PlayCircle size={18} />
-                  Vídeo
+              {videoAberto ? (
+                <iframe
+                  src={`https://www.youtube.com/embed/${videos[0].url}?rel=0&controls=1&autoplay=1`}
+                  title="Vídeo"
+                  className="w-full h-full rounded-lg"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <>
+                  <Image
+                    src={imagens[1]?.Foto ?? "/fallback.jpg"}
+                    alt="Thumb do vídeo"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-black/30" />
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="bg-white/80 text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md">
+                      <PlayCircle size={18} />
+                      Vídeo
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            videos.map((video, i) => (
+              <div
+                key={`video-${i}`}
+                className="relative group overflow-hidden rounded-lg shadow-md cursor-pointer h-64"
+                onClick={() => handleAbrirGaleria("video")}
+              >
+                <Image
+                  src={imagens[1]?.Foto ?? "/fallback.jpg"}
+                  alt={`Thumb do vídeo ${i + 1}`}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-black/30" />
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="bg-white/80 text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md">
+                    <PlayCircle size={18} />
+                    Vídeo
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
 
+          {/* Imagens */}
           {imagens.slice(0, 1).map((img, i) => (
             <div
               key={`foto-${i}`}
