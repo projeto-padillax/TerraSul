@@ -31,8 +31,8 @@ function gerarTitulo(imovel: Imovel) {
   const categoria = imovel.Categoria ? capitalizar(imovel.Categoria) : "Imóvel";
 
   const area =
-    imovel.AreaTerreno || imovel.AreaTotal
-      ? `${imovel.AreaTerreno || imovel.AreaTotal}m²`
+    imovel.AreaUtil || imovel.AreaTotal
+      ? `${imovel.AreaUtil || imovel.AreaTotal}m²`
       : "";
 
   const quartos =

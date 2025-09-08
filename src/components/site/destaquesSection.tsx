@@ -31,8 +31,8 @@ interface DestaquesSectionProps {
 
     const categoria = imovel.Categoria ? imovel.Categoria : "Imóvel";
     const area =
-      imovel.AreaTerreno || imovel.AreaTotal
-        ? `${imovel.AreaTerreno || imovel.AreaTotal}m²`
+      imovel.AreaUtil || imovel.AreaTotal
+        ? `${imovel.AreaUtil || imovel.AreaTotal}m²`
         : "";
 
     const quartos =

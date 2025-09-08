@@ -114,8 +114,8 @@ export default async function ImovelPage({
     categoria += status
 
     const area =
-      imovel.AreaTerreno || imovel.AreaTotal
-        ? `${imovel.AreaTerreno || imovel.AreaTotal}m²`
+      imovel.AreaUtil || imovel.AreaTotal
+        ? `${imovel.AreaUtil || imovel.AreaTotal}m²`
         : "";
 
     const quartos =
@@ -373,7 +373,7 @@ export default async function ImovelPage({
                       </div>
                     )}
 
-                    {imovel.AreaTerreno > 0 && (
+                    {imovel.AreaUtil > 0 && (
                       <div className="flex items-end ml-2">
                         <Dot
                           size={25}
@@ -442,7 +442,7 @@ export default async function ImovelPage({
                             />
                           </svg>
                           <span className="mt-1 sm:mt-2 text-center leading-5">
-                            {imovel.AreaTerreno} m² totais
+                            {imovel.AreaUtil} m² totais
                           </span>
                         </div>
                       </div>

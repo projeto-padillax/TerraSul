@@ -287,8 +287,8 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
 
     categoria = categoria.replaceAll(" ", "_");
     const area =
-      imovel.AreaTerreno || imovel.AreaTotal
-        ? `${imovel.AreaTerreno || imovel.AreaTotal}m²`
+      imovel.AreaUtil || imovel.AreaTotal
+        ? `${imovel.AreaUtil || imovel.AreaTotal}m²`
         : "";
 
     const quartos =

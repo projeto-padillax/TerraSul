@@ -643,23 +643,11 @@ export async function GET(request: NextRequest) {
       whereClause.OR = [
         {
           // Prioriza AreaTotal
-          AreaTotal: {
+          AreaUtil: {
             ...(min !== undefined ? { gte: min } : {}),
             ...(max !== undefined ? { lte: max } : {}),
           },
-        },
-        {
-          // Só usa AreaTerreno quando não houver AreaTotal
-          AND: [
-            { AreaTotal: null },
-            {
-              AreaTerreno: {
-                ...(min !== undefined ? { gte: min } : {}),
-                ...(max !== undefined ? { lte: max } : {}),
-              },
-            },
-          ],
-        },
+        }
       ];
     }
 

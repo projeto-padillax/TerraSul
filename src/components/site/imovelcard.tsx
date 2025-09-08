@@ -22,7 +22,7 @@ export function ImovelCard({ imovel, activeTab }: PropertyCardProps) {
       .join("/");
   };
 
-  const areas = [imovel.AreaTotal, imovel.AreaTerreno];
+  const areas = [imovel.AreaUtil, imovel.AreaTotal];
   const area = areas.find((a) => Number(a) > 0);
 
   const hasDormitorios = Number(imovel.Dormitorios) > 0;
