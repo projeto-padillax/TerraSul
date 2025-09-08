@@ -6,6 +6,7 @@ export type Destaque = {
   ValorCondominio: string;
   Categoria: string;
   AreaTerreno: number;
+  AreaUtil: number;
   Bairro: string;
   GMapsLatitude: string;
   GMapsLongitude: string;

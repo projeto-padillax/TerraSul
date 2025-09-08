@@ -26,6 +26,16 @@ export async function GET(
             id: "asc",
           },
         },
+        videos: {
+          select: {
+            id: true,
+            destaque: true,
+            descricao: true,
+            codigo: true,
+            tipo: true,
+            exibirNoSire: true,
+          },
+        },
         caracteristicas: {
           select: {
             nome: true,
@@ -117,7 +127,7 @@ async function fetchFromVista(codigo: string): Promise<VistaImovel | null> {
                           "ValorVenda", "ValorLocacao", "Dormitorios", "Suites", "Vagas", "AreaTotal",
                           "Caracteristicas", "InfraEstrutura", "Descricao", "DataHoraAtualizacao", "Lancamento",
                           "Status", "Empreendimento", "Endereco", "AreaUtil",
-                          "Numero", "Complemento", "UF", "CEP", "DestaqueWeb", "FotoDestaque", "Latitude", "Longitude", "FotoDestaqueEmpreendimento", "VideoDestaque",{"Foto":["Foto","FotoPequena","Destaque"]}]}`;
+                          "Numero", "Complemento", "UF", "CEP", "DestaqueWeb", "FotoDestaque", "Latitude", "Longitude", "FotoDestaqueEmpreendimento", "VideoDestaque",{ Video: ["ExibirNoSite","Descricao","Destaque","Tipo","Video"]},{"Foto":["Foto","FotoPequena","Destaque"]}]}`;
 
   const res = await fetch(url, {
     cache: "no-store",
@@ -173,7 +183,7 @@ export async function PUT(
 
     let imovel: typeof imovelExistente;
 
-    const { fotos, caracteristicas, ...dadosImovel } = data;
+    const { fotos, videos, caracteristicas, ...dadosImovel } = data;
 
     if (imovelExistente) {
       await prisma.foto.deleteMany({ where: { imovelId: imovelExistente.id } });
@@ -197,6 +207,12 @@ export async function PUT(
     if (fotos?.length) {
       await prisma.foto.createMany({
         data: fotos.map((f) => ({ ...f, imovelId: imovel.id })),
+      });
+    }
+
+    if (videos?.length) {
+      await prisma.video.createMany({
+        data: videos.map((f) => ({ ...f, imovelId: imovel.id })),
       });
     }
 
@@ -225,6 +241,7 @@ function mapVistaToDb(v: VistaImovel) {
     Suites: v.Suites,
     Vagas: v.Vagas,
     AreaTotal: v.AreaTotal ? parseFloat(v.AreaTotal) : 0,
+    AreaUtil: v.AreaUtil ? parseFloat(v.AreaUtil) : 0,
     DataHoraAtualizacao: new Date(),
 
     ValorIptu: v.ValorIptu,
@@ -250,6 +267,15 @@ function mapVistaToDb(v: VistaImovel) {
       codigo: f.Codigo,
       url: f.Foto,
       urlPequena: f.FotoPequena,
+      destaque: f.Destaque,
+    })),
+
+    videos: Object.values(v.Video ?? {}).map((f) => ({
+      codigo: f.Codigo,
+      descricao: f.Descricao,
+      tipo: f.Tipo,
+      exibirNoSite: f.ExibirNoSite,
+      video: f.Video,
       destaque: f.Destaque,
     })),
 

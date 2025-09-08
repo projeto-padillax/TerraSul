@@ -9,6 +9,7 @@ export type VistaImovel = {
   Suites?: string;
   Vagas?: string;
   AreaTotal?: string;
+  AreaUtil?: string
   AreaPrivativa?: string;
   ValorIptu?: string;
   ValorCondominio?: string;
@@ -37,6 +38,18 @@ export type VistaImovel = {
       Foto: string;
       FotoPequena?: string;
       Destaque?: string;
+    }
+  >;
+
+  Video?: Record<
+    string,
+    {
+      Codigo?: string;
+      Tipo?: string;
+      Descricao?: string;
+      ExibirNoSite?: string;
+      Destaque?: string;
+      Video?: string;
     }
   >;
 
