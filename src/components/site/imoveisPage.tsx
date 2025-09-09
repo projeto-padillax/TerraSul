@@ -755,14 +755,14 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       </div>
       <main className="flex-1 pb-8">
         <div className="py-8 justify-items-center">
-          <div className="px-8 sm:px-10 md:px-12 w-full max-w-7xl">
+          <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl">
             <div className="h-6 rounded-sm select-none mt-3">
               <BreadCrumb />
             </div>
           </div>
         </div>
         <div className="justify-items-center">
-          <div className="px-8 sm:px-10 md:px-12 w-full max-w-7xl flex flex-col gap-4 sm:gap-0 sm:flex-row items-center justify-between">
+          <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl flex flex-col gap-4 sm:gap-0 sm:flex-row items-center justify-between">
             <div className="h-auto min-h-6 rounded-sm">
               <h1 className="text-2xl font-bold text-[#4d4d4d]">{titulo}</h1>
             </div>
@@ -784,7 +784,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
           </div>
         </div>
         <div className="py-8 justify-items-center">
-          <div className="px-8 sm:px-10 md:px-12 w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center gap-5">
+          <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-center gap-5">
             {loading ? (
               // Se estiver carregando, mostre os skeletons
               Array.from({ length: 8 }).map((_, index) => (

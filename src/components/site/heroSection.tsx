@@ -179,7 +179,7 @@ export function HeroSection(banner: HeroSectionProps) {
       {/* <div className="absolute inset-0 bg-black bg-opacity-40"></div> */}
 
       <div
-        className={`z-10 py-8 px-8 sm:px-10 md:px-12 w-full h-full flex flex-col max-w-7xl`}
+        className={`z-10 py-8 px-8 sm:px-10 md:px-0 w-full h-full flex flex-col max-w-7xl`}
       >
         <div className="pt-6 md:pt-4 lg:pt-2.5">
           <Link

@@ -14,7 +14,7 @@ export default async function Header() {
   return (
     <>
       <header className="bg-white h-28 content-center justify-items-center">
-        <div className="px-8 sm:px-10 md:px-12 w-full max-w-7xl">
+        <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl">
           <div className="flex justify-between items-center h-16 lg:h-20">
             <div className="flex-shrink-0">
               <Link href="/">

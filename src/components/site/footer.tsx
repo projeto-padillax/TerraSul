@@ -23,7 +23,7 @@ export default async function Footer() {
 
   return (
     <section className="py-8 justify-items-center">
-      <footer className="text-black px-8 sm:px-10 md:px-12 w-full max-w-7xl">
+      <footer className="text-black px-8 sm:px-10 md:px-0 w-full max-w-7xl">
         {/* Container principal */}
         <div className="py-6 border-t border-b">
           {/* Seção superior */}

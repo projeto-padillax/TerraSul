@@ -158,7 +158,7 @@ export default async function ImovelPage({
       </div>
       <main className="flex-1 pb-8">
         <div className="py-4 justify-items-center">
-          <section className="px-8 sm:px-10 md:px-12 w-full max-w-7xl mb-4">
+          <section className="px-8 sm:px-10 md:px-0 w-full max-w-7xl mb-4">
             <div className="flex justify-between items-center">
               <nav className="text-sm text-gray-500">
                 <BreadCrumb />
@@ -166,7 +166,7 @@ export default async function ImovelPage({
             </div>
           </section>
 
-          <section className="px-8 sm:px-10 md:px-12 w-full max-w-7xl mb-8">
+          <section className="px-8 sm:px-10 md:px-0 w-full max-w-7xl mb-8">
             <GaleriaImagens
               imagens={imagensGaleria}
               principal={imovel.FotoDestaque}
@@ -178,7 +178,7 @@ export default async function ImovelPage({
             />
           </section>
 
-          <section className="px-8 sm:px-10 md:px-12 w-full max-w-7xl mb-8">
+          <section className="px-8 sm:px-10 md:px-0 w-full max-w-7xl mb-8">
             <div className="grid grid-cols-1 lg:grid-cols-[3fr_1.25fr] gap-6 lg:gap-8">
               <div className="space-y-8">
                 <div className="space-y-4">

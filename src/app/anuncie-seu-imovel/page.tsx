@@ -32,7 +32,7 @@ export default async function AnuncieImovel() {
 
       <main className="flex-1">
         <section className="relative w-full py-8">
-          <div className="w-full max-w-7xl mx-auto px-8 sm:px-10 md:px-12">
+          <div className="w-full max-w-7xl mx-auto px-8 sm:px-10 md:px-0">
             <div className="rounded-sm mb-8">
               <Suspense>
                 <BreadCrumb />

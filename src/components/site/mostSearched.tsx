@@ -6,7 +6,7 @@ export async function MostSearched() {
   if (links.length == 0) return null;
   return (
     <section className="py-8 justify-items-center">
-      <div className="px-8 sm:px-10 md:px-12 w-full max-w-7xl">
+      <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl">
         <h1 className="text-center md:text-start text-4xl mb-8 font-semibold text-[#303030]">
           Mais buscados
         </h1>

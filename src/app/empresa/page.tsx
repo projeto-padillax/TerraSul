@@ -31,7 +31,7 @@ export default async function PaginaDinamicaSecao() {
 
       <main className="flex-1">
         <section className="justify-items-center py-8">
-          <div className="px-8 sm:px-10 md:px-12 w-full max-w-7xl">
+          <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl">
             <div className="rounded-sm mb-7">
               <Suspense>
                 <BreadCrumb />

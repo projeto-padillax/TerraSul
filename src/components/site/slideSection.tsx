@@ -39,7 +39,7 @@ export default function SlideSection({ slides }: SlideSectionProps) {
 
   return (
     <section className="py-8 pt-16 justify-items-center">
-      <div className="px-8 sm:px-10 md:px-12 w-full max-w-7xl">
+      <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl">
         <Carousel setApi={setApi}>
           <CarouselContent>
             {slides.map((slide, index) => (
