@@ -171,8 +171,10 @@ export default async function ImovelPage({
               imagens={imagensGaleria}
               principal={imovel.FotoDestaque}
               video={
-                imovel.VideoDestaque && imovel.VideoDestaque.trim() !== ""
-                  ? [imovel.VideoDestaque]
+                Array.isArray(imovel?.videos)
+                  ? imovel.videos
+                    .filter((v: { video: string; }): v is { video: string } => typeof v.video === "string" && v.video.trim() !== "")
+                    .map((v: { video: string; }) => ({ url: v.video }))
                   : []
               }
             />

@@ -54,14 +54,14 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
               ) : (
                 <>
                   <Image
-                    src={imagens[1]?.Foto ?? "/fallback.jpg"}
+                    src={imagens[1]?.Foto}
                     alt="Thumb do vídeo"
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/30" />
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="bg-white/80 text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md">
+                    <div className="bg-white text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md">
                       <PlayCircle size={18} />
                       Vídeo
                     </div>
@@ -77,14 +77,14 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
                 onClick={() => handleAbrirGaleria("video")}
               >
                 <Image
-                  src={imagens[1]?.Foto ?? "/fallback.jpg"}
+                  src={imagens[1]?.Foto}
                   alt={`Thumb do vídeo ${i + 1}`}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/30" />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="bg-white/80 text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md">
+                  <div className="bg-white text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md">
                     <PlayCircle size={18} />
                     Vídeo
                   </div>

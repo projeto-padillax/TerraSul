@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Camera, Video } from "lucide-react";
-import { useState} from "react";
+import { useState } from "react";
 import GaleriaModal from "./galeriaModal";
 
 type Midia = {
@@ -18,12 +18,13 @@ interface GaleriaImagensProps {
 
 export default function GaleriaImagens({ imagens, principal, video }: GaleriaImagensProps) {
   const [modalAberta, setModalAberta] = useState(false);
+  const [videoAberto, setVideoAberto] = useState(false);
 
-  // converte para Midia[]
- const midias: Midia[] = [
-  ...imagens.map(img => ({ type: "image" as const, src: img.Foto })),
-  ...video.map(v => ({ type: "video" as const, src: v.url }))
-];
+  // converter para tipo unificado
+  const midias: Midia[] = [
+    ...imagens.map(img => ({ type: "image" as const, src: img.Foto })),
+    ...video.map(v => ({ type: "video" as const, src: v.url })),
+  ];
 
   const temVideo = midias.some(m => m.type === "video");
 
@@ -31,29 +32,47 @@ export default function GaleriaImagens({ imagens, principal, video }: GaleriaIma
     <>
       <div className="flex flex-col md:flex-row gap-4 md:h-[448px]">
         <div
-          className="w-full aspect-square md:aspect-auto md:w-4/7 md:h-full relative rounded-md overflow-hidden cursor-pointer"
-          onClick={() => setModalAberta(true)}
+          className="w-full aspect-square md:aspect-auto md:w-4/7 md:h-full relative rounded-md overflow-hidden"
         >
-          <Image
-            src={principal}
-            alt="Foto principal"
-            fill
-            className="object-cover rounded-md"
-            sizes="(max-width: 768px) 100vw, 60vw"
-            priority
-          />
+          {videoAberto && video.length > 0 ? (
+            <iframe
+              src={`https://www.youtube.com/embed/${video[0].url}?rel=0&controls=1&autoplay=1`}
+              title="Vídeo"
+              className="w-full h-full rounded-md"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+
+          ) : (
+            <div className="relative w-full h-full cursor-pointer" onClick={() => setModalAberta(true)}>
+              <Image
+                src={principal}
+                alt="Foto principal"
+                fill
+                className="object-cover rounded-md"
+                sizes="(max-width: 768px) 100vw, 60vw"
+                priority
+              />
+            </div>
+          )}
 
           {(temVideo || imagens.length > 4) && (
-            <div className="absolute bottom-6 left-6 flex gap-2">
-              {temVideo && (
-                <div className="bg-white text-black px-4 py-2 rounded-md flex items-center gap-2 shadow-md pointer-events-none">
-                  <Video size={16}/>
+            <div className="absolute bottom-10 left-6 flex gap-2">
+              {temVideo && !videoAberto && (
+                <div
+                  className="bg-white text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md cursor-pointer"
+                  onClick={() => setVideoAberto(true)}
+                >
+                  <Video size={16} />
                   <span>Vídeo</span>
                 </div>
               )}
               {imagens.length > 4 && (
-                <div className="bg-white text-black px-4 py-2 rounded-md flex items-center gap-2 shadow-md pointer-events-none">
-                  <Camera size={16}/>
+                <div
+                  className={`bg-white text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md cursor-pointer ${videoAberto ? "opacity-50" : ""
+                    }` } onClick={() => {setModalAberta(true); setVideoAberto(false);}}
+                >
+                  <Camera size={16} />
                   <span>{imagens.length} Fotos</span>
                 </div>
               )}
@@ -66,7 +85,7 @@ export default function GaleriaImagens({ imagens, principal, video }: GaleriaIma
             <div
               key={i}
               className="relative w-full h-full rounded-md overflow-hidden cursor-pointer"
-              onClick={() => setModalAberta(true)}
+              onClick={() => {setModalAberta(true); setVideoAberto(false);}}
             >
               {m.type === "image" ? (
                 <Image
@@ -78,7 +97,7 @@ export default function GaleriaImagens({ imagens, principal, video }: GaleriaIma
                 />
               ) : (
                 <video
-                  src={m.src}
+                  src={`https://www.youtube.com/embed/${m.src}`}
                   className="object-cover w-full h-full rounded-md"
                   muted
                 />
