@@ -2,7 +2,7 @@
 
 import { X, ChevronLeft, ChevronRight, PlayCircle } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Midia = {
     type: "image" | "video";
@@ -31,8 +31,16 @@ export default function GaleriaModal({ midias, onClose }: GaleriaModalProps) {
         }
     };
 
+    // 🚫 Trava o scroll do body quando o modal abre
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, []);
+
     return (
-        <div className="fixed inset-0 z-50 bg-white flex items-center justify-center">
+         <div className="fixed inset-0 z-50 w-screen h-screen bg-white flex items-center justify-center">
             <button
                 onClick={() => {
                     if (selectedIndex !== null) {
@@ -48,7 +56,7 @@ export default function GaleriaModal({ midias, onClose }: GaleriaModalProps) {
             </button>
 
             {selectedItem ? (
-                <div className="w-full h-full relative flex items-center justify-center">
+                <div className="w-full h-full relative flex items-center justify-center p-4">
                     {selectedItem.type === "image" ? (
                         <Image
                             src={selectedItem.src}
@@ -59,7 +67,7 @@ export default function GaleriaModal({ midias, onClose }: GaleriaModalProps) {
                     ) : (
                         <iframe
                             src={`https://www.youtube.com/embed/${selectedItem.src}?rel=0&controls=1`}
-                            className="w-[90vw] h-[60vh] sm:w-[60vw] sm:h-[70vh] rounded-lg"
+                            className="w-[95vw] h-[70vh] sm:w-[70vw] sm:h-[75vh] rounded-lg"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
                         />
