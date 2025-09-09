@@ -294,10 +294,6 @@ model Foto {
 model Video {
   id           Int     @id @default(autoincrement())
   destaque     String?
-  codigo       String?
-  descricao    String?
-  tipo         String?
-  exibirNoSite String?
   video        String?
 
   imovelId String

@@ -36,10 +36,6 @@ interface VistaPropertyDetailPhoto {
 
 interface VistaPropertyDetailVideo {
   Destaque?: boolean;
-  Codigo?: string;
-  Descricao?: string;
-  Tipo?: string;
-  ExibirNoSite?: boolean;
   Video?: string;
 }
 
@@ -286,12 +282,6 @@ const processAndUpsertProperty = async (
           video.Destaque !== undefined && video.Destaque !== null
             ? String(video.Destaque)
             : null,
-        codigo: video.Codigo ?? null,
-        descricao: video.Descricao ?? null,
-        exibirNoSite: video.ExibirNoSite !== undefined && video.ExibirNoSite !== null
-            ? String(video.ExibirNoSite)
-            : null,
-        tipo: video.Descricao ?? null,
         video: video.Video ?? null
       })
     );

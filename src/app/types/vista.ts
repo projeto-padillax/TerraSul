@@ -44,10 +44,6 @@ export type VistaImovel = {
   Video?: Record<
     string,
     {
-      Codigo?: string;
-      Tipo?: string;
-      Descricao?: string;
-      ExibirNoSite?: string;
       Destaque?: string;
       Video?: string;
     }

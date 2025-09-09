@@ -30,11 +30,7 @@ export async function GET(
           select: {
             id: true,
             destaque: true,
-            descricao: true,
-            codigo: true,
-            tipo: true,
             video: true,
-            exibirNoSite: true,
           },
         },
         caracteristicas: {
@@ -272,10 +268,6 @@ function mapVistaToDb(v: VistaImovel) {
     })),
 
     videos: Object.values(v.Video ?? {}).map((f) => ({
-      codigo: f.Codigo,
-      descricao: f.Descricao,
-      tipo: f.Tipo,
-      exibirNoSite: f.ExibirNoSite,
       video: f.Video,
       destaque: f.Destaque,
     })),
