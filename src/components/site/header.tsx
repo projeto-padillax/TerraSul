@@ -13,7 +13,7 @@ export default async function Header() {
   const logo = await getLogo()
   return (
     <>
-      <header className="bg-white h-28 content-center justify-items-center">
+      <header className="bg-white h-full py-2 sm:py-0 sm:h-28 content-center justify-items-center">
         <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl">
           <div className="flex justify-between items-center h-16 lg:h-20">
             <div className="flex-shrink-0">

@@ -159,7 +159,7 @@ export default async function ImovelPage({
       <main className="flex-1 pb-8">
         <div className="py-4 justify-items-center">
           <section className="px-8 sm:px-10 md:px-0 w-full max-w-7xl mb-4">
-            <div className="flex justify-between items-center">
+            <div className="justify-between items-center">
               <nav className="text-sm text-gray-500">
                 <BreadCrumb />
               </nav>
@@ -209,7 +209,7 @@ export default async function ImovelPage({
                       </div>
                     )}
 
-                    {(imovel.ValorCondominio && parseFloat(imovel.ValorCondominio) > 0.0) ||
+                    {(imovel.ValorCondominio && parseFloat(imovel.ValorCondominio) > 0.1) ||
                       (imovel.ValorIptu && parseFloat(imovel.ValorIptu) > 0) ? (
                       <div className="flex items-center gap-2 text-xs text-black whitespace-nowrap">
                         {imovel.ValorCondominio &&
@@ -253,9 +253,9 @@ export default async function ImovelPage({
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-end justify-start text-sm text-grey mt-10">
+                  <div className="grid grid-cols-2 gap-y-2 sm:gap-y-0 sm:flex sm:flex-wrap items-center justify-center sm:items-end sm:justify-start text-sm text-grey mt-10">
                     {imovel.Categoria && (
-                      <div className="flex flex-col items-center mr-1">
+                      <div className="flex flex-col items-center sm:mr-1">
                         <Home
                           size={26}
                           strokeWidth={1}
@@ -268,7 +268,7 @@ export default async function ImovelPage({
                     )}
 
                     {imovel.Dormitorios > 0 && (
-                      <div className="flex items-end ml-2">
+                      <div className="flex flex-col sm:flex-row sm:items-end sm:ml-2">
                         {" "}
                         {/* Adicionado ml-4 para espaçamento */}
                         <Dot
@@ -301,7 +301,7 @@ export default async function ImovelPage({
                     )}
 
                     {imovel.AreaPrivativa > 0 && (
-                      <div className="flex items-end ml-2">
+                      <div className="flex flex-col sm:flex-row sm:items-end sm:ml-2">
                         <Dot
                           size={25}
                           className="text-site-primary hidden sm:inline-block mx-2"
@@ -376,7 +376,7 @@ export default async function ImovelPage({
                     )}
 
                     {imovel.AreaUtil > 0 && (
-                      <div className="flex items-end ml-2">
+                      <div className="flex flex-col sm:flex-row sm:items-end sm:ml-2">
                         <Dot
                           size={25}
                           className="text-site-primary hidden sm:inline-block mx-2"
@@ -444,14 +444,14 @@ export default async function ImovelPage({
                             />
                           </svg>
                           <span className="mt-1 sm:mt-2 text-center leading-5">
-                            {imovel.AreaUtil} m² totais
+                            {imovel.AreaUtil} m² úteis
                           </span>
                         </div>
                       </div>
                     )}
 
                     {imovel.Vagas > 0 && (
-                      <div className="flex items-end ml-2">
+                      <div className="flex flex-col sm:flex-row sm:items-end sm:ml-2">
                         <Dot
                           size={25}
                           className="text-site-primary hidden sm:inline-block mx-2"
