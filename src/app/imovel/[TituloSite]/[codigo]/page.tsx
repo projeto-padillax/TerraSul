@@ -509,8 +509,6 @@ export default async function ImovelPage({
                 <LocalizacaoBox
                   bairro={imovel.Bairro}
                   cidade={imovel.Cidade}
-                  lat={imovel.GMapsLatitude}
-                  lng={imovel.GMapsLongitude}
                   endereco={imovel.endereco}
                   numero={imovel.numero}
                   uf={imovel.uf}
