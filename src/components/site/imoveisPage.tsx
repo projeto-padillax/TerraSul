@@ -756,7 +756,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       <main className="flex-1 pb-8">
         <div className="py-8 justify-items-center">
           <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl">
-            <div className="h-6 rounded-sm select-none mt-3">
+            <div className="rounded-sm select-none mt-3">
               <BreadCrumb />
             </div>
           </div>

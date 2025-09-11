@@ -189,7 +189,7 @@ export function HeroSection(banner: HeroSectionProps) {
             {banner.titulo}
           </Link>
           {banner.subtitulo && (
-            <p className="text-xl text-white mb-28 md:mb-[160px]">
+            <p className="text-xl text-white mb-24 md:mb-[160px]">
               {banner.subtitulo}
             </p>
           )}
