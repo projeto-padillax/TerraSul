@@ -524,6 +524,7 @@ export default async function ImovelPage({
                 codigoImovel={imovel.Codigo}
                 valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
                 corretor={imovel.corretor}
+                isRelease={imovel.Lancamento == "Sim"}
               />
             </div>
 

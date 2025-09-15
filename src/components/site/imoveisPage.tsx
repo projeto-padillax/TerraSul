@@ -169,7 +169,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     router.push(
       `${decodeURIComponent(path)}?${decodeURIComponent(
         newSearchParams.toString()
-      )}`
+      )}#ImoveisSection`
     );
 
     const fetchImoveis = async () => {
@@ -385,7 +385,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       router.push(
         `${decodeURIComponent(
           path
-        )}?action=comprar&empreendimento=${name}&page=1`
+        )}?action=comprar&empreendimento=${name}&page=1#ImoveisSection`
       );
       const res = await fetch(
         `/api/vista/imoveis?action=comprar&empreendimento=${name}&page=1`
@@ -761,7 +761,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
             </div>
           </div>
         </div>
-        <div className="justify-items-center">
+        <div className="justify-items-center" id="ImoveisSection">
           <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl flex flex-col gap-4 sm:gap-0 sm:flex-row items-center justify-between">
             <div className="h-auto min-h-6 rounded-sm">
               <h1 className="text-2xl font-bold text-[#4d4d4d]">{titulo}</h1>

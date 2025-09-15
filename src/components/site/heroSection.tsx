@@ -112,7 +112,7 @@ export function HeroSection(banner: HeroSectionProps) {
     router.push(
       `${decodeURIComponent(path)}?${decodeURIComponent(
         newSearchParams.toString()
-      )}`
+      )}#ImoveisSection`
     );
   };
 
@@ -132,7 +132,7 @@ export function HeroSection(banner: HeroSectionProps) {
     const newSearchParams = new URLSearchParams();
     if (searchData.action) newSearchParams.set("action", searchData.action);
     newSearchParams.set("page", String("1"));
-    router.push(`${path}?${decodeURIComponent(newSearchParams.toString())}`);
+    router.push(`${path}?${decodeURIComponent(newSearchParams.toString())}#ImoveisSection`);
   };
 
   const handleSearchByCode = async () => {
