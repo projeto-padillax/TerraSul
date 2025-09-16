@@ -32,8 +32,10 @@ import {
 import BreadCrumb from "./filteredBreadcrumb";
 import { ImovelCardSkeleton } from "./cardSkeleton";
 import { Imovel } from "@prisma/client";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
+  const isMobile = useIsMobile()
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showFilters, setShowFilters] = useState(false);
@@ -169,7 +171,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     router.push(
       `${decodeURIComponent(path)}?${decodeURIComponent(
         newSearchParams.toString()
-      )}#ImoveisSection`
+      )}${isMobile ? '#ImoveisSection' : ''}`, { scroll: false }
     );
 
     const fetchImoveis = async () => {
@@ -385,7 +387,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       router.push(
         `${decodeURIComponent(
           path
-        )}?action=comprar&empreendimento=${name}&page=1#ImoveisSection`
+        )}?action=comprar&empreendimento=${name}&page=1${isMobile ? '#ImoveisSection' : ''}`, { scroll: false }
       );
       const res = await fetch(
         `/api/vista/imoveis?action=comprar&empreendimento=${name}&page=1`
@@ -405,10 +407,10 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="w-full content-center shadow-lg shadow-gray-200">
-        <div className="bg-white w-[full] max-w-7xl px-4 mx-auto py-4 border-t-1 ">
-          <div className="flex flex-col md:flex-row w-[full] justify-start items-center md:gap-2">
+    <div className="min-h-screen flex flex-col scroll-smooth">
+      <div className="w-full content-center shadow-lg shadow-gray-200 scroll-smooth">
+        <div className="bg-white w-[full] max-w-7xl px-4 mx-auto py-4 border-t-1 scroll-smooth">
+          <div className="flex flex-col md:flex-row w-[full] justify-start items-center md:gap-2 scroll-smooth">
             <div className="grid grid-cols-2 gap-4 md:flex md:flex-row md:gap-2 md:flex-wrap md:justify-between w-full justify-start items-center">
               <Button
                 variant="outline"
@@ -577,7 +579,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
           </div>
         </div>
         <div
-          className={`bg-white max-w-7xl mx-auto px-4 overflow-hidden border-t-1 transition-all duration-500 ease-in-out ${
+          className={`bg-white max-w-7xl mx-auto px-4 overflow-hidden border-t-1 transition-all duration-500 scroll-smooth ease-in-out ${
             showFilters ? "opacity-100 max-h-96 py-4" : "opacity-0 max-h-0 py-0"
           }`}
         >
@@ -753,15 +755,15 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
           </div>
         </div>
       </div>
-      <main className="flex-1 pb-8">
-        <div className="py-8 justify-items-center">
+      <main className="flex-1 pb-8 scroll-smooth">
+        <div className="py-8 justify-items-center scroll-smooth">
           <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl">
             <div className="rounded-sm select-none mt-3">
               <BreadCrumb />
             </div>
           </div>
         </div>
-        <div className="justify-items-center" id="ImoveisSection">
+        <div className="justify-items-center scroll-mt-8 scroll-smooth" id="ImoveisSection">
           <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl flex flex-col gap-4 sm:gap-0 sm:flex-row items-center justify-between">
             <div className="h-auto min-h-6 rounded-sm">
               <h1 className="text-2xl font-bold text-[#4d4d4d]">{titulo}</h1>

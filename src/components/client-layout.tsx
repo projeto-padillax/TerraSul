@@ -21,7 +21,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <main>{children}</main>
+      <main className="scroll-smooth">{children}</main>
       <Toaster richColors expand={true} />
     </ThemeProvider>
   );

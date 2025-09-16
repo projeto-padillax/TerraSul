@@ -6,6 +6,7 @@ import ClientLayout from "@/components/client-layout";
 import Footer from "@/components/site/footer";
 import { Filtros } from "@/utils/parseFilter";
 import { capitalize } from "@/lib/utils";
+import ScrollHandler from "@/components/site/scrollHandler";
 
 interface Props {
   searchParams: Promise<{
@@ -164,6 +165,7 @@ export default async function Imoveis({ searchParams }: Props) {
     <ClientLayout>
       <Header />
       <ImoveisPage filtros={initialFiltros}/>
+      <ScrollHandler />
       <Footer />
     </ClientLayout>
   );

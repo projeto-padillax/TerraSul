@@ -14,6 +14,7 @@ import { LocationSelectModal } from "@/components/site/locationSelectModal";
 import { TypeSelectModal } from "@/components/site/tipoImovelSelectModal";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface HeroSectionProps {
   imageUrl: string;
@@ -38,6 +39,7 @@ export function HeroSection(banner: HeroSectionProps) {
     type: false,
     value: false,
   });
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     if (isSearching && inputRef.current) {
@@ -112,7 +114,7 @@ export function HeroSection(banner: HeroSectionProps) {
     router.push(
       `${decodeURIComponent(path)}?${decodeURIComponent(
         newSearchParams.toString()
-      )}#ImoveisSection`
+      )}${isMobile ? '#ImoveisSection' : ''}`
     );
   };
 
@@ -132,7 +134,7 @@ export function HeroSection(banner: HeroSectionProps) {
     const newSearchParams = new URLSearchParams();
     if (searchData.action) newSearchParams.set("action", searchData.action);
     newSearchParams.set("page", String("1"));
-    router.push(`${path}?${decodeURIComponent(newSearchParams.toString())}#ImoveisSection`);
+    router.push(`${path}?${decodeURIComponent(newSearchParams.toString())}${isMobile ? '#ImoveisSection' : ''}`);
   };
 
   const handleSearchByCode = async () => {
