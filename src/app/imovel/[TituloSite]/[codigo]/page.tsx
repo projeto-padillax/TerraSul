@@ -55,7 +55,13 @@ export async function generateMetadata({
     title: title,
     description: imovel.Descricao,
     openGraph: {
-      images: [imovel.FotoDestaque],
+      images: [
+        {
+          url: imovel.FotoDestaque,
+          width: 1200,
+          height: 630,
+        },
+      ],
     }
   };
 }
