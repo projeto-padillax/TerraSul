@@ -2,6 +2,7 @@ import Image from "next/image";
 import FavoriteButton from "./favoritosButton";
 import { CodigoImobiliariaIcon } from "../ui/codigoImobiliariaIcon";
 import { Destaque } from "@/lib/types/destaque";
+import ImageBadge from "./imageBadge";
 
 interface PropertyCardProps {
   imovel: Destaque;
@@ -46,16 +47,20 @@ export function ImovelCard({ imovel, activeTab }: PropertyCardProps) {
   };
 
   return (
-    // Adicionando a classe hover:bg-gray-50 e transition para uma animação suave
-  <div className="w-full overflow-hidden shadow-lg bg-white rounded-md transition-colors duration-200 hover:bg-gray-50 cursor-pointer">
-  {/* Container da imagem maior */}
-  <div className="relative w-full aspect-[4/3]"> {/* altura maior que 16:9 */}
-    <Image
-      src={imovel.FotoDestaque || "/placeholder.svg"}
-      alt={imovel.Bairro}
-      fill
-      className="object-cover rounded-t-xl rounded-b-xl"
-    />
+    <div className="w-full overflow-hidden shadow-lg bg-white rounded-md transition-colors duration-200 hover:bg-gray-50 cursor-pointer">
+      <div className="relative w-full aspect-[4/3]">
+        {imovel.EstudaDacao === "Sim" && (
+          <ImageBadge text="ESTUDA IMÓVEL NO NEGÓCIO" />
+        )}
+        {imovel.EstudaDacao !== "Sim" && imovel.Exclusivo === "Sim" && (
+          <ImageBadge text="EXCLUSIVO" />
+        )}
+        <Image
+          src={imovel.FotoDestaque}
+          alt={imovel.Bairro}
+          fill
+          className="object-cover rounded-t-xl rounded-b-xl"
+        />
 
         { /* alterar o black/90 para mais ou pra menos para mudar a intensidade da sombra*/}
         <div className="absolute bottom-0 left-0 w-full 
@@ -63,9 +68,17 @@ export function ImovelCard({ imovel, activeTab }: PropertyCardProps) {
                   bg-gradient-to-t from-black/90 to-transparent 
                   rounded-b-xl" />
 
-        <h3 className="absolute bottom-4 left-0 w-full text-center text-white text-xl font-bold px-4">
-          {imovel.Bairro}
-        </h3>
+        <div className="absolute bottom-4 left-0 w-full flex flex-col items-center justify-center gap-1 z-10 px-2">
+          {imovel.EstudaDacao === "Sim" && (
+            <ImageBadge text="ESTUDA IMÓVEL NO NEGÓCIO" />
+          )}
+          {imovel.EstudaDacao !== "Sim" && imovel.Exclusivo === "Sim" && (
+            <ImageBadge text="EXCLUSIVO" />
+          )}
+          <h3 className="text-white text-sm sm:text-base md:text-lg font-bold text-center">
+            {imovel.Bairro}
+          </h3>
+        </div>
       </div>
 
       <div className="p-5 flex flex-col h-[180px]">
@@ -87,7 +100,7 @@ export function ImovelCard({ imovel, activeTab }: PropertyCardProps) {
         <div className="flex-1 flex items-center justify-center mb-4">
           {hasAnyDetail ? (
             <div className="flex justify-between items-center w-full border-b border-gray-200 pb-3">
-               {hasDormitorios && (
+              {hasDormitorios && (
                 <p className="text-sm text-[#303030]">
                   {imovel.Dormitorios} quarto
                   {Number(imovel.Dormitorios) > 1 ? "s" : ""}

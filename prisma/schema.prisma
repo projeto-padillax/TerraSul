@@ -252,6 +252,8 @@ model Imovel {
   Complemento                String?
   UF                         String?
   CEP                        String?
+  EstudaDacao                String?
+  Exclusivo                  String?
   DestaqueWeb                String?   @map("destaqueWeb")
   FotoDestaque               String?   @map("fotoDestaque")
   Latitude                   String?

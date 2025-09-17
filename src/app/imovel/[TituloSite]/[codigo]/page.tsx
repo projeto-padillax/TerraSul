@@ -102,8 +102,8 @@ export default async function ImovelPage({
 
   const hasBadges =
     imovel.Lancamento === "Sim" ||
-    imovel.Estudadação === "Sim" ||
-    imovel.Etiqueta === "Sim";
+    imovel.EstudaDacao === "Sim" ||
+    imovel.Exclusivo === "Sim";
 
   function gerarTitulo() {
     const capitalizar = (str: string) =>
@@ -202,8 +202,8 @@ export default async function ImovelPage({
                       <div className="flex gap-2 flex-wrap">
                         {[
                           imovel.Lancamento === "Sim" && "LANÇAMENTO",
-                          imovel.Estudadação === "Sim" && "ESTUDA DAÇÃO",
-                          imovel.Etiqueta === "Sim" && "ETIQUETA",
+                          imovel.EstudaDacao === "Sim" && "ESTUDA IMÓVEL NO NEGÓCIO",
+                          imovel.Exclusivo === "Sim" && "EXCLUSIVO",
                         ]
                           .filter(Boolean)
                           .slice(0, 3)

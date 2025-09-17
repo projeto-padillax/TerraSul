@@ -34,4 +34,6 @@ export type Destaque = {
   FotoDestaqueEmpreendimento: string;
   VideoDestaque: string;
   corretorId: string;
+  EstudaDacao: string;
+  Exclusivo: string;
 };
