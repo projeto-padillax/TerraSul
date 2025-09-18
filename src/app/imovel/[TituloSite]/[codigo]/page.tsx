@@ -571,7 +571,7 @@ export default async function ImovelPage({
         </div>
       </main>
       <Footer />
-      <div className="md:hidden fixed left-0 z-50 bottom-0 w-full p-2">
+      <div className="bg-white md:hidden fixed left-0 z-50 bottom-0 w-full p-2">
         <div className="flex justify-around w-full gap-1 pb-2">
           <button className="w-full appearance-none inline-flex gap-1  items-center justify-center px-2 py-0 text-sm leading-4 whitespace-nowrap rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer h-12 tracking-normal font-bold normal-case bg-transparent border border-foxter-bright text-foxter-brand-900 focus:ring-foxter-brand-100 hover:bg-foxter-brand-100 transition-colors ease-in-out duration-700 lg:hidden">
             Enviar Mensagem
