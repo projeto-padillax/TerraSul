@@ -12,6 +12,8 @@ import FavoriteButton from "@/components/site/favoritosButton";
 import BreadCrumb from "@/components/site/filteredBreadcrumb";
 import LocalizacaoBox from "@/components/site/localizacaobox";
 import { Metadata } from "next/dist/types";
+import "./page.css";
+import { FaWhatsapp } from "react-icons/fa";
 
 export async function generateMetadata({
   params,
@@ -62,7 +64,7 @@ export async function generateMetadata({
           height: 630,
         },
       ],
-    }
+    },
   };
 }
 
@@ -109,7 +111,7 @@ export default async function ImovelPage({
     const capitalizar = (str: string) =>
       str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
-    let status = ""
+    let status = "";
     if (imovel.Status == "VENDA") {
       status += ` à venda`;
     } else {
@@ -120,7 +122,7 @@ export default async function ImovelPage({
       ? imovel.Categoria.split("/")[0]
       : "Imóvesssl";
 
-    categoria += status
+    categoria += status;
 
     const area =
       imovel.AreaUtil || imovel.AreaTotal
@@ -175,15 +177,21 @@ export default async function ImovelPage({
             </div>
           </section>
 
-          <section className="px-8 sm:px-10 md:px-0 w-full max-w-7xl sm:mb-8">
+          <section
+            id="teste"
+            className="px-8 sm:px-10 md:px-0 w-full max-w-7xl sm:mb-8"
+          >
             <GaleriaImagens
               imagens={imagensGaleria}
               principal={imovel.FotoDestaque}
               video={
                 Array.isArray(imovel?.videos)
                   ? imovel.videos
-                    .filter((v: { video: string; }): v is { video: string } => typeof v.video === "string" && v.video.trim() !== "")
-                    .map((v: { video: string; }) => ({ url: v.video }))
+                      .filter(
+                        (v: { video: string }): v is { video: string } =>
+                          typeof v.video === "string" && v.video.trim() !== ""
+                      )
+                      .map((v: { video: string }) => ({ url: v.video }))
                   : []
               }
             />
@@ -202,7 +210,8 @@ export default async function ImovelPage({
                       <div className="flex gap-2 flex-wrap">
                         {[
                           imovel.Lancamento === "Sim" && "LANÇAMENTO",
-                          imovel.EstudaDacao === "Sim" && "ESTUDA IMÓVEL NO NEGÓCIO",
+                          imovel.EstudaDacao === "Sim" &&
+                            "ESTUDA IMÓVEL NO NEGÓCIO",
                           imovel.Exclusivo === "Sim" && "EXCLUSIVO",
                         ]
                           .filter(Boolean)
@@ -218,14 +227,18 @@ export default async function ImovelPage({
                       </div>
                     )}
 
-                    {(imovel.ValorCondominio && parseFloat(imovel.ValorCondominio) > 0.1) ||
-                      (imovel.ValorIptu && parseFloat(imovel.ValorIptu) > 0) ? (
+                    {(imovel.ValorCondominio &&
+                      parseFloat(imovel.ValorCondominio) > 0.1) ||
+                    (imovel.ValorIptu && parseFloat(imovel.ValorIptu) > 0) ? (
                       <div className="flex items-center gap-2 text-xs text-black whitespace-nowrap">
                         {imovel.ValorCondominio &&
                           parseFloat(imovel.ValorCondominio) > 0 && (
                             <span>
                               Condomínio R${" "}
-                              {parseFloat(imovel.ValorCondominio).toLocaleString("pt-BR")}/mês
+                              {parseFloat(
+                                imovel.ValorCondominio
+                              ).toLocaleString("pt-BR")}
+                              /mês
                             </span>
                           )}
 
@@ -243,26 +256,32 @@ export default async function ImovelPage({
                           parseFloat(imovel.ValorIptu) > 0 && (
                             <span>
                               IPTU R${" "}
-                              {parseFloat(imovel.ValorIptu).toLocaleString("pt-BR")}/mês
+                              {parseFloat(imovel.ValorIptu).toLocaleString(
+                                "pt-BR"
+                              )}
+                              /mês
                             </span>
                           )}
                       </div>
                     ) : null}
 
                     <div
-                      className={`flex items-center gap-1 mt-0 sm:mt-2 ${!hasBadges &&
-                        (!imovel.ValorCondominio || parseFloat(imovel.ValorCondominio) === 0) &&
-                        (!imovel.ValorIptu || parseFloat(imovel.ValorIptu) === 0)
-                        ? ''
-                        : 'ml-4'
-                        }`}
+                      className={`hidden sm:flex items-center gap-1 mt-0 ${
+                        !hasBadges &&
+                        (!imovel.ValorCondominio ||
+                          parseFloat(imovel.ValorCondominio) === 0) &&
+                        (!imovel.ValorIptu ||
+                          parseFloat(imovel.ValorIptu) === 0)
+                          ? ""
+                          : "ml-4"
+                      }`}
                     >
                       <FavoriteButton property={imovel} />
-                      <span >Salvar</span>
+                      <span>Salvar</span>
                     </div>
                   </div>
 
-               <div className="grid grid-cols-2 gap-y-2 sm:gap-y-0 sm:flex sm:flex-wrap items-center justify-center sm:items-end sm:justify-start text-sm text-grey mt-5 sm:mt-10">
+                  <div className="grid grid-cols-2 gap-y-2 sm:gap-y-0 sm:flex sm:flex-wrap items-center justify-center sm:items-end sm:justify-start text-sm text-grey mt-5 sm:mt-10">
                     {imovel.Categoria && (
                       <div className="flex flex-col items-center sm:mr-1">
                         <Home
@@ -301,8 +320,9 @@ export default async function ImovelPage({
                             {imovel.Dormitorios} quarto
                             {imovel.Dormitorios > 1 ? "s" : ""}
                             {imovel.Suites > 0
-                              ? ` (${imovel.Suites} suíte${imovel.Suites > 1 ? "s" : ""
-                              })`
+                              ? ` (${imovel.Suites} suíte${
+                                  imovel.Suites > 1 ? "s" : ""
+                                })`
                               : ""}
                           </span>
                         </div>
@@ -502,15 +522,22 @@ export default async function ImovelPage({
                   infraestrutura={imovel.InfraEstrutura}
                 />
 
-                <AgendamentoForm codigo={imovel.Codigo} codigoCorretor={imovel.corretor?.codigo} />
+                <AgendamentoForm
+                  codigo={imovel.Codigo}
+                  codigoCorretor={imovel.corretor?.codigo}
+                />
 
                 <MidiaBox
                   imagens={imagensGaleria}
                   videos={
                     Array.isArray(imovel?.videos)
                       ? imovel.videos
-                        .filter((v: { video: string; }): v is { video: string } => typeof v.video === "string" && v.video.trim() !== "")
-                        .map((v: { video: string; }) => ({ url: v.video }))
+                          .filter(
+                            (v: { video: string }): v is { video: string } =>
+                              typeof v.video === "string" &&
+                              v.video.trim() !== ""
+                          )
+                          .map((v: { video: string }) => ({ url: v.video }))
                       : []
                   }
                 />
@@ -544,6 +571,24 @@ export default async function ImovelPage({
         </div>
       </main>
       <Footer />
+      <div className="md:hidden fixed left-0 z-50 bottom-0 w-full p-2">
+        <div className="flex justify-around w-full gap-1 pb-2">
+          <button className="w-full appearance-none inline-flex gap-1  items-center justify-center px-2 py-0 text-sm leading-4 whitespace-nowrap rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer h-12 tracking-normal font-bold normal-case bg-transparent border border-foxter-bright text-foxter-brand-900 focus:ring-foxter-brand-100 hover:bg-foxter-brand-100 transition-colors ease-in-out duration-700 lg:hidden">
+            Enviar Mensagem
+          </button>
+          <button className="w-full appearance-none inline-flex gap-1 items-center justify-center px-2 py-0 text-sm leading-4 whitespace-nowrap rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer h-12 tracking-normal font-bold normal-case bg-[#F9C013] text-[#05273B] focus:ring-[#d9a911] hover:bg-[#d9a911] transition-colors ease-in-out duration-500">
+            Agendar Visita
+          </button>
+          <a
+            href="https://wa.me/5511999999999" // substitua pelo seu número
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#25d366] hover:bg-[#1ebe5d] rounded-full h-12 items-center justify-center inline-flex px-4"
+          >
+            <FaWhatsapp size={24} color="#fff" />
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
