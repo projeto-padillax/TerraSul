@@ -86,6 +86,8 @@ const base: string[] = [
   "FotoDestaqueEmpreendimento",
   "VideoDestaque",
   "AreaUtil",
+  "EstudaDacao",
+  "Exclusivo"
 ];
 
 const LISTING_RESEARCH_FIELDS = [
@@ -220,6 +222,8 @@ interface VistaPropertyData {
   CodigoImobiliaria?: string; // ✨ Add CodigoImobiliaria to the interface to be safe
   Corretor_Codigo?: string;
   Corretor?: Record<string, any>;
+  Exclusivo?: string; 
+  EstudaDacao?: string;
   [key: string]: any; // Permite outros campos dinâmicos da API Vista
 }
 
@@ -530,6 +534,7 @@ export async function GET(request: NextRequest) {
             select: { nome: true, valor: true },
           },
           corretor: true, // ✅ Inclui o corretor
+          
         },
       });
 

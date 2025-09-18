@@ -123,7 +123,7 @@ async function fetchFromVista(codigo: string): Promise<VistaImovel | null> {
                           "AreaTerreno", "Bairro", "GMapsLatitude", "GMapsLongitude", "Cidade",
                           "ValorVenda", "ValorLocacao", "Dormitorios", "Suites", "Vagas", "AreaTotal",
                           "Caracteristicas", "InfraEstrutura", "Descricao", "DataHoraAtualizacao", "Lancamento",
-                          "Status", "Empreendimento", "Endereco", "AreaUtil",
+                          "Status", "Empreendimento", "Endereco", "AreaUtil", "Exclusivo", "EstudaDacao",
                           "Numero", "Complemento", "UF", "CEP", "DestaqueWeb", "FotoDestaque", "Latitude", "Longitude", "FotoDestaqueEmpreendimento", "VideoDestaque",{ Video: ["ExibirNoSite","Descricao","Destaque","Tipo","Video"]},{"Foto":["Foto","FotoPequena","Destaque"]}]}`;
 
   const res = await fetch(url, {
@@ -259,6 +259,8 @@ function mapVistaToDb(v: VistaImovel) {
     Longitude: v.Longitude,
     FotoDestaqueEmpreendimento: v.FotoDestaqueEmpreendimento,
     VideoDestaque: v.VideoDestaque,
+    EstudaDacao: v.EstudaDacao,
+    Exclusivo: v.Exclusivo,
 
     fotos: Object.values(v.Foto ?? {}).map((f) => ({
       codigo: f.Codigo,

@@ -30,6 +30,8 @@ export type VistaImovel = {
   Longitude?: string;
   FotoDestaqueEmpreendimento?: string;
   VideoDestaque?: string;
+  EstudaDacao?: string;
+  Exclusivo?: string;
 
   Foto?: Record<
     string,

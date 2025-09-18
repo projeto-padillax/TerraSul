@@ -58,6 +58,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ codigo: 
         Status: true,
         ValorVenda: true,
         ValorLocacao: true,
+        EstudaDacao: true,
+        Endereco: true,
       },
     });
 
