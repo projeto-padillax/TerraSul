@@ -229,7 +229,7 @@ export default function AgendamentoForm({ codigo, codigoCorretor }: AgendamentoF
                         <button
                             type="submit"
                             disabled={isPending}
-                            className="grid h-[50px] place-items-center rounded-xl bg-site-primary px-4 py-3 text-white hover:bg-[#41659c] disabled:opacity-70"
+                            className="grid h-[50px] place-items-center rounded-xl bg-site-primary px-4 py-3 text-white hover:bg-site-primary-hover disabled:opacity-70"
                         >
                             {isPending
                                 ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
