@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import WhatsAppButton from "@/components/site/whatsapp";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -47,6 +48,7 @@ export default function RootLayout({
       <body className={`${montserrat.variable} antialiased font-[montserrat, sans-serif]`}>
         {children}
         <Toaster richColors position="top-center" />
+        <WhatsAppButton /> 
       </body>
     </html>
   );

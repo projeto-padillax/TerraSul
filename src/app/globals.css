@@ -146,6 +146,19 @@ html {
   color: black;
 }
 
+@layer components {
+  .whatsapp-float {
+    @apply fixed bottom-5 right-5 flex items-center justify-center w-14 h-14 rounded-full shadow-lg transition-transform;
+    background-color: #25d366;
+    z-index: 1000;
+  }
+
+  .whatsapp-float:hover {
+    @apply scale-110;
+    background-color: #1ebe5d;
+  }
+}
+
 @layer utilities {
   .animate-slide-left {
     animation: slideLeft 0.5s ease-in-out;
