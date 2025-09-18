@@ -146,6 +146,14 @@ html {
   color: black;
 }
 
+@layer utilities {
+  @media (max-width: 640px) {
+    .title-mobile-small {
+      font-size: 1.3rem; /* 24px */
+    }
+  }
+}
+
 @layer components {
   .whatsapp-float {
     @apply fixed bottom-5 right-5 flex items-center justify-center w-14 h-14 rounded-full shadow-lg transition-transform;

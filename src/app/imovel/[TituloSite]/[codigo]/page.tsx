@@ -175,7 +175,7 @@ export default async function ImovelPage({
             </div>
           </section>
 
-          <section className="px-8 sm:px-10 md:px-0 w-full max-w-7xl mb-8">
+          <section className="px-8 sm:px-10 md:px-0 w-full max-w-7xl sm:mb-8">
             <GaleriaImagens
               imagens={imagensGaleria}
               principal={imovel.FotoDestaque}
@@ -193,11 +193,11 @@ export default async function ImovelPage({
             <div className="grid grid-cols-1 lg:grid-cols-[3fr_1.25fr] gap-6 lg:gap-8">
               <div className="space-y-8">
                 <div className="space-y-4">
-                  <h1 className="text-3xl font-semibold text-[#111] leading-snug break-words">
+                  <h1 className="text-3xl sm:text-4xl font-semibold title-mobile-small">
                     {gerarTitulo()}
                   </h1>
 
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-[#4d4d4d] w-full">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:gap-x-4 sm:gap-y-4">
                     {hasBadges && (
                       <div className="flex gap-2 flex-wrap">
                         {[
@@ -250,7 +250,7 @@ export default async function ImovelPage({
                     ) : null}
 
                     <div
-                      className={`flex items-center gap-1 ${!hasBadges &&
+                      className={`flex items-center gap-1 mt-0 sm:mt-2 ${!hasBadges &&
                         (!imovel.ValorCondominio || parseFloat(imovel.ValorCondominio) === 0) &&
                         (!imovel.ValorIptu || parseFloat(imovel.ValorIptu) === 0)
                         ? ''
@@ -262,7 +262,7 @@ export default async function ImovelPage({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-y-2 sm:gap-y-0 sm:flex sm:flex-wrap items-center justify-center sm:items-end sm:justify-start text-sm text-grey mt-10">
+               <div className="grid grid-cols-2 gap-y-2 sm:gap-y-0 sm:flex sm:flex-wrap items-center justify-center sm:items-end sm:justify-start text-sm text-grey mt-5 sm:mt-10">
                     {imovel.Categoria && (
                       <div className="flex flex-col items-center sm:mr-1">
                         <Home
