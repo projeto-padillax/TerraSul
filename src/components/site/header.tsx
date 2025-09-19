@@ -32,7 +32,7 @@ export default async function Header() {
                 >
                   <Phone className="h-8 w-8 mr-1" />
                 </Link>
-                <Link href='https://wa.me/555198121-4507'
+                <Link href='https://wa.me/5551981214507'
                   className="flex items-center text-[#303030] hover:text-site-secondary-hover"
                   aria-label="Conversar via WhatsApp"
                 >
