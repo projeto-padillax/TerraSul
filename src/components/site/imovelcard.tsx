@@ -49,12 +49,6 @@ export function ImovelCard({ imovel, activeTab }: PropertyCardProps) {
   return (
     <div className="w-full overflow-hidden shadow-lg bg-white rounded-md transition-colors duration-200 hover:bg-gray-50 cursor-pointer">
       <div className="relative w-full aspect-[4/3]">
-        {imovel.EstudaDacao === "Sim" && (
-          <ImageBadge text="ESTUDA IMÓVEL NO NEGÓCIO" />
-        )}
-        {imovel.EstudaDacao !== "Sim" && imovel.Exclusivo === "Sim" && (
-          <ImageBadge text="EXCLUSIVO" />
-        )}
         <Image
           src={imovel.FotoDestaque}
           alt={imovel.Bairro}

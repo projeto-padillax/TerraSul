@@ -35,7 +35,7 @@ export default function ImovelContatoBox({
   };
 
   return (
-    <div className="block">
+    <div id="sendMessage" className="block scroll-mt-6">
       <div className="lg:sticky lg:top-2">
         <div className="flex justify-center mb-6 lg:mb-8">
           <div className="flex items-start gap-4">
@@ -56,7 +56,7 @@ export default function ImovelContatoBox({
               <div className="text-[12px] text-black flex items-center gap-5">
                 <button
                   type="button"
-                  className="bg-[#29A71A] p-1 px-2 rounded-lg text-white transition duration-300 transform hover:bg-[#238E17] hover:shadow-lg cursor-pointer"
+                  className="bg-[#25d366] hover:bg-[#1ebe5d] p-1 px-2 rounded-lg text-white transition duration-300 transform hover:shadow-lg cursor-pointer"
                   onClick={() => abrirModal("whatsapp")}
                 >
                   Enviar WhatsApp

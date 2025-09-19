@@ -88,7 +88,7 @@ export default function AgendamentoForm({ codigo, codigoCorretor }: AgendamentoF
     }, [])
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 scroll-mt-6" id='agendarVisita'>
             <div>
                 <h2 className="flex items-center gap-2 text-xl font-semibold text-gray-800 mb-2">
                     <svg

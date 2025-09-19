@@ -359,7 +359,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         return;
       }
 
-      router.push(`/imovel/comprar+${tipo}+em+${location}/${code}`);
+      router.push(`/imovel/comprar+${tipo}+em+${location}/${code}${isMobile ? "#main": ""}`);
     } catch (error) {
       console.error("Falha ao buscar imóveis:", error);
       setImoveis([]);
@@ -804,7 +804,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                   key={imovel.id}
                   href={`/imovel/${encodeURIComponent(
                     toSlug(gerarTitulos(imovel))
-                  )}/${imovel.Codigo}`}
+                  )}/${imovel.Codigo}${isMobile ? "#main": ""}`}
                 >
                   <ImovelCard imovel={imovel} activeTab={searchData.action} />
                 </Link>

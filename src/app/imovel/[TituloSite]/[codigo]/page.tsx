@@ -13,7 +13,7 @@ import BreadCrumb from "@/components/site/filteredBreadcrumb";
 import LocalizacaoBox from "@/components/site/localizacaobox";
 import { Metadata } from "next/dist/types";
 import "./page.css";
-import { FaWhatsapp } from "react-icons/fa";
+import FixedForm from "@/components/site/fixedForm";
 
 export async function generateMetadata({
   params,
@@ -163,7 +163,7 @@ export default async function ImovelPage({
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col scroll-smooth">
       <div className="shadow-lg">
         <Header />
       </div>
@@ -178,8 +178,8 @@ export default async function ImovelPage({
           </section>
 
           <section
-            id="teste"
-            className="px-8 sm:px-10 md:px-0 w-full max-w-7xl sm:mb-8"
+            id="main"
+            className="px-8 sm:px-10 md:px-0 w-full max-w-7xl sm:mb-8 scroll-mt-6 scroll-smooth"
           >
             <GaleriaImagens
               imagens={imagensGaleria}
@@ -201,7 +201,7 @@ export default async function ImovelPage({
             <div className="grid grid-cols-1 lg:grid-cols-[3fr_1.25fr] gap-6 lg:gap-8">
               <div className="space-y-8">
                 <div className="space-y-4">
-                  <h1 className="text-3xl sm:text-4xl font-semibold title-mobile-small">
+                  <h1 className="hidden sm:block text-3xl sm:text-4xl font-semibold title-mobile-small">
                     {gerarTitulo()}
                   </h1>
 
@@ -571,24 +571,7 @@ export default async function ImovelPage({
         </div>
       </main>
       <Footer />
-      <div className="bg-white md:hidden fixed left-0 z-50 bottom-0 w-full p-2">
-        <div className="flex justify-around w-full gap-1 pb-2">
-          <button className="w-full appearance-none inline-flex gap-1  items-center justify-center px-2 py-0 text-sm leading-4 whitespace-nowrap rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer h-12 tracking-normal font-bold normal-case bg-transparent border border-foxter-bright text-foxter-brand-900 focus:ring-foxter-brand-100 hover:bg-foxter-brand-100 transition-colors ease-in-out duration-700 lg:hidden">
-            Enviar Mensagem
-          </button>
-          <button className="w-full appearance-none inline-flex gap-1 items-center justify-center px-2 py-0 text-sm leading-4 whitespace-nowrap rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer h-12 tracking-normal font-bold normal-case bg-[#F9C013] text-[#05273B] focus:ring-[#d9a911] hover:bg-[#d9a911] transition-colors ease-in-out duration-500">
-            Agendar Visita
-          </button>
-          <a
-            href="https://wa.me/5511999999999" // substitua pelo seu número
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-[#25d366] hover:bg-[#1ebe5d] rounded-full h-12 items-center justify-center inline-flex px-4"
-          >
-            <FaWhatsapp size={24} color="#fff" />
-          </a>
-        </div>
-      </div>
+      <FixedForm/>
     </div>
   );
 }
