@@ -39,6 +39,12 @@ export async function GET(
             valor: true,
           },
         },
+        infraestrutura: {
+          select: {
+            nome: true,
+            valor: true,
+          },
+        },
         corretor: {
           select: {
             id: true,

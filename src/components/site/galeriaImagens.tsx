@@ -56,8 +56,8 @@ export default function GaleriaImagens({ imagens, principal, video }: GaleriaIma
             </div>
           )}
 
-          {(temVideo || imagens.length > 4) && (
-            <div className="absolute bottom-10 left-6 flex gap-2">
+          {(temVideo || imagens.length > 3) && (
+            <div className="absolute bottom-5 left-5 flex gap-2">
               {temVideo && !videoAberto && (
                 <div
                   className="bg-white text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md cursor-pointer"
@@ -67,7 +67,7 @@ export default function GaleriaImagens({ imagens, principal, video }: GaleriaIma
                   <span>Vídeo</span>
                 </div>
               )}
-              {imagens.length > 4 && (
+              {imagens.length > 3 && (
                 <div
                   className={`bg-white text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md cursor-pointer ${videoAberto ? "opacity-50" : ""
                     }` } onClick={() => {setModalAberta(true); setVideoAberto(false);}}

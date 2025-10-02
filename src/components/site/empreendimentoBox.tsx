@@ -3,12 +3,18 @@
 import Image from 'next/image'
 import { useState } from 'react'
 
+interface Item {
+  nome: string
+  valor: string
+}
+
 interface Props {
   empreendimento: string
   imagem: string
-  caracteristicas: Record<string, string>
-  infraestrutura: Record<string, string>
+  caracteristicas: Item[]
+  infraestrutura: Item[]
 }
+
 
 export default function EmpreendimentoBox({
   empreendimento,
@@ -19,8 +25,8 @@ export default function EmpreendimentoBox({
   const [expandido, setExpandido] = useState(false)
 
   const itensComSim = [
-    ...Object.entries(caracteristicas || {}).filter(([, v]) => v === 'Sim'),
-    ...Object.entries(infraestrutura || {}).filter(([, v]) => v === 'Sim'),
+    ...(caracteristicas || []).filter(item => item.valor?.trim().toLowerCase() === 'sim'),
+    ...(infraestrutura || []).filter(item => item.valor?.trim().toLowerCase() === 'sim'),
   ]
 
   const limite = 12
@@ -34,8 +40,8 @@ export default function EmpreendimentoBox({
         Sobre o Empreendimento
       </h2>
 
-      <p className="text-[16px] text-black underline underline-offset-4 font-medium mb-4 text-center sm:text-left break-words">
-        {empreendimento}
+      <p className={`text-[14px] text-gray-800 underline underline-offset-4 font-medium text-center sm:text-left break-words ${empreendimento ? 'mb-4' : 'mb-0'} min-h-[24px]`}>
+        {empreendimento?.trim() || ''}
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-[200px_1fr] gap-5 sm:gap-6 items-start">
@@ -49,23 +55,25 @@ export default function EmpreendimentoBox({
           />
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2 text-sm text-gray-800 justify-items-center sm:justify-items-start text-center sm:text-left">
-          {itensVisiveis.map(([item], idx) => (
-            <span key={`${item}-${idx}`} className="leading-tight">
-              {item}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2 text-sm text-gray-900 justify-items-center sm:justify-items-start text-center sm:text-left">
+          {itensVisiveis.map((item, idx) => (
+            <span key={`${item.nome}-${idx}`} className="leading-tight">
+              {item.nome}
             </span>
           ))}
         </div>
       </div>
 
-      {itensComSim.length > limite && (
-        <button
-          onClick={() => setExpandido(v => !v)}
-          className="text-sm text-blue-600 underline mt-4 block mx-auto sm:ml-auto"
-        >
-          {expandido ? 'Ver menos' : 'Ver mais'}
-        </button>
-      )}
-    </div>
+      {
+        itensComSim.length > limite && (
+          <button
+            onClick={() => setExpandido(v => !v)}
+            className="text-sm text-blue-600 underline mt-4 block mx-auto sm:ml-auto"
+          >
+            {expandido ? 'Ver menos' : 'Ver mais'}
+          </button>
+        )
+      }
+    </div >
   )
 }

@@ -259,7 +259,6 @@ export default async function ImovelPage({
                               {parseFloat(imovel.ValorIptu).toLocaleString(
                                 "pt-BR"
                               )}
-                              /mês
                             </span>
                           )}
                       </div>
@@ -518,8 +517,8 @@ export default async function ImovelPage({
                 <EmpreendimentoBox
                   empreendimento={imovel.Empreendimento}
                   imagem={imovel.FotoDestaque}
-                  caracteristicas={imovel.Caracteristicas}
-                  infraestrutura={imovel.InfraEstrutura}
+                  caracteristicas={imovel.caracteristicas}
+                  infraestrutura={imovel.infraEstrutura}
                 />
 
                 <AgendamentoForm
