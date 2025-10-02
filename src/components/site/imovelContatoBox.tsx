@@ -6,20 +6,21 @@ import FormularioModal from "./formularioModal";
 import { useState } from "react";
 import AgendamentoModal from "./agendamentoModal";
 import { CorretorExterno } from "@prisma/client";
+import Link from "next/link";
 
 interface ImovelContatoBoxProps {
   financiamento?: boolean;
   codigoImovel: string;
   valor: number;
   corretor?: CorretorExterno;
-  isRelease?: boolean
+  isRelease?: boolean;
 }
 
 export default function ImovelContatoBox({
   codigoImovel,
   valor,
   corretor,
-  isRelease = false
+  isRelease = false,
 }: ImovelContatoBoxProps) {
   const isVenda = true;
 
@@ -62,19 +63,26 @@ export default function ImovelContatoBox({
                   Enviar WhatsApp
                 </button>
 
-                <button
-                  type="button"
+                <Link
+                  href="tel:+555132577777"
                   className="bg-black p-1 px-2 rounded-lg text-white transition duration-300 transform hover:bg-[#303030] hover:shadow-lg cursor-pointer"
+                  aria-label="Ligar para o número (51) 3257-7777"
                 >
                   Ligar
-                </button>
+                </Link>
               </div>
             </div>
           </div>
         </div>
 
         <div className="bg-white rounded-2xl shadow-md lg:shadow-[0_0_15px_5px_rgba(0,0,0,0.12)] p-4 sm:p-5 lg:p-8 w-full lg:max-w-[460px] mx-auto">
-          <p className={`text-xs text-[#303030] ${isRelease ? "block" : "hidden"}`}>A partir de</p>
+          <p
+            className={`text-xs text-[#303030] ${
+              isRelease ? "block" : "hidden"
+            }`}
+          >
+            A partir de
+          </p>
           <div className="flex items-center justify-between gap-2 mb-1">
             <p className="text-[20px] sm:text-[20px] font-semibold text-[#303030] truncate">
               {valor > 0
