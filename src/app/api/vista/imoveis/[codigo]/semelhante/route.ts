@@ -84,6 +84,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ codigo: 
     const maxPrice = Math.ceil(basePrice * 1.15);
 
     const cidade = base.Cidade;
+    const categoria = base.Categoria
     // const categoria = base.Categoria;
 
     // Ensure types for Prisma where clause are correct
@@ -95,6 +96,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ codigo: 
         AND: [ // Use AND to combine all conditions
           { Codigo: { not: base.Codigo } }, // Exclude the base property itself
           cidade ? { Cidade: cidade } : {}, // Only apply if cidade exists
+          categoria ? { Categoria: categoria } : {},
           { Status: { in: statusCompat as string[] } }, // Cast to string[] for Prisma 'in' operator
           {
             [priceField]: { // Dynamically set the price field
