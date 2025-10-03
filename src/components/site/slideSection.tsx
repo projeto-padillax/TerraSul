@@ -18,7 +18,7 @@ export default function SlideSection({ slides }: SlideSectionProps) {
 
   useEffect(() => {
     if (!api) return;
-
+    if (slides.length <= 1) return;
     const onSelect = () => {
       const index = api.selectedScrollSnap();
       setCurrentIndex(index);
@@ -28,7 +28,6 @@ export default function SlideSection({ slides }: SlideSectionProps) {
         api.scrollTo(index); // trava no último
       }
     };
-
     api.on("select", onSelect);
     setCurrentIndex(api.selectedScrollSnap());
 
@@ -40,7 +39,12 @@ export default function SlideSection({ slides }: SlideSectionProps) {
   return (
     <section className="py-8 pt-16 justify-items-center">
       <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl">
-        <Carousel setApi={setApi}>
+        <Carousel
+          setApi={setApi}
+          opts={{
+            watchDrag: slides.length > 1
+          }}
+        >
           <CarouselContent>
             {slides.map((slide, index) => (
               <CarouselItem key={index}>
@@ -51,8 +55,12 @@ export default function SlideSection({ slides }: SlideSectionProps) {
                   <Link
                     href={slide.url ?? "#"}
                     className="absolute w-full h-full z-10"
-                      aria-label={slide.titulo ? `Abrir: ${slide.titulo}` : "Slide sem título"}
-  title={slide.titulo ? slide.titulo : "Slide sem título"}
+                    aria-label={
+                      slide.titulo
+                        ? `Abrir: ${slide.titulo}`
+                        : "Slide sem título"
+                    }
+                    title={slide.titulo ? slide.titulo : "Slide sem título"}
                   >
                     {!slide.imagem && (
                       <div className="absolute inset-0 bg-black bg-opacity-40"></div>
@@ -71,19 +79,21 @@ export default function SlideSection({ slides }: SlideSectionProps) {
             ))}
           </CarouselContent>
         </Carousel>
-        <div className="flex justify-center gap-2 mt-4">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => api?.scrollTo(index)}
-              className={`w-4 h-4 rounded-full transition-all duration-300 cursor-pointer ${
-                currentIndex === index ? "bg-site-primary" : "bg-[#e7e7e7]"
-              }`}
-              aria-label={`Ir para o slide ${index + 1}`}
-              aria-current={currentIndex === index ? "true" : undefined}
-            />
-          ))}
-        </div>
+        {slides.length > 1 && (
+          <div className="flex justify-center gap-2 mt-4">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => api?.scrollTo(index)}
+                className={`w-4 h-4 rounded-full transition-all duration-300 cursor-pointer ${
+                  currentIndex === index ? "bg-site-primary" : "bg-[#e7e7e7]"
+                }`}
+                aria-label={`Ir para o slide ${index + 1}`}
+                aria-current={currentIndex === index ? "true" : undefined}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -7,6 +7,7 @@ import { useState } from "react";
 import AgendamentoModal from "./agendamentoModal";
 import { CorretorExterno } from "@prisma/client";
 import Link from "next/link";
+import { useModal } from "@/utils/ModalContext";
 
 interface ImovelContatoBoxProps {
   financiamento?: boolean;
@@ -29,10 +30,12 @@ export default function ImovelContatoBox({
   const [tipoModal, setTipoModal] = useState<
     "whatsapp" | "financiamento" | null
   >(null);
+  const { setIsModalOpen } = useModal();
 
   const abrirModal = (tipo: "whatsapp" | "financiamento") => {
     setTipoModal(tipo);
     setModalAberta(true);
+    setIsModalOpen(true);
   };
 
   return (
@@ -64,7 +67,7 @@ export default function ImovelContatoBox({
                 </button>
 
                 <Link
-                  href="tel:+555132577777"
+                  href="https://wa.me/5551981214507"
                   className="bg-black p-1 px-2 rounded-lg text-white transition duration-300 transform hover:bg-[#303030] hover:shadow-lg cursor-pointer"
                   aria-label="Ligar para o número (51) 3257-7777"
                 >
@@ -146,7 +149,10 @@ export default function ImovelContatoBox({
       {modalAberta && tipoModal && (
         <FormularioModal
           open={modalAberta}
-          onClose={() => setModalAberta(false)}
+          onClose={() => {
+            setModalAberta(false);
+            setIsModalOpen(false);
+          }}
           tipo={tipoModal}
           valorImovel={valor}
           codigoImovel={codigoImovel}

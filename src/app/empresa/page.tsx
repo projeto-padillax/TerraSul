@@ -7,6 +7,7 @@ import BreadCrumb from "@/components/site/filteredBreadcrumb";
 import { Suspense } from "react";
 import { Metadata } from "next/types";
 import { getSecao } from "@/lib/actions/secoes";
+import { getSobreNos } from "@/lib/actions/config";
 
 export async function generateMetadata(): Promise<Metadata> {
   const secao = await getSecao(2);
@@ -20,6 +21,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function PaginaDinamicaSecao() {
   const secao = await getSecao(2);
+  const sobreNos = await getSobreNos();
+
 
   if (!secao) return null;
 
@@ -70,8 +73,8 @@ export default async function PaginaDinamicaSecao() {
             </h1>
 
             <p className="text-lg text-[#444] leading-relaxed whitespace-pre-line">
-              {secao.textoPagina?.trim()?.length
-                ? secao.textoPagina
+              {sobreNos?.trim()?.length
+                ? sobreNos
                 : "Conteúdo indisponível no momento."}
             </p>
           </div>
