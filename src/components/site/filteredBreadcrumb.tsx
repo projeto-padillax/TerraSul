@@ -36,8 +36,10 @@ export default function BreadCrumb() {
 
       // Extrair cidade (após "em-")
       const cidadeMatch = decodedSlug.match(/-em-([^/]+)/);
-      
-      const cidade = cidadeMatch ? cidadeMatch[1].replaceAll("-", " ") : "porto alegre";
+
+      const cidade = cidadeMatch
+        ? cidadeMatch[1].replaceAll("-", " ")
+        : "porto alegre";
 
       // Extrair bairro (após "bairro-" e antes de "-em-")
       const bairroMatch = decodedSlug.match(/bairro-([^-]+(?:-[^-]+)*)-em-/);
@@ -55,7 +57,11 @@ export default function BreadCrumb() {
           name: `${tipoCapitalized} à venda em ${cidadeCapitalized}`,
           href: `/busca/comprar/${
             tipo.replace("/", "-") ?? "Imovel"
-          }/${encodeURIComponent(cidade)}?action=comprar&tipos=${encodeURIComponent(tipo)}&cidade=${cidade}&page=1`
+          }/${encodeURIComponent(
+            cidade
+          )}?action=comprar&tipos=${encodeURIComponent(
+            tipo
+          )}&cidade=${cidade}&page=1`,
         });
       }
 
@@ -66,7 +72,11 @@ export default function BreadCrumb() {
           name: bairroCapitalized,
           href: `/busca/comprar/${
             encodeURIComponent(tipo.replace("/", "-")) ?? "Imovel"
-          }/${encodeURIComponent(cidade)}+${encodeURIComponent(bairro)}?action=comprar&tipos=${encodeURIComponent(tipo)}&cidade=${cidade}&bairro=${bairro}&page=1`
+          }/${encodeURIComponent(cidade)}+${encodeURIComponent(
+            bairro
+          )}?action=comprar&tipos=${encodeURIComponent(
+            tipo
+          )}&cidade=${cidade}&bairro=${bairro}&page=1`,
         });
       }
 
@@ -76,14 +86,18 @@ export default function BreadCrumb() {
           name: `${quartos} quartos`,
           href: `/busca/comprar/${
             encodeURIComponent(tipo.replace("/", "-")) ?? "Imovel"
-          }/${encodeURIComponent(cidade)}+${encodeURIComponent(bairro)}?action=comprar&tipos=${encodeURIComponent(tipo)}&cidade=${cidade}&bairro=${bairro}&quartos=${quartos}&page=1`,
+          }/${encodeURIComponent(cidade)}+${encodeURIComponent(
+            bairro
+          )}?action=comprar&tipos=${encodeURIComponent(
+            tipo
+          )}&cidade=${cidade}&bairro=${bairro}&quartos=${quartos}&page=1`,
         });
       }
 
       // 4. ID do imóvel
       items.push({
         name: idImovel,
-        href: pathname,
+        href: "", // deixar vazio para não gerar link
       });
 
       return items;
@@ -131,10 +145,18 @@ export default function BreadCrumb() {
       const cityName = decodeURIComponent(cidadeParam.replace(/\+/g, " "));
 
       items.push({
-        name: tipoName + ` a venda em ${capitalize(cityName !== "" ? cityName : "Porto Alegre")}`,
+        name:
+          tipoName +
+          ` a venda em ${capitalize(
+            cityName !== "" ? cityName : "Porto Alegre"
+          )}`,
         href: `/busca/comprar/${
-            tipoName.replace("/", "-") ?? "Imovel"
-          }/${encodeURIComponent(cityName)}?action=comprar&tipos=${encodeURIComponent(tipoName)}&cidade=${cityName}&page=1`,
+          tipoName.replace("/", "-") ?? "Imovel"
+        }/${encodeURIComponent(
+          cityName
+        )}?action=comprar&tipos=${encodeURIComponent(
+          tipoName
+        )}&cidade=${cityName}&page=1`,
       });
     }
 
@@ -177,9 +199,13 @@ export default function BreadCrumb() {
         {breadcrumbItems.map(({ name, href }, index) => (
           <Fragment key={`${name}-${index}`}>
             <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href={href}>{name}</Link>
-              </BreadcrumbLink>
+              {href ? (
+                <BreadcrumbLink asChild>
+                  <Link href={href}>{name}</Link>
+                </BreadcrumbLink>
+              ) : (
+                <BreadcrumbLink>{name}</BreadcrumbLink>
+              )}
             </BreadcrumbItem>
             {index < breadcrumbItems.length - 1 && <BreadcrumbSeparator />}
           </Fragment>
