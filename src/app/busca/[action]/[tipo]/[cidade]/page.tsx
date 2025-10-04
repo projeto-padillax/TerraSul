@@ -25,6 +25,7 @@ interface Props {
     codigo?: string;
     page?: string;
     sort?: string;
+    empreendimento?: string;
   }>;
 }
 
@@ -127,6 +128,7 @@ export async function generateMetadata({ searchParams }: Props) {
     codigo: awaitedSearchParams.codigo || "",
     page: awaitedSearchParams.page || "1",
     sort: awaitedSearchParams.sort || "",
+    empreendimento: awaitedSearchParams.empreendimento || "",
   };
 
   const titulo = buildUrl(filtros);
@@ -159,6 +161,7 @@ export default async function Imoveis({ searchParams }: Props) {
     codigo: awaitedSearchParams.codigo || "",
     page: awaitedSearchParams.page || "1",
     sort: awaitedSearchParams.sort || "",
+    empreendimento: awaitedSearchParams.empreendimento || ""
   };
 
   return (

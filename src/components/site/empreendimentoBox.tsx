@@ -1,6 +1,8 @@
 'use client'
 
+import { useIsMobile } from '@/hooks/useIsMobile'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useState } from 'react'
 
 interface Item {
@@ -23,6 +25,7 @@ export default function EmpreendimentoBox({
   infraestrutura,
 }: Props) {
   const [expandido, setExpandido] = useState(false)
+  const isMobile = useIsMobile()
 
   const itensComSim = [
     ...(caracteristicas || []).filter(item => item.valor?.trim().toLowerCase() === 'sim'),
@@ -40,9 +43,9 @@ export default function EmpreendimentoBox({
         Sobre o Empreendimento
       </h2>
 
-      <p className={`text-[14px] text-gray-800 underline underline-offset-4 font-medium text-center sm:text-left break-words ${empreendimento ? 'mb-4' : 'mb-0'} min-h-[24px]`}>
+      <Link href={`/busca/comprar/${encodeURIComponent("imóveis")}/${encodeURIComponent("porto alegre")}?action=comprar&empreendimento=${encodeURIComponent(empreendimento?.trim())}&page=1${isMobile ? '#ImoveisSection' : ''}`} className={`text-[14Linkx] text-gray-800 underline underline-offset-4 font-medium text-center sm:text-left break-words ${empreendimento ? 'mb-4' : 'mb-0'} min-h-[24px]`}>
         {empreendimento?.trim() || ''}
-      </p>
+      </Link>
 
       <div className="grid grid-cols-1 sm:grid-cols-[200px_1fr] gap-5 sm:gap-6 items-start">
         <div className="relative w-full max-w-[320px] sm:max-w-[200px] aspect-[4/3] mx-auto sm:mx-0 rounded overflow-hidden">

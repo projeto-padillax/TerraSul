@@ -118,8 +118,9 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   }, [searchParams]);
 
   useEffect(() => {
-    if (empreendimento) {
-      handleSearchByName(empreendimento);
+    // debugger
+    if (empreendimento || searchData.empreendimento) {
+      handleSearchByName(empreendimento || searchData.empreendimento);
       return;
     }
 
@@ -369,6 +370,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   };
 
   const handleSearchByName = async (name: string) => {
+    console.log(name)
     if (!name) return;
     try {
       setLoading(true);
