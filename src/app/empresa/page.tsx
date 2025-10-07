@@ -72,11 +72,11 @@ export default async function PaginaDinamicaSecao() {
               {secao.tituloh1 || "Título indisponível"}
             </h1>
 
-            <p className="text-lg text-[#444] leading-relaxed whitespace-pre-line">
-              {sobreNos?.trim()?.length
-                ? sobreNos
-                : "Conteúdo indisponível no momento."}
-            </p>
+<p className="text-lg text-[#444] leading-relaxed whitespace-pre-line">
+  {sobreNos?.trim()?.length
+    ? <span dangerouslySetInnerHTML={{ __html: sobreNos }} />
+    : "Conteúdo indisponível no momento."}
+</p>
           </div>
         </section>
       </main>
