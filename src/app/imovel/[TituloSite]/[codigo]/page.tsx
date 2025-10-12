@@ -173,8 +173,6 @@ export default async function ImovelPage({
     parseFloat(imovel.ValorVenda || imovel.ValorLocacao);
   const valorAnterior = parsePtBrCurrency(imovel.Desconto);
 
-  console.log(valorAnterior)
-
 
   return (
     <div className="min-h-screen flex flex-col scroll-smooth">
@@ -519,6 +517,30 @@ export default async function ImovelPage({
                     )}
                   </div>
                 </div>
+
+                {valorAnterior && valorAnterior > 0 && (
+                  <div className="sm:hidden my-4">
+                  <div className="border-t border-gray-200 mb-3" />
+                  <div className="w-full flex items-baseline justify-center gap-3 text-center">
+                    {typeof valorAnterior === "number" && valorAnterior > valorAtual && (
+                      <span className="text-sm text-gray-500 line-through">
+                        {valorAnterior.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                          minimumFractionDigits: 0,
+                        })}
+                      </span>
+                    )}
+                    <span className="text-2xl font-semibold text-[#303030]">
+                      {valorAtual.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                        minimumFractionDigits: 0,
+                      })}
+                    </span>
+                  </div>
+                </div>
+              )}
 
                 <div className="border-t"></div>
 

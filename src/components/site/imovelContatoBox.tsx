@@ -42,7 +42,6 @@ export default function ImovelContatoBox({
     n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
 
   const mostrarAnterior = typeof valorAnterior === "number" && valorAnterior > valor;
-  console.log(mostrarAnterior)
 
   return (
     <div id="sendMessage" className="block scroll-mt-6">
