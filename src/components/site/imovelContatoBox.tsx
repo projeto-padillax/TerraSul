@@ -12,7 +12,8 @@ import { useModal } from "@/utils/ModalContext";
 interface ImovelContatoBoxProps {
   financiamento?: boolean;
   codigoImovel: string;
-  valor: number;
+  valor: number;              // preço atual
+  valorAnterior?: number;     // preço anterior (opcional)
   corretor?: CorretorExterno;
   isRelease?: boolean;
 }
@@ -20,6 +21,7 @@ interface ImovelContatoBoxProps {
 export default function ImovelContatoBox({
   codigoImovel,
   valor,
+  valorAnterior,
   corretor,
   isRelease = false,
 }: ImovelContatoBoxProps) {
@@ -27,9 +29,7 @@ export default function ImovelContatoBox({
 
   const [abrirAgendamento, setAbrirAgendamento] = useState(false);
   const [modalAberta, setModalAberta] = useState(false);
-  const [tipoModal, setTipoModal] = useState<
-    "whatsapp" | "financiamento" | null
-  >(null);
+  const [tipoModal, setTipoModal] = useState<"whatsapp" | "financiamento" | null>(null);
   const { setIsModalOpen } = useModal();
 
   const abrirModal = (tipo: "whatsapp" | "financiamento") => {
@@ -37,6 +37,12 @@ export default function ImovelContatoBox({
     setModalAberta(true);
     setIsModalOpen(true);
   };
+
+  const fmt = (n: number) =>
+    n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
+
+  const mostrarAnterior = typeof valorAnterior === "number" && valorAnterior > valor;
+  console.log(mostrarAnterior)
 
   return (
     <div id="sendMessage" className="block scroll-mt-6">
@@ -79,21 +85,19 @@ export default function ImovelContatoBox({
         </div>
 
         <div className="bg-white rounded-2xl shadow-md lg:shadow-[0_0_15px_5px_rgba(0,0,0,0.12)] p-4 sm:p-5 lg:p-8 w-full lg:max-w-[460px] mx-auto">
-          <p
-            className={`text-xs text-[#303030] ${
-              isRelease ? "block" : "hidden"
-            }`}
-          >
-            A partir de
-          </p>
+          <p className={`text-xs text-[#303030] ${isRelease ? "block" : "hidden"}`}>A partir de</p>
+
           <div className="flex items-center justify-between gap-2 mb-1">
-            <p className="text-[20px] sm:text-[20px] font-semibold text-[#303030] truncate">
-              {valor > 0
-                ? `R$ ${valor.toLocaleString("pt-BR", {
-                    minimumFractionDigits: 0,
-                  })}`
-                : "Consultar"}
-            </p>
+            <div className="flex flex-col">
+              {mostrarAnterior && (
+                <span className="text-xs sm:text-sm text-gray-500 line-through">
+                  {fmt(valorAnterior!)}
+                </span>
+              )}
+              <p className="text-[20px] sm:text-[20px] font-semibold text-[#303030] truncate">
+                {valor > 0 ? fmt(valor) : "Consultar"}
+              </p>
+            </div>
 
             {isVenda && (
               <button

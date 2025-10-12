@@ -162,6 +162,20 @@ export default async function ImovelPage({
     return [categoria, detalhes, localizacao].filter(Boolean).join(", ");
   }
 
+  const parsePtBrCurrency = (v?: string | null) => {
+  if (!v) return undefined;
+  const s = v.replace(/[^\d.,]/g, "").replace(/\.(?=\d{3}(?:\D|$))/g, "").replace(",", ".");
+  const n = Number(s);
+  return isNaN(n) ? undefined : n;
+};
+
+  const valorAtual =
+    parseFloat(imovel.ValorVenda || imovel.ValorLocacao);
+  const valorAnterior = parsePtBrCurrency(imovel.Desconto);
+
+  console.log(valorAnterior)
+
+
   return (
     <div className="min-h-screen flex flex-col scroll-smooth">
       <div className="shadow-lg">
@@ -558,6 +572,7 @@ export default async function ImovelPage({
                 }
                 codigoImovel={imovel.Codigo}
                 valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
+                valorAnterior={valorAnterior ?? undefined} 
                 corretor={imovel.corretor}
                 isRelease={imovel.Lancamento == "Sim"}
               />

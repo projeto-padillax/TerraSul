@@ -87,7 +87,8 @@ const base: string[] = [
   "VideoDestaque",
   "AreaUtil",
   "EstudaDacao",
-  "Exclusivo"
+  "Exclusivo",
+  "Desconto"
 ];
 
 const LISTING_RESEARCH_FIELDS = [
@@ -224,6 +225,7 @@ interface VistaPropertyData {
   Corretor?: Record<string, any>;
   Exclusivo?: string; 
   EstudaDacao?: string;
+  Desconto?: string;
   [key: string]: any; // Permite outros campos dinâmicos da API Vista
 }
 

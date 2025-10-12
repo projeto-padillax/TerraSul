@@ -260,6 +260,7 @@ model Imovel {
   Longitude                  String?
   FotoDestaqueEmpreendimento String?   @map("fotoDestaqueEmpreendimento")
   VideoDestaque              String?   @map("videoDestaque")
+  Desconto                   String?   @map("desconto")
 
   fotos           Foto[]
   videos          Video[]
