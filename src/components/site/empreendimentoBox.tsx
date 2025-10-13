@@ -42,12 +42,12 @@ export default function EmpreendimentoBox({
   return (
     <div className="bg-white rounded-lg border p-4 sm:p-6 shadow-sm mb-8">
       <h2 className="text-xl font-semibold text-gray-800 mb-1 text-center sm:text-left">
-        INFRA-ESTRUTURA
+        INFRAESTRUTURA
       </h2>
 
       <Link
         href={`/busca/comprar/${encodeURIComponent(
-          "imóveis"
+          "imoveis"
         )}/${encodeURIComponent(
           "porto alegre"
         )}?action=comprar&empreendimento=${encodeURIComponent(
@@ -62,7 +62,7 @@ export default function EmpreendimentoBox({
 
       <div className="flex gap-5 sm:gap-6 items-start">
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-x-4 gap-y-2 text-sm text-gray-900 justify-items-center sm:justify-items-start text-center sm:text-left">
+        <div className="grid grid-cols-3 gap-x-6 gap-y-2 text-sm text-gray-900 justify-items-center sm:justify-items-start text-center sm:text-left w-full">
           {itensVisiveis.map((item, idx) => (
             <span key={`${item.nome}-${idx}`} className="leading-tight">
               {item.nome}
