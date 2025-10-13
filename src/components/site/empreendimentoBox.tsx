@@ -62,18 +62,9 @@ export default function EmpreendimentoBox({
         {capitalizeWords(empreendimento?.trim()) || ""}
       </Link>
 
-      <div className="grid grid-cols-1 sm:grid-cols-[200px_1fr] gap-5 sm:gap-6 items-start">
-        <div className="relative w-full max-w-[320px] sm:max-w-[200px] aspect-[4/3] mx-auto sm:mx-0 rounded overflow-hidden">
-          <Image
-            src={imagem}
-            alt={`Imagem do empreendimento ${empreendimento}`}
-            fill
-            sizes="(max-width: 640px) 320px, 200px"
-            className="object-cover"
-          />
-        </div>
+      <div className="flex gap-5 sm:gap-6 items-start">
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2 text-sm text-gray-900 justify-items-center sm:justify-items-start text-center sm:text-left">
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-x-4 gap-y-2 text-sm text-gray-900 justify-items-center sm:justify-items-start text-center sm:text-left">
           {itensVisiveis.map((item, idx) => (
             <span key={`${item.nome}-${idx}`} className="leading-tight">
               {item.nome}
