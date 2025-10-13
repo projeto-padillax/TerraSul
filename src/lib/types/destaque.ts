@@ -36,4 +36,5 @@ export type Destaque = {
   corretorId: string;
   EstudaDacao: string;
   Exclusivo: string;
+  Desconto: string;
 };
