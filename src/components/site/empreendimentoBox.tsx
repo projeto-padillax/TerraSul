@@ -26,10 +26,7 @@ export default function EmpreendimentoBox({
 }: Props) {
   const [expandido, setExpandido] = useState(false);
   const isMobile = useIsMobile();
-  // useEffect(() => {
-  //   console.log(infraestrutura);
-  //   console.log(caracteristicas);
-  // });
+
   const itensComSim = [
     ...(caracteristicas || []).filter(
       (item) => item.valor?.trim().toLowerCase() === "sim"
@@ -47,7 +44,7 @@ export default function EmpreendimentoBox({
   return (
     <div className="bg-white rounded-lg border p-4 sm:p-6 shadow-sm mb-8">
       <h2 className="text-xl font-semibold text-gray-800 mb-1 text-center sm:text-left">
-        Sobre o Empreendimento
+        INFRA-ESTRUTURA
       </h2>
 
       <Link
