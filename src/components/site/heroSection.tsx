@@ -102,7 +102,7 @@ export function HeroSection(banner: HeroSectionProps) {
     const path = `/busca/${searchData.action}/${
       searchData.tipos.length > 0
         ? searchData.tipos[0].replace("/", "-")
-        : "imóveis"
+        : "imoveis"
     }/${
       searchData.locations.length > 0
         ? searchData.locations[0].split(":")[0] +
@@ -122,7 +122,7 @@ export function HeroSection(banner: HeroSectionProps) {
     const path = `/busca/${searchData.action}/${
       searchData.tipos.length > 0
         ? searchData.tipos[0].replace("/", "-")
-        : "imóveis"
+        : "imoveis"
     }/${
       searchData.locations.length > 0
         ? searchData.locations[0].split(":")[0] +

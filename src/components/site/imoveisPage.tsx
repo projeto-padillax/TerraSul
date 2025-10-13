@@ -128,7 +128,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     const path = `/busca/${searchData.action}/${
       searchData.tipos.length > 0
         ? searchData.tipos[0].replace("/", "-")
-        : "imóveis"
+        : "imoveis"
     }/${
       searchData.locations.length > 0
         ? searchData.locations[0].split(":")[0] +
@@ -378,7 +378,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       const path = `/busca/${searchData.action}/${
         searchData.tipos.length > 0
           ? searchData.tipos[0].replace("/", "-")
-          : "imóveis"
+          : "imoveis"
       }/${
         searchData.locations.length > 0
           ? searchData.locations[0].split(":")[0] +
@@ -722,7 +722,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                 </PopoverContent>
               </Popover>
               <div className="flex items-center space-x-2 h-12 w-full md:w-fit justify-between">
-                <Label htmlFor="lancamentos">Lançamentos</Label>
+                <Label>Lançamentos</Label>
                 <Switch
                   checked={
                     searchData.lancamentos == ""

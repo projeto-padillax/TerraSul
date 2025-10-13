@@ -4,7 +4,7 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { capitalizeWords } from "@/utils/capitalize";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface Item {
   nome: string;

@@ -33,7 +33,7 @@ const buildUrl = (filtros: Filtros) => {
   let titulo = "";
 
   // Tipos de imóvel - mostrar apenas o primeiro tipo
-  let tipoTexto = "Imóveis";
+  let tipoTexto = "Imoveis";
 
  const primeiroTipo = filtros.tipo?.[0]?.split(",")?.map(t => t.trim())?.[0];
   if (primeiroTipo) {
