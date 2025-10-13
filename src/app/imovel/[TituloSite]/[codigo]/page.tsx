@@ -545,7 +545,7 @@ export default async function ImovelPage({
                 <div className="border-t"></div>
 
                 <div>
-                  <p className="text-gray-800 text-lg mb-8">
+                  <p className="text-gray-800 text-lg mb-8 whitespace-pre-line">
                     {imovel.Descricao}
                   </p>
                 </div>
