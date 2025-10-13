@@ -99,6 +99,7 @@ export function ImovelCard({ imovel, activeTab }: PropertyCardProps) {
           alt={imovel.Bairro}
           fill
           className="object-cover rounded-t-xl rounded-b-xl"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
 
         {/* alterar o black/90 para mais ou pra menos para mudar a intensidade da sombra*/}

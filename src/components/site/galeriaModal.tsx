@@ -63,6 +63,7 @@ export default function GaleriaModal({ midias, onClose }: GaleriaModalProps) {
                             alt="Imagem ampliada"
                             fill
                             className="object-contain"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                     ) : (
                         <iframe
@@ -110,6 +111,7 @@ export default function GaleriaModal({ midias, onClose }: GaleriaModalProps) {
                                         alt={`Imagem ${index + 1}`}
                                         fill
                                         className="object-cover"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     />
                                 ) : (
                                     <div className="relative w-full h-full bg-black flex items-center justify-center">
