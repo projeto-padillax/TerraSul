@@ -2,7 +2,6 @@
 
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { capitalizeWords } from "@/utils/capitalize";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -20,7 +19,6 @@ interface Props {
 
 export default function EmpreendimentoBox({
   empreendimento,
-  imagem,
   caracteristicas,
   infraestrutura,
 }: Props) {
