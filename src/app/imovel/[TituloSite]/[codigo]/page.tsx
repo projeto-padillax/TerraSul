@@ -89,7 +89,7 @@ export default async function ImovelPage({
   }
 
   const imovel = await res.json();
-
+  console.log(imovel)
   const imagensGaleria: { Foto: string }[] = (() => {
     const fotos = (imovel.fotos ?? []).map((foto: { url: string }) => ({
       Foto: foto.url,
@@ -217,7 +217,7 @@ export default async function ImovelPage({
                     {gerarTitulo()}
                   </h1>
 
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:gap-x-4 sm:gap-y-4">
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1 sm:gap-x-4 sm:gap-y-4">
                     {hasBadges && (
                       <div className="flex gap-2 flex-wrap">
                         {[
@@ -554,7 +554,7 @@ export default async function ImovelPage({
                   empreendimento={imovel.Empreendimento}
                   imagem={imovel.FotoDestaque}
                   caracteristicas={imovel.caracteristicas}
-                  infraestrutura={imovel.infraEstrutura}
+                  infraestrutura={imovel.infraestrutura}
                 />
 
                 <AgendamentoForm

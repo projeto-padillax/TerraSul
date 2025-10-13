@@ -23,7 +23,6 @@ export default async function PaginaDinamicaSecao() {
   const secao = await getSecao(2);
   const sobreNos = await getSobreNos();
 
-
   if (!secao) return null;
 
   return (
@@ -54,13 +53,13 @@ export default async function PaginaDinamicaSecao() {
                 <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent" />
                 <div className="absolute inset-y-0 left-0 flex items-center z-10 px-4 sm:px-6 md:px-10">
                   <h2 className="text-white text-2xl md:text-4xl font-semibold">
-                    {secao.titulo || secao.tituloh1 }
+                    {secao.titulo || secao.tituloh1}
                   </h2>
                 </div>
               </div>
             ) : (
               <h2 className="text-2xl md:text-4xl font-semibold text-gray-900">
-                {secao.titulo || secao.tituloh1 }
+                {secao.titulo || secao.tituloh1}
               </h2>
             )}
           </div>
@@ -72,11 +71,13 @@ export default async function PaginaDinamicaSecao() {
               {secao.tituloh1 || "Título indisponível"}
             </h1>
 
-<p className="text-lg text-[#444] leading-relaxed whitespace-pre-line">
-  {sobreNos?.trim()?.length
-    ? <span dangerouslySetInnerHTML={{ __html: sobreNos }} />
-    : "Conteúdo indisponível no momento."}
-</p>
+            <p className="text-lg text-[#444] leading-relaxed whitespace-pre-line">
+              {sobreNos?.trim()?.length ? (
+                <span dangerouslySetInnerHTML={{ __html: sobreNos }} />
+              ) : (
+                "Conteúdo indisponível no momento."
+              )}
+            </p>
           </div>
         </section>
       </main>

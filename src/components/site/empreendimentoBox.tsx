@@ -1,22 +1,22 @@
-'use client'
+"use client";
 
-import { useIsMobile } from '@/hooks/useIsMobile'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useState } from 'react'
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { capitalizeWords } from "@/utils/capitalize";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface Item {
-  nome: string
-  valor: string
+  nome: string;
+  valor: string;
 }
 
 interface Props {
-  empreendimento: string
-  imagem: string
-  caracteristicas: Item[]
-  infraestrutura: Item[]
+  empreendimento: string;
+  imagem: string;
+  caracteristicas: Item[];
+  infraestrutura: Item[];
 }
-
 
 export default function EmpreendimentoBox({
   empreendimento,
@@ -24,18 +24,25 @@ export default function EmpreendimentoBox({
   caracteristicas,
   infraestrutura,
 }: Props) {
-  const [expandido, setExpandido] = useState(false)
-  const isMobile = useIsMobile()
-
+  const [expandido, setExpandido] = useState(false);
+  const isMobile = useIsMobile();
+  // useEffect(() => {
+  //   console.log(infraestrutura);
+  //   console.log(caracteristicas);
+  // });
   const itensComSim = [
-    ...(caracteristicas || []).filter(item => item.valor?.trim().toLowerCase() === 'sim'),
-    ...(infraestrutura || []).filter(item => item.valor?.trim().toLowerCase() === 'sim'),
-  ]
+    ...(caracteristicas || []).filter(
+      (item) => item.valor?.trim().toLowerCase() === "sim"
+    ),
+    ...(infraestrutura || []).filter(
+      (item) => item.valor?.trim().toLowerCase() === "sim"
+    ),
+  ];
 
-  const limite = 12
-  const itensVisiveis = expandido ? itensComSim : itensComSim.slice(0, limite)
+  const limite = 12;
+  const itensVisiveis = expandido ? itensComSim : itensComSim.slice(0, limite);
 
-  if (itensComSim.length === 0) return null
+  if (itensComSim.length === 0) return null;
 
   return (
     <div className="bg-white rounded-lg border p-4 sm:p-6 shadow-sm mb-8">
@@ -43,8 +50,19 @@ export default function EmpreendimentoBox({
         Sobre o Empreendimento
       </h2>
 
-      <Link href={`/busca/comprar/${encodeURIComponent("imóveis")}/${encodeURIComponent("porto alegre")}?action=comprar&empreendimento=${encodeURIComponent(empreendimento?.trim())}&page=1${isMobile ? '#ImoveisSection' : ''}`} className={`text-[14Linkx] text-gray-800 underline underline-offset-4 font-medium text-center sm:text-left break-words ${empreendimento ? 'mb-4' : 'mb-0'} min-h-[24px]`}>
-        {empreendimento?.trim() || ''}
+      <Link
+        href={`/busca/comprar/${encodeURIComponent(
+          "imóveis"
+        )}/${encodeURIComponent(
+          "porto alegre"
+        )}?action=comprar&empreendimento=${encodeURIComponent(
+          empreendimento?.trim()
+        )}&page=1${isMobile ? "#ImoveisSection" : ""}`}
+        className={`inline-block text-[14px] text-gray-800 underline underline-offset-4 font-medium text-center sm:text-left break-words ${
+          empreendimento ? "mb-4" : "mb-0"
+        } min-h-[24px]`}
+      >
+        {capitalizeWords(empreendimento?.trim()) || ""}
       </Link>
 
       <div className="grid grid-cols-1 sm:grid-cols-[200px_1fr] gap-5 sm:gap-6 items-start">
@@ -67,16 +85,14 @@ export default function EmpreendimentoBox({
         </div>
       </div>
 
-      {
-        itensComSim.length > limite && (
-          <button
-            onClick={() => setExpandido(v => !v)}
-            className="text-sm text-blue-600 underline mt-4 block mx-auto sm:ml-auto"
-          >
-            {expandido ? 'Ver menos' : 'Ver mais'}
-          </button>
-        )
-      }
-    </div >
-  )
+      {itensComSim.length > limite && (
+        <button
+          onClick={() => setExpandido((v) => !v)}
+          className="text-sm text-blue-600 underline mt-4 block mx-auto sm:ml-auto"
+        >
+          {expandido ? "Ver menos" : "Ver mais"}
+        </button>
+      )}
+    </div>
+  );
 }
