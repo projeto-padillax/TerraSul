@@ -58,6 +58,7 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
                     alt="Thumb do vídeo"
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-black/30" />
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -81,6 +82,7 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
                   alt={`Thumb do vídeo ${i + 1}`}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-black/30" />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
