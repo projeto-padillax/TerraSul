@@ -89,7 +89,6 @@ export default async function ImovelPage({
   }
 
   const imovel = await res.json();
-  console.log(imovel)
   const imagensGaleria: { Foto: string }[] = (() => {
     const fotos = (imovel.fotos ?? []).map((foto: { url: string }) => ({
       Foto: foto.url,
@@ -163,16 +162,20 @@ export default async function ImovelPage({
   }
 
   const parsePtBrCurrency = (v?: string | null) => {
-  if (!v) return undefined;
-  const s = v.replace(/[^\d.,]/g, "").replace(/\.(?=\d{3}(?:\D|$))/g, "").replace(",", ".");
-  const n = Number(s);
-  return isNaN(n) ? undefined : n;
-};
+    if (!v) return undefined;
+    const s = v
+      .replace(/[^\d.,-]/g, "")
+      .replace(/\.(?=\d{3}(?:\D|$))/g, "")
+      .replace(",", ".");
 
-  const valorAtual =
-    parseFloat(imovel.ValorVenda || imovel.ValorLocacao);
+    if (!/\d/.test(s)) return undefined;
+
+    const n = Number.parseFloat(s);
+    return Number.isFinite(n) ? n : undefined;
+  };
+
+  const valorAtual = parseFloat(imovel.ValorVenda || imovel.ValorLocacao);
   const valorAnterior = parsePtBrCurrency(imovel.Desconto);
-
 
   return (
     <div className="min-h-screen flex flex-col scroll-smooth">
@@ -518,29 +521,30 @@ export default async function ImovelPage({
                   </div>
                 </div>
 
-                {valorAnterior && valorAnterior > 0 && (
+                {valorAnterior != null && valorAnterior !== 0 && (
                   <div className="sm:hidden my-4">
-                  <div className="border-t border-gray-200 mb-3" />
-                  <div className="w-full flex items-baseline justify-center gap-3 text-center">
-                    {typeof valorAnterior === "number" && valorAnterior > valorAtual && (
-                      <span className="text-sm text-gray-500 line-through">
-                        {valorAnterior.toLocaleString("pt-BR", {
+                    <div className="border-t border-gray-200 mb-3" />
+                    <div className="w-full flex items-baseline justify-center gap-3 text-center">
+                      {typeof valorAnterior === "number" &&
+                        valorAnterior > valorAtual && (
+                          <span className="text-sm text-gray-500 line-through">
+                            {valorAnterior.toLocaleString("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
+                              minimumFractionDigits: 0,
+                            })}
+                          </span>
+                        )}
+                      <span className="text-2xl font-semibold text-[#303030]">
+                        {valorAtual.toLocaleString("pt-BR", {
                           style: "currency",
                           currency: "BRL",
                           minimumFractionDigits: 0,
                         })}
                       </span>
-                    )}
-                    <span className="text-2xl font-semibold text-[#303030]">
-                      {valorAtual.toLocaleString("pt-BR", {
-                        style: "currency",
-                        currency: "BRL",
-                        minimumFractionDigits: 0,
-                      })}
-                    </span>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
                 <div className="border-t"></div>
 
@@ -594,7 +598,7 @@ export default async function ImovelPage({
                 }
                 codigoImovel={imovel.Codigo}
                 valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
-                valorAnterior={valorAnterior ?? undefined} 
+                valorAnterior={valorAnterior ?? undefined}
                 corretor={imovel.corretor}
                 isRelease={imovel.Lancamento == "Sim"}
               />
@@ -607,7 +611,7 @@ export default async function ImovelPage({
         </div>
       </main>
       <Footer />
-      <FixedForm/>
+      <FixedForm />
     </div>
   );
 }

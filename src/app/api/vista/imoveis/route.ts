@@ -831,7 +831,7 @@ export async function PUT() {
         .length,
       deleted: deleteResults.filter((r) => r.status === "fulfilled").length,
       failedUpserts: upsertResults.filter((r) => r.status === "rejected")
-        .length,
+        .length,  
       failedDeletes: deleteResults.filter((r) => r.status === "rejected")
         .length,
     });
