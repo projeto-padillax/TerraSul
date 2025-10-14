@@ -35,7 +35,7 @@ import { Imovel } from "@prisma/client";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showFilters, setShowFilters] = useState(false);
@@ -133,7 +133,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         ? searchData.locations[0].split(":")[0] +
           "+" +
           searchData.locations[0].split(":")[1]
-        : "porto-alegre"
+        : "porto alegre"
     }`;
     if (searchData.action) newSearchParams.set("action", searchData.action);
     if (searchData.tipos?.length > 0)
@@ -167,11 +167,12 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     // ... e os outros filtros
     if (sortOrder) newSearchParams.set("sort", sortOrder);
     newSearchParams.set("page", String(page));
-
+    console.log(path);
     router.push(
-      `${path}?${decodeURIComponent(
-        newSearchParams.toString()
-      )}${isMobile ? '#ImoveisSection' : ''}`, { scroll: false }
+      `${path}?${decodeURIComponent(newSearchParams.toString())}${
+        isMobile ? "#ImoveisSection" : ""
+      }`,
+      { scroll: false }
     );
 
     const fetchImoveis = async () => {
@@ -359,7 +360,11 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         return;
       }
 
-      router.push(`/imovel/comprar+${tipo}+em+${location}/${code}${isMobile ? "#main": ""}`);
+      router.push(
+        `/imovel/comprar+${tipo}+em+${location}/${code}${
+          isMobile ? "#main" : ""
+        }`
+      );
     } catch (error) {
       console.error("Falha ao buscar imóveis:", error);
       setImoveis([]);
@@ -369,11 +374,11 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   };
 
   const handleSearchByName = async (name: string) => {
-    console.log(name)
+    console.log(name);
     if (!name) return;
     try {
       setLoading(true);
-      
+
       const path = `/busca/${searchData.action}/${
         searchData.tipos.length > 0
           ? searchData.tipos[0].replace("/", "-")
@@ -388,7 +393,10 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       router.push(
         `${decodeURIComponent(
           path
-        )}?action=comprar&empreendimento=${name}&page=1${isMobile ? '#ImoveisSection' : ''}`, { scroll: false }
+        )}?action=comprar&empreendimento=${name}&page=1${
+          isMobile ? "#ImoveisSection" : ""
+        }`,
+        { scroll: false }
       );
       const res = await fetch(
         `/api/vista/imoveis?action=comprar&empreendimento=${name}&page=1`
@@ -764,7 +772,10 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
             </div>
           </div>
         </div>
-        <div className="justify-items-center scroll-mt-8 scroll-smooth" id="ImoveisSection">
+        <div
+          className="justify-items-center scroll-mt-8 scroll-smooth"
+          id="ImoveisSection"
+        >
           <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl flex flex-col gap-4 sm:gap-0 sm:flex-row items-center justify-between">
             <div className="h-auto min-h-6 rounded-sm">
               <h1 className="text-2xl font-bold text-[#4d4d4d]">{titulo}</h1>
@@ -805,7 +816,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                   key={imovel.id}
                   href={`/imovel/${encodeURIComponent(
                     toSlug(gerarTitulos(imovel))
-                  )}/${imovel.Codigo}${isMobile ? "#main": ""}`}
+                  )}/${imovel.Codigo}${isMobile ? "#main" : ""}`}
                 >
                   <ImovelCard imovel={imovel} activeTab={searchData.action} />
                 </Link>
