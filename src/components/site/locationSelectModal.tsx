@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -114,7 +114,11 @@ export function LocationSelectModal({
   };
 
   const handleConfirm = () => {
-    onSelectionChange(tempSelectedLocations);
+    if(tempSelectedLocations.length > 0){
+      onSelectionChange(tempSelectedLocations);
+    }else{
+      onSelectionChange([selectedCidade])
+    }
     onClose();
   };
 

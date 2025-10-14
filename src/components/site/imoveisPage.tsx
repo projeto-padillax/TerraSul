@@ -54,7 +54,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     tipos: filtros.tipo
       ? filtros.tipo.map((t: string) => decodeURIComponent(t))
       : ([] as string[]),
-    locations: location || "",
+    locations: location.length > 0 ? location : [filtros.cidade ?? "porto alegre"],
     valueRange: { min: filtros.valorMin ?? "", max: filtros.valorMax ?? "" },
     quartos: filtros.quartos ?? "",
     area: filtros.areaMinima ?? "",
@@ -83,13 +83,6 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     { id: "sacada", label: "Sacada" },
     { id: "saloa", label: "Salão de festa" },
   ];
-
-  useEffect(()=>{
-    console.log("entrei")
-    console.log(searchData)
-    console.log(filtros)
-    console.log(location)
-  })
 
   useEffect(() => {
     const newData = {
@@ -131,15 +124,16 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     }
 
     const newSearchParams = new URLSearchParams();
+    // debugger;
     const path = `/busca/${searchData.action}/${
       searchData.tipos.length > 0
         ? searchData.tipos[0].replace("/", "-")
         : "imoveis"
     }/${
       searchData.locations.length > 0
-        ? searchData.locations[0].split(":")[0] +
+        ? searchData.locations[0].includes(":") ? searchData.locations[0].split(":")[0] +
           "+" +
-          searchData.locations[0].split(":")[1]
+          searchData.locations[0].split(":")[1] : searchData.locations[0].split(":")[0]
         : "porto alegre"
     }`;
     if (searchData.action) newSearchParams.set("action", searchData.action);
@@ -338,6 +332,8 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   };
 
   const closeModal = (modalType: "location" | "type") => {
+    console.log(searchData)
+    console.log(location)
     setModals({ ...modals, [modalType]: false });
   };
 
