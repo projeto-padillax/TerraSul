@@ -118,7 +118,6 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   }, [searchParams]);
 
   useEffect(() => {
-    // debugger
     if (empreendimento || searchData.empreendimento) {
       handleSearchByName(empreendimento || searchData.empreendimento);
       return;
@@ -134,7 +133,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         ? searchData.locations[0].split(":")[0] +
           "+" +
           searchData.locations[0].split(":")[1]
-        : "porto alegre"
+        : "porto-alegre"
     }`;
     if (searchData.action) newSearchParams.set("action", searchData.action);
     if (searchData.tipos?.length > 0)
@@ -170,13 +169,12 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     newSearchParams.set("page", String(page));
 
     router.push(
-      `${decodeURIComponent(path)}?${decodeURIComponent(
+      `${path}?${decodeURIComponent(
         newSearchParams.toString()
       )}${isMobile ? '#ImoveisSection' : ''}`, { scroll: false }
     );
 
     const fetchImoveis = async () => {
-      debugger
       setLoading(true);
       try {
         const res = await fetch(

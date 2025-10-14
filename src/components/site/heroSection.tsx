@@ -108,7 +108,7 @@ export function HeroSection(banner: HeroSectionProps) {
         ? searchData.locations[0].split(":")[0] +
           "+" +
           searchData.locations[0].split(":")[1]
-        : "porto alegre"
+        : "porto-alegre"
     }`;
     // console.log(path)
     router.push(
