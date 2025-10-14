@@ -39,7 +39,7 @@ export function HeroSection(banner: HeroSectionProps) {
     type: false,
     value: false,
   });
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (isSearching && inputRef.current) {
@@ -114,7 +114,7 @@ export function HeroSection(banner: HeroSectionProps) {
     router.push(
       `${decodeURIComponent(path)}?${decodeURIComponent(
         newSearchParams.toString()
-      )}${isMobile ? '#ImoveisSection' : ''}`
+      )}${isMobile ? "#ImoveisSection" : ""}`
     );
   };
 
@@ -340,7 +340,7 @@ export function HeroSection(banner: HeroSectionProps) {
                 onClick={() => setIsSearching(true)}
                 className="text-xs w-[152px] font-semibold flex items-center border border-transparent gap-1 bg-transparent hover:bg-transparent focus:ring-2 focus:ring-white has-[>svg]:px-0 cursor-pointer"
               >
-                BUSCA POR CÓDIGO <Search className="h-4 w-5" />
+                <span className="text-shadow">BUSCA POR CÓDIGO</span> <Search className="h-4 w-5" />
               </Button>
             ) : (
               <div className="flex h-[36px] items-center border border-white rounded-md overflow-hidden">
@@ -353,7 +353,7 @@ export function HeroSection(banner: HeroSectionProps) {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") handleSearchByCode();
                   }}
-                  className="w-[132px] px-2 text-sm text-white outline-none"
+                  className="w-[132px] px-2 text-sm text-white outline-none text-shadow"
                 />
                 <Button
                   onClick={handleSearchByCode}

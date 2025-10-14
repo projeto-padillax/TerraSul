@@ -6,6 +6,7 @@ import GaleriaImagens from "@/components/site/galeriaImagens";
 import { notFound } from "next/navigation";
 import AgendamentoForm from "@/components/site/agendamentoForm";
 import EmpreendimentoBox from "@/components/site/empreendimentoBox";
+import CaracteristicasBox from "@/components/site/caracteristicasBox";
 import MidiaBox from "@/components/site/midiaBox";
 import SemelhantesSection from "@/components/site/semelhantesSection";
 import FavoriteButton from "@/components/site/favoritosButton";
@@ -13,7 +14,7 @@ import BreadCrumb from "@/components/site/filteredBreadcrumb";
 import LocalizacaoBox from "@/components/site/localizacaobox";
 import { Metadata } from "next/dist/types";
 import "./page.css";
-import FixedForm from "@/components/site/fixedForm";
+// import FixedForm from "@/components/site/fixedForm";
 
 export async function generateMetadata({
   params,
@@ -554,10 +555,11 @@ export default async function ImovelPage({
                   </p>
                 </div>
 
+                <CaracteristicasBox caracteristicas={imovel.caracteristicas}></CaracteristicasBox>
+
                 <EmpreendimentoBox
                   empreendimento={imovel.Empreendimento}
                   imagem={imovel.FotoDestaque}
-                  caracteristicas={imovel.caracteristicas}
                   infraestrutura={imovel.infraestrutura}
                 />
 
@@ -611,7 +613,7 @@ export default async function ImovelPage({
         </div>
       </main>
       <Footer />
-      <FixedForm />
+      {/* <FixedForm/> */}
     </div>
   );
 }

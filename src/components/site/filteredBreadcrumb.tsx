@@ -56,7 +56,7 @@ export default function BreadCrumb() {
         items.push({
           name: `${tipoCapitalized} à venda em ${cidadeCapitalized}`,
           href: `/busca/comprar/${
-            tipo.replace("/", "-") ?? "Imovel"
+            tipo.replace("/", "-") ?? "imoveis"
           }/${encodeURIComponent(
             cidade
           )}?action=comprar&tipos=${encodeURIComponent(
@@ -71,7 +71,7 @@ export default function BreadCrumb() {
         items.push({
           name: bairroCapitalized,
           href: `/busca/comprar/${
-            encodeURIComponent(tipo.replace("/", "-")) ?? "Imovel"
+            encodeURIComponent(tipo.replace("/", "-")) ?? "imoveis"
           }/${encodeURIComponent(cidade)}+${encodeURIComponent(
             bairro
           )}?action=comprar&tipos=${encodeURIComponent(
@@ -85,7 +85,7 @@ export default function BreadCrumb() {
         items.push({
           name: `${quartos} quartos`,
           href: `/busca/comprar/${
-            encodeURIComponent(tipo.replace("/", "-")) ?? "Imovel"
+            encodeURIComponent(tipo.replace("/", "-")) ?? "imoveis"
           }/${encodeURIComponent(cidade)}+${encodeURIComponent(
             bairro
           )}?action=comprar&tipos=${encodeURIComponent(
@@ -151,7 +151,7 @@ export default function BreadCrumb() {
             cityName !== "" ? cityName : "Porto Alegre"
           )}`,
         href: `/busca/comprar/${
-          tipoName.replace("/", "-") ?? "Imovel"
+          tipoName.replace("/", "-") ?? "imoveis"
         }/${encodeURIComponent(
           cityName
         )}?action=comprar&tipos=${encodeURIComponent(
