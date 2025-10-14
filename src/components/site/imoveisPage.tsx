@@ -84,6 +84,13 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     { id: "saloa", label: "Salão de festa" },
   ];
 
+  useEffect(()=>{
+    console.log("entrei")
+    console.log(searchData)
+    console.log(filtros)
+    console.log(location)
+  })
+
   useEffect(() => {
     const newData = {
       action: searchParams.get("action") ?? "comprar",
@@ -167,7 +174,6 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     // ... e os outros filtros
     if (sortOrder) newSearchParams.set("sort", sortOrder);
     newSearchParams.set("page", String(page));
-    console.log(path);
     router.push(
       `${path}?${decodeURIComponent(newSearchParams.toString())}${
         isMobile ? "#ImoveisSection" : ""
