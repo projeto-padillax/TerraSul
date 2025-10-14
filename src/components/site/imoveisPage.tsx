@@ -176,6 +176,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     );
 
     const fetchImoveis = async () => {
+      debugger
       setLoading(true);
       try {
         const res = await fetch(
