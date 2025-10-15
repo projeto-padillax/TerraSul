@@ -54,7 +54,8 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     tipos: filtros.tipo
       ? filtros.tipo.map((t: string) => decodeURIComponent(t))
       : ([] as string[]),
-    locations: location.length > 0 ? location : [filtros.cidade ?? "porto alegre"],
+    locations:
+      location.length > 0 ? location : [filtros.cidade ?? "porto alegre"],
     valueRange: { min: filtros.valorMin ?? "", max: filtros.valorMax ?? "" },
     quartos: filtros.quartos ?? "",
     area: filtros.areaMinima ?? "",
@@ -91,9 +92,12 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         ? searchParams.get("tipos")!.split(",")
         : [],
       locations: searchParams.get("cidade")
-        ? (searchParams.get("bairro")?.split(",") || []).map(
-            (b) => `${searchParams.get("cidade")}:${b}`
-          )
+        ? searchParams.get("bairro")
+          ? searchParams
+              .get("bairro")!
+              .split(",")
+              .map((b) => `${searchParams.get("cidade")}:${b}`)
+          : [searchParams.get("cidade")!] // só cidade, sem ":"
         : [],
       valueRange: {
         min: searchParams.get("valorMin") ?? "",
@@ -109,9 +113,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       lancamentos: searchParams.get("lancamentos") ?? "",
       empreendimento: searchParams.get("empreendimento") ?? "",
     };
-    if (newData.locations.length == 0 && searchParams.has("cidade")) {
-      newData.locations = [`${searchParams.get("cidade")}:all`];
-    }
+
     setSearchData(newData);
     setPage(Number(searchParams.get("page") ?? 1));
     setSortOrder(searchParams.get("sort") ?? "");
@@ -124,18 +126,18 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     }
 
     const newSearchParams = new URLSearchParams();
-    // debugger;
+
+    let pathLocation = "porto alegre";
+    if (searchData.locations.length > 0) {
+      const [cidade, bairro] = searchData.locations[0].split(":");
+      pathLocation = bairro ? `${cidade}+${bairro}` : cidade;
+    }
+
     const path = `/busca/${searchData.action}/${
       searchData.tipos.length > 0
         ? searchData.tipos[0].replace("/", "-")
         : "imoveis"
-    }/${
-      searchData.locations.length > 0
-        ? searchData.locations[0].includes(":") ? searchData.locations[0].split(":")[0] +
-          "+" +
-          searchData.locations[0].split(":")[1] : searchData.locations[0].split(":")[0]
-        : "porto alegre"
-    }`;
+    }/${pathLocation}`;
     if (searchData.action) newSearchParams.set("action", searchData.action);
     if (searchData.tipos?.length > 0)
       newSearchParams.set("tipos", searchData.tipos.join(","));
@@ -332,8 +334,6 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   };
 
   const closeModal = (modalType: "location" | "type") => {
-    console.log(searchData)
-    console.log(location)
     setModals({ ...modals, [modalType]: false });
   };
 

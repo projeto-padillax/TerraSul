@@ -110,6 +110,7 @@ export function HeroSection(banner: HeroSectionProps) {
           searchData.locations[0].split(":")[1]
         : "porto alegre"
     }`;
+    console.log(path)
     router.push(
       `${decodeURIComponent(path)}?${decodeURIComponent(
         newSearchParams.toString()
