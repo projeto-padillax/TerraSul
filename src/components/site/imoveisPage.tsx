@@ -146,6 +146,8 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         "bairro",
         searchData.locations.map((i) => i.split(":")[1]).join(",")
       );
+    }else{
+      newSearchParams.set("cidade", pathLocation);
     }
     if (searchData.valueRange.min)
       newSearchParams.set("valorMin", searchData.valueRange.min);
@@ -176,6 +178,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       { scroll: false }
     );
     console.log("linha 179")
+    console.log(path)
     console.log(newSearchParams.toString())
     const fetchImoveis = async () => {
       setLoading(true);
