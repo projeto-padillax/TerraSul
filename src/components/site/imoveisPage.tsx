@@ -113,7 +113,6 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       lancamentos: searchParams.get("lancamentos") ?? "",
       empreendimento: searchParams.get("empreendimento") ?? "",
     };
-
     setSearchData(newData);
     setPage(Number(searchParams.get("page") ?? 1));
     setSortOrder(searchParams.get("sort") ?? "");
@@ -176,7 +175,10 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       }`,
       { scroll: false }
     );
-
+    console.log("path")
+    console.log(path)
+    console.log("linha 179")
+    console.log(newSearchParams)
     const fetchImoveis = async () => {
       setLoading(true);
       try {
