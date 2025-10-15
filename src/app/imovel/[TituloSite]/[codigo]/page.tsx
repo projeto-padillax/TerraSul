@@ -14,7 +14,6 @@ import BreadCrumb from "@/components/site/filteredBreadcrumb";
 import LocalizacaoBox from "@/components/site/localizacaobox";
 import { Metadata } from "next/dist/types";
 import "./page.css";
-// import FixedForm from "@/components/site/fixedForm";
 
 export async function generateMetadata({
   params,
@@ -522,30 +521,29 @@ export default async function ImovelPage({
                   </div>
                 </div>
 
-                {valorAnterior != null && valorAnterior !== 0 && (
-                  <div className="sm:hidden my-4">
-                    <div className="border-t border-gray-200 mb-3" />
-                    <div className="w-full flex items-baseline justify-center gap-3 text-center">
-                      {typeof valorAnterior === "number" &&
-                        valorAnterior > valorAtual && (
-                          <span className="text-sm text-gray-500 line-through">
-                            {valorAnterior.toLocaleString("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
-                              minimumFractionDigits: 0,
-                            })}
-                          </span>
-                        )}
-                      <span className="text-2xl font-semibold text-[#303030]">
-                        {valorAtual.toLocaleString("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                          minimumFractionDigits: 0,
-                        })}
-                      </span>
-                    </div>
-                  </div>
-                )}
+               <div className="sm:hidden my-4">
+  <div className="border-t border-gray-200 mb-3" />
+  <div className="w-full flex items-baseline justify-center gap-3 text-center">
+    {typeof valorAnterior === "number" &&
+      valorAnterior > 0 &&
+      valorAnterior > valorAtual && (
+        <span className="text-sm text-gray-500 line-through">
+          {valorAnterior.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+            minimumFractionDigits: 0,
+          })}
+        </span>
+      )}
+    <span className="text-2xl font-semibold text-[#303030]">
+      {valorAtual.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        minimumFractionDigits: 0,
+      })}
+    </span>
+  </div>
+</div>
 
                 <div className="border-t"></div>
 
