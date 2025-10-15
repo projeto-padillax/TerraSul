@@ -180,6 +180,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     console.log("linha 179")
     console.log(path)
     console.log(newSearchParams.toString())
+    console.log(filtros)
     const fetchImoveis = async () => {
       setLoading(true);
       try {
