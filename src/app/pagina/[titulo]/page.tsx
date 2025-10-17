@@ -11,7 +11,7 @@ interface DynamicPageProps {
 
 export default async function DynamicPage({ params }: DynamicPageProps) {
   const tituloOriginal = await params.then((p) => p.titulo);
-  const titulo = decodeURIComponent(tituloOriginal).replaceAll("-", " ");
+  const titulo = decodeURIComponent(tituloOriginal);
   const pageData = await getPaginaByTitle(titulo);
   if (!pageData) notFound();
 
