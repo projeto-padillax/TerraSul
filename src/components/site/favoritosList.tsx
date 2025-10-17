@@ -87,7 +87,7 @@ export default function FavoritesList() {
             {comprar.map((favorito: Destaque) => (
               <Link
                 key={favorito.id}
-                href={`/imovel/${encodeURIComponent(toSlug(gerarTitulo(favorito)))}/${favorito.Codigo}`}
+                href={`/imovel/${(toSlug(gerarTitulo(favorito)))}/${favorito.Codigo}`}
               >
                 <ImovelCard
                   imovel={favorito}
@@ -109,7 +109,7 @@ export default function FavoritesList() {
             {alugar.map((favorito: Destaque) => (
               <Link
                 key={favorito.id}
-                href={`/imovel/${encodeURIComponent(toSlug(gerarTitulo(favorito)))}/${favorito.Codigo}`}
+                href={`/imovel/${(toSlug(gerarTitulo(favorito)))}/${favorito.Codigo}`}
               >
                 <ImovelCard
                   imovel={favorito}

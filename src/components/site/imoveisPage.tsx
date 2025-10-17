@@ -317,7 +317,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
 
     const detalhes = [area && `com ${area}`, quartos, suites, vagas]
       .filter(Boolean)
-      .join(", ");
+      .join("-");
 
     const localizacao = [bairro, cidade].filter(Boolean).join(" ");
 
@@ -814,9 +814,9 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
               imoveis.map((imovel: Destaque) => (
                 <Link
                   key={imovel.id}
-                  href={`/imovel/${encodeURIComponent(
-                    toSlug(gerarTitulos(imovel))
-                  )}/${imovel.Codigo}${isMobile ? "#main" : ""}`}
+                  href={`/imovel/${toSlug(gerarTitulos(imovel))}/${
+                    imovel.Codigo
+                  }${isMobile ? "#main" : ""}`}
                 >
                   <ImovelCard imovel={imovel} activeTab={searchData.action} />
                 </Link>

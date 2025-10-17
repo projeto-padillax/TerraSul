@@ -94,7 +94,7 @@ export default async function SemelhantesSection({
         {itens.map((imovel) => (
           <Link
             key={imovel.Codigo}
-            href={`/imovel/${encodeURIComponent(toSlug(gerarTitulo(imovel)))}/${
+            href={`/imovel/${(toSlug(gerarTitulo(imovel)))}/${
               imovel.Codigo
             }`}
             className="block"

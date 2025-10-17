@@ -128,7 +128,7 @@ export function DestaquesSection({ destaques }: DestaquesSectionProps) {
           {todosImoveis.map((imovel: Destaque) => (
             <Link
               key={imovel.id}
-              href={`/imovel/${encodeURIComponent(toSlug(gerarTitulo(imovel)))}/${imovel.Codigo}`}
+              href={`/imovel/${toSlug(gerarTitulo(imovel))}/${imovel.Codigo}`}
             >
               <ImovelCard
                 key={imovel.id}
