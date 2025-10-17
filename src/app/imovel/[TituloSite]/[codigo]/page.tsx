@@ -14,6 +14,7 @@ import BreadCrumb from "@/components/site/filteredBreadcrumb";
 import LocalizacaoBox from "@/components/site/localizacaobox";
 import { Metadata } from "next/dist/types";
 import "./page.css";
+import { formatBRL0, formatIntPtBR, lower } from "@/utils/format";
 
 export async function generateMetadata({
   params,
@@ -250,9 +251,7 @@ export default async function ImovelPage({
                           parseFloat(imovel.ValorCondominio) > 0 && (
                             <span>
                               Condomínio R${" "}
-                              {parseFloat(
-                                imovel.ValorCondominio
-                              ).toLocaleString("pt-BR")}
+                              {formatIntPtBR(parseFloat(imovel.ValorCondominio))}
                               /mês
                             </span>
                           )}
@@ -271,9 +270,7 @@ export default async function ImovelPage({
                           parseFloat(imovel.ValorIptu) > 0 && (
                             <span>
                               IPTU R${" "}
-                              {parseFloat(imovel.ValorIptu).toLocaleString(
-                                "pt-BR"
-                              )}
+                              {formatIntPtBR(parseFloat(imovel.ValorCondominio))}
                             </span>
                           )}
                       </div>
@@ -304,7 +301,7 @@ export default async function ImovelPage({
                           className="text-[#4D4D4D] opacity-70 sm:size-[30px]"
                         />
                         <span className="mt-1 sm:mt-2 text-center leading-5 capitalize">
-                          {(imovel.Categoria ?? "").toLocaleLowerCase("pt-BR")}
+                          {lower(imovel.Categoria ?? "")}
                         </span>
                       </div>
                     )}
@@ -528,19 +525,11 @@ export default async function ImovelPage({
       valorAnterior > 0 &&
       valorAnterior > valorAtual && (
         <span className="text-sm text-gray-500 line-through">
-          {valorAnterior.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-            minimumFractionDigits: 0,
-          })}
+          {formatBRL0(valorAnterior)}
         </span>
       )}
     <span className="text-2xl font-semibold text-[#303030]">
-      {valorAtual.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-        minimumFractionDigits: 0,
-      })}
+      {formatBRL0(valorAtual)}
     </span>
   </div>
 </div>

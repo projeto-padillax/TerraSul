@@ -5,8 +5,8 @@ import Header from "@/components/site/header";
 import ClientLayout from "@/components/client-layout";
 import Footer from "@/components/site/footer";
 import { Filtros } from "@/utils/parseFilter";
-import { capitalize } from "@/lib/utils";
 import ScrollHandler from "@/components/site/scrollHandler";
+import { capitalizePt, formatIntPtBR } from "@/utils/format";
 
 interface Props {
   searchParams: Promise<{
@@ -37,7 +37,7 @@ const buildUrl = (filtros: Filtros) => {
 
  const primeiroTipo = filtros.tipo?.[0]?.split(",")?.map(t => t.trim())?.[0];
   if (primeiroTipo) {
-    tipoTexto = capitalize(primeiroTipo);
+    tipoTexto = capitalizePt(primeiroTipo);
   }
 
   // Tipo de ação
@@ -95,11 +95,11 @@ const buildUrl = (filtros: Filtros) => {
 
   if (filtros.valorMin || filtros.valorMax) {
     if (filtros.valorMin && filtros.valorMax) {
-      titulo += `, entre R$ ${Number(filtros.valorMin).toLocaleString()} e R$ ${Number(filtros.valorMax).toLocaleString()}`;
+      titulo += `, entre R$ ${formatIntPtBR(Number(filtros.valorMin))} e R$ ${formatIntPtBR(Number(filtros.valorMax))}`;
     } else if (filtros.valorMin) {
-      titulo += `, a partir de R$ ${Number(filtros.valorMin).toLocaleString()}`;
+      titulo += `, a partir de R$ ${formatIntPtBR(Number(filtros.valorMin))}`;
     } else if (filtros.valorMax) {
-      titulo += `, até R$ ${Number(filtros.valorMax).toLocaleString()}`;
+      titulo += `, até R$ ${formatIntPtBR(Number(filtros.valorMax))}`;
     }
   }
 
