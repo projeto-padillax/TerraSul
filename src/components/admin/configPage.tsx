@@ -1,8 +1,13 @@
 "use client";
 
+import { useState, useTransition } from "react";
+import Image from "next/image";
+import { CldUploadWidget } from "next-cloudinary";
+
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,17 +18,17 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { useTransition } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "@radix-ui/react-label";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import {
   createConfiguracaoPagina,
   updateConfiguracaoPagina,
 } from "@/lib/actions/config";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { ImageIcon, X } from "lucide-react";
 
 const enderecoSchema = z.object({
   titulo: z.string().optional(),
@@ -60,35 +65,14 @@ const siteConfigSchema = z.object({
   nomeSite: z.string().nullable(),
   CRECI: z.string().nullable(),
   sobreNos: z.string().nullable(),
-  logoUrl: z.string().nullable(),
-  linkedInUrl: z
-    .string()
-    .url("URL do LinkedIn inválida.")
-    .nullable()
-    .or(z.literal("")),
-  facebookUrl: z
-    .string()
-    .url("URL do Facebook inválida.")
-    .nullable()
-    .or(z.literal("")),
-  instagramUrl: z
-    .string()
-    .url("URL do Instagram inválida.")
-    .nullable()
-    .or(z.literal("")),
-  youtubeUrl: z
-    .string()
-    .url("URL do YouTube inválida.")
-    .nullable()
-    .or(z.literal("")),
-  twitterUrl: z
-    .string()
-    .url("URL do Twitter inválida.")
-    .nullable()
-    .or(z.literal("")),
-  whatsappNumber: z
-    .string()
-    .nullable(),
+  logoUrl: z.string().url("URL inválida").nullable().or(z.literal("")),
+  publicId: z.string().nullable().or(z.literal("")),
+  linkedInUrl: z.string().url("URL do LinkedIn inválida.").nullable().or(z.literal("")),
+  facebookUrl: z.string().url("URL do Facebook inválida.").nullable().or(z.literal("")),
+  instagramUrl: z.string().url("URL do Instagram inválida.").nullable().or(z.literal("")),
+  youtubeUrl: z.string().url("URL do YouTube inválida.").nullable().or(z.literal("")),
+  twitterUrl: z.string().url("URL do Twitter inválida.").nullable().or(z.literal("")),
+  whatsappNumber: z.string().nullable(),
   enderecos: z.array(enderecoSchema),
 });
 
@@ -109,6 +93,7 @@ export default function SiteConfigForm({
       CRECI: "",
       sobreNos: "",
       logoUrl: "",
+      publicId: "",
       linkedInUrl: "",
       facebookUrl: "",
       instagramUrl: "",
@@ -138,6 +123,10 @@ export default function SiteConfigForm({
     },
   });
 
+  const [previewLogo, setPreviewLogo] = useState<string>(
+    (defaultValues?.logoUrl as string) ?? ""
+  );
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "enderecos",
@@ -155,6 +144,12 @@ export default function SiteConfigForm({
       toast.success("Página editada com sucesso!");
       router.push("/admin");
     });
+  };
+
+  const clearLogo = () => {
+    form.setValue("logoUrl", "");
+    form.setValue("publicId", "");
+    setPreviewLogo("");
   };
 
   return (
@@ -204,19 +199,93 @@ export default function SiteConfigForm({
               )}
             />
 
+            {/* === LOGO: URL manual OU Upload === */}
             <FormField
               control={form.control}
               name="logoUrl"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Logo URL</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ""} />
-                  </FormControl>
+                <FormItem className="space-y-2">
+                  <FormLabel>Logo</FormLabel>
+                  <div className="flex flex-col gap-3">
+                    <FormControl>
+                      <Input
+                        placeholder="https://exemplo.com/logo.png"
+                        {...field}
+                        value={field.value ?? ""}
+                        onChange={(e) => {
+                          field.onChange(e.target.value);
+                          setPreviewLogo(e.target.value);
+                        }}
+                      />
+                    </FormControl>
+
+                    <div className="flex items-center gap-3">
+                      <CldUploadWidget
+                        options={{
+                          clientAllowedFormats: ["png", "jpeg", "jpg", "webp", "svg"],
+                          multiple: false,
+                        }}
+                        uploadPreset="grupo-souze-unsigned"
+                        onSuccess={(result) => {
+                          if (result?.info && typeof result.info !== "string") {
+                            const url = result.info.secure_url as string;
+                            const publicId = result.info.public_id as string;
+                            field.onChange(url);
+                            form.setValue("publicId", publicId);
+                            setPreviewLogo(url);
+                            toast.success("Logo enviado.");
+                          }
+                        }}
+                        onError={(err) => {
+                          console.error(err);
+                          toast.error("Falha no upload do logo.");
+                        }}
+                      >
+                        {({ open }: { open: () => void }) => (
+                          <button
+                            type="button"
+                            onClick={open}
+                            className="text-sm text-blue-700 font-semibold bg-blue-50 hover:bg-blue-100 rounded-md px-3 py-1.5 cursor-pointer inline-flex items-center gap-2"
+                          >
+                            <ImageIcon className="h-4 w-4" />
+                            Enviar imagem
+                          </button>
+                        )}
+                      </CldUploadWidget>
+
+                      {previewLogo ? (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="cursor-pointer h-8 px-2"
+                          onClick={clearLogo}
+                        >
+                          <X className="h-4 w-4 mr-1" />
+                          Remover logo
+                        </Button>
+                      ) : null}
+                    </div>
+
+                    {previewLogo ? (
+                      <div className="mt-1">
+                        <Image
+                          src={previewLogo}
+                          alt="Preview do logo"
+                          width={200}
+                          height={80}
+                          className="rounded-md border border-gray-200 object-contain bg-white"
+                        />
+                      </div>
+                    ) : null}
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {/* hidden publicId */}
+            <input type="hidden" {...form.register("publicId")} />
+
+            {/* === /LOGO === */}
 
             <div className="space-y-6">
               <h2 className="text-xl font-semibold text-gray-900 border-b pb-2">
@@ -412,11 +481,11 @@ export default function SiteConfigForm({
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem
                                 value="whatsapp"
-                                id="whatsapp"
+                                id={`whatsapp-1-${index}`}
                                 className="scale-110"
                               />
                               <Label
-                                htmlFor="whatsapp"
+                                htmlFor={`whatsapp-1-${index}`}
                                 className="text-gray-700 text-base font-medium"
                               >
                                 Whatsapp
@@ -425,11 +494,11 @@ export default function SiteConfigForm({
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem
                                 value="telefone"
-                                id="telefone"
+                                id={`telefone-1-${index}`}
                                 className="scale-110"
                               />
                               <Label
-                                htmlFor="telefone"
+                                htmlFor={`telefone-1-${index}`}
                                 className="text-gray-700 text-base font-medium"
                               >
                                 Telefone
@@ -453,6 +522,7 @@ export default function SiteConfigForm({
                     )}
                   />
                 </div>
+
                 <div className="space-y-2">
                   <FormField
                     control={form.control}
@@ -483,11 +553,11 @@ export default function SiteConfigForm({
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem
                                 value="whatsapp"
-                                id="whatsapp"
+                                id={`whatsapp-2-${index}`}
                                 className="scale-110"
                               />
                               <Label
-                                htmlFor="whatsapp"
+                                htmlFor={`whatsapp-2-${index}`}
                                 className="text-gray-700 text-base font-medium"
                               >
                                 Whatsapp
@@ -496,11 +566,11 @@ export default function SiteConfigForm({
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem
                                 value="telefone"
-                                id="telefone"
+                                id={`telefone-2-${index}`}
                                 className="scale-110"
                               />
                               <Label
-                                htmlFor="telefone"
+                                htmlFor={`telefone-2-${index}`}
                                 className="text-gray-700 text-base font-medium"
                               >
                                 Telefone
@@ -524,6 +594,7 @@ export default function SiteConfigForm({
                     )}
                   />
                 </div>
+
                 <div className="space-y-2">
                   <FormField
                     control={form.control}
@@ -554,11 +625,11 @@ export default function SiteConfigForm({
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem
                                 value="whatsapp"
-                                id="whatsapp"
+                                id={`whatsapp-3-${index}`}
                                 className="scale-110"
                               />
                               <Label
-                                htmlFor="whatsapp"
+                                htmlFor={`whatsapp-3-${index}`}
                                 className="text-gray-700 text-base font-medium"
                               >
                                 Whatsapp
@@ -567,11 +638,11 @@ export default function SiteConfigForm({
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem
                                 value="telefone"
-                                id="telefone"
+                                id={`telefone-3-${index}`}
                                 className="scale-110"
                               />
                               <Label
-                                htmlFor="telefone"
+                                htmlFor={`telefone-3-${index}`}
                                 className="text-gray-700 text-base font-medium"
                               >
                                 Telefone
@@ -608,6 +679,7 @@ export default function SiteConfigForm({
             </CardContent>
           </Card>
         ))}
+
         <div className="justify-self-center ">
           <Button
             className="mr-8 cursor-pointer"
@@ -637,11 +709,7 @@ export default function SiteConfigForm({
             Adicionar Endereço
           </Button>
 
-          <Button
-            type="submit"
-            className="mt-6 cursor-pointer"
-            disabled={isPending}
-          >
+          <Button type="submit" className="mt-6 cursor-pointer" disabled={isPending}>
             {isPending ? "Salvando..." : "Salvar Configurações"}
           </Button>
         </div>

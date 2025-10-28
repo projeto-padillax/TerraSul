@@ -138,6 +138,7 @@ model ConfiguracaoPagina {
   nomeSite       String?
   CRECI          String? @unique
   logoUrl        String?
+  publicId       String?
   facebookUrl    String?
   instagramUrl   String?
   youtubeUrl     String?

@@ -6,21 +6,11 @@ import { prisma } from "../neon/db";
 const enderecoSchema = z.object({
   titulo: z.string().optional(),
   rua: z.string().max(200, "Rua deve ter no máximo 200 caracteres.").optional(),
-  bairro: z
-    .string()
-    .max(100, "Bairro deve ter no máximo 100 caracteres.")
-    .optional(),
-  cidade: z
-    .string()
-    .max(100, "Cidade deve ter no máximo 100 caracteres.")
-    .optional(),
+  bairro: z.string().max(100, "Bairro deve ter no máximo 100 caracteres.").optional(),
+  cidade: z.string().max(100, "Cidade deve ter no máximo 100 caracteres.").optional(),
   estado: z.string().optional(),
   cep: z.string().max(10, "CEP deve ter no máximo 10 caracteres.").optional(),
-  linkGoogleMaps: z
-    .string()
-    .url("URL do Google Maps inválida.")
-    .or(z.literal(""))
-    .optional(),
+  linkGoogleMaps: z.string().url("URL do Google Maps inválida.").or(z.literal("")).optional(),
   telefone1: z.string().optional(),
   isWhatsApp1: z.boolean().optional(),
   tituloTelefone1: z.string().optional(),
@@ -33,50 +23,18 @@ const enderecoSchema = z.object({
 });
 
 const configuracaoServerSchema = z.object({
-  nomeSite: z
-    .string()
-    .max(100, "Nome do site deve ter no máximo 100 caracteres.")
-    .nullable(),
-  CRECI: z
-    .string()
-    .max(20, "CRECI deve ter no máximo 20 caracteres.")
-    .nullable(),
+  nomeSite: z.string().max(100, "Nome do site deve ter no máximo 100 caracteres.").nullable(),
+  CRECI: z.string().max(20, "CRECI deve ter no máximo 20 caracteres.").nullable(),
   logoUrl: z.string().url("URL do logo inválida.").nullable().or(z.literal("")),
-  facebookUrl: z
-    .string()
-    .url("URL do Facebook inválida.")
-    .nullable()
-    .or(z.literal("")),
-  instagramUrl: z
-    .string()
-    .url("URL do Instagram inválida.")
-    .nullable()
-    .or(z.literal("")),
-  youtubeUrl: z
-    .string()
-    .url("URL do YouTube inválida.")
-    .nullable()
-    .or(z.literal("")),
-  twitterUrl: z
-    .string()
-    .url("URL do Twitter inválida.")
-    .nullable()
-    .or(z.literal("")),
-  whatsappNumber: z
-    .string()
-    .nullable(),
-  linkedInUrl: z
-    .string()
-    .url("URL do LinkedIn inválida.")
-    .nullable()
-    .or(z.literal("")),
-  sobreNos: z
-    .string()
-    .max(2000, "Sobre nós deve ter no máximo 2000 caracteres.")
-    .nullable(),
-  enderecos: z
-    .array(enderecoSchema)
-    .max(10, "Máximo de 10 endereços permitidos."),
+  publicId: z.string().nullable().or(z.literal("")),
+  facebookUrl: z.string().url("URL do Facebook inválida.").nullable().or(z.literal("")),
+  instagramUrl: z.string().url("URL do Instagram inválida.").nullable().or(z.literal("")),
+  youtubeUrl: z.string().url("URL do YouTube inválida.").nullable().or(z.literal("")),
+  twitterUrl: z.string().url("URL do Twitter inválida.").nullable().or(z.literal("")),
+  whatsappNumber: z.string().nullable(),
+  linkedInUrl: z.string().url("URL do LinkedIn inválida.").nullable().or(z.literal("")),
+  sobreNos: z.string().max(2000, "Sobre nós deve ter no máximo 2000 caracteres.").nullable(),
+  enderecos: z.array(enderecoSchema).max(10, "Máximo de 10 endereços permitidos."),
 });
 
 export type configuracaoSchema = z.infer<typeof configuracaoServerSchema>;
@@ -89,6 +47,7 @@ export async function getConfiguracaoPagina(): Promise<configuracaoSchema | null
         nomeSite: true,
         CRECI: true,
         logoUrl: true,
+        publicId: true,
         facebookUrl: true,
         instagramUrl: true,
         youtubeUrl: true,
@@ -122,11 +81,11 @@ export async function getConfiguracaoPagina(): Promise<configuracaoSchema | null
 
     if (!record) return null;
 
-    // Sanitização do retorno (evita valores null/undefined)
     const sanitized: configuracaoSchema = {
       nomeSite: record.nomeSite ?? "",
       CRECI: record.CRECI ?? "",
       logoUrl: record.logoUrl ?? "",
+      publicId: record.publicId ?? "", // <-- FIX: sanitização consistente
       facebookUrl: record.facebookUrl ?? "",
       instagramUrl: record.instagramUrl ?? "",
       youtubeUrl: record.youtubeUrl ?? "",
@@ -206,8 +165,6 @@ export async function getSobreNos(): Promise<string | null> {
     });
 
     if (!record) return null;
-
-    // Sanitiza: garante string, mesmo se vier null
     return record.sobreNos ?? "";
   } catch (error) {
     console.error("Erro ao buscar 'Sobre nós':", error);
@@ -231,6 +188,7 @@ export async function createConfiguracaoPagina(
         nomeSite: validatedData.nomeSite ?? "",
         CRECI: validatedData.CRECI ?? "",
         logoUrl: validatedData.logoUrl ?? "",
+        publicId: validatedData.publicId ?? "", // <-- FIX: salvar publicId na criação
         facebookUrl: validatedData.facebookUrl ?? "",
         instagramUrl: validatedData.instagramUrl ?? "",
         youtubeUrl: validatedData.youtubeUrl ?? "",
@@ -280,11 +238,8 @@ export async function updateConfiguracaoPagina(
 
     const validatedData = configuracaoServerSchema.parse(configuracao);
 
-    // Estratégia: Deletar endereços e telefones antigos e recriar tudo (mais simples)
     await prisma.endereco.deleteMany({
-      where: {
-        configuracaoId: existingConfig.id,
-      },
+      where: { configuracaoId: existingConfig.id },
     });
 
     await prisma.configuracaoPagina.update({
@@ -293,6 +248,7 @@ export async function updateConfiguracaoPagina(
         nomeSite: validatedData.nomeSite ?? "",
         CRECI: validatedData.CRECI ?? "",
         logoUrl: validatedData.logoUrl ?? "",
+        publicId: validatedData.publicId ?? "", // <-- FIX: atualizar publicId também
         facebookUrl: validatedData.facebookUrl ?? "",
         instagramUrl: validatedData.instagramUrl ?? "",
         youtubeUrl: validatedData.youtubeUrl ?? "",
@@ -329,22 +285,28 @@ export async function updateConfiguracaoPagina(
     console.error("Erro ao atualizar configuração da página:", error);
     throw new Error("Erro ao atualizar configuração da página");
   }
-
 }
 
-export async function getLogo(){
+export async function getLogo() {
   try {
     const record = await prisma.configuracaoPagina.findFirst({
       orderBy: { id: "asc" },
-      select: { logoUrl: true },
+      select: { logoUrl: true, publicId: true },
     });
 
     if (!record) return null;
-
-    // Sanitiza: garante string, mesmo se vier null
     return record.logoUrl ?? "";
   } catch (error) {
     console.error("Erro ao buscar logo:", error);
     throw new Error("Erro ao buscar logo");
   }
+}
+
+export async function getLogoInfo() {
+  const record = await prisma.configuracaoPagina.findFirst({
+    orderBy: { id: "asc" },
+    select: { logoUrl: true, publicId: true },
+  });
+  if (!record) return { logoUrl: "", publicId: "" };
+  return { logoUrl: record.logoUrl ?? "", publicId: record.publicId ?? "" };
 }
