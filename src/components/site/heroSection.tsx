@@ -182,7 +182,7 @@ export function HeroSection(banner: HeroSectionProps) {
       <div
         className={`z-10 py-8 px-8 sm:px-10 md:px-0 w-full h-full flex flex-col max-w-7xl`}
       >
-        <div className="pt-6 md:pt-4 lg:pt-2.5">
+        <div className="md:pt-4 lg:pt-2.5">
           <Link
             href={banner.url ?? ""}
             className="text-4xl md:text-5xl font-semibold text-white mb-4 leading-tight font-[Montserrat, sans-serif]"
@@ -190,7 +190,7 @@ export function HeroSection(banner: HeroSectionProps) {
             {banner.titulo}
           </Link>
           {banner.subtitulo && (
-            <p className="text-xl text-white mb-24 md:mb-[160px]">
+            <p className="text-xl text-white mb-8 md:mb-[160px]">
               {banner.subtitulo}
             </p>
           )}

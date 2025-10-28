@@ -67,11 +67,31 @@ const siteConfigSchema = z.object({
   sobreNos: z.string().nullable(),
   logoUrl: z.string().url("URL inválida").nullable().or(z.literal("")),
   publicId: z.string().nullable().or(z.literal("")),
-  linkedInUrl: z.string().url("URL do LinkedIn inválida.").nullable().or(z.literal("")),
-  facebookUrl: z.string().url("URL do Facebook inválida.").nullable().or(z.literal("")),
-  instagramUrl: z.string().url("URL do Instagram inválida.").nullable().or(z.literal("")),
-  youtubeUrl: z.string().url("URL do YouTube inválida.").nullable().or(z.literal("")),
-  twitterUrl: z.string().url("URL do Twitter inválida.").nullable().or(z.literal("")),
+  linkedInUrl: z
+    .string()
+    .url("URL do LinkedIn inválida.")
+    .nullable()
+    .or(z.literal("")),
+  facebookUrl: z
+    .string()
+    .url("URL do Facebook inválida.")
+    .nullable()
+    .or(z.literal("")),
+  instagramUrl: z
+    .string()
+    .url("URL do Instagram inválida.")
+    .nullable()
+    .or(z.literal("")),
+  youtubeUrl: z
+    .string()
+    .url("URL do YouTube inválida.")
+    .nullable()
+    .or(z.literal("")),
+  twitterUrl: z
+    .string()
+    .url("URL do Twitter inválida.")
+    .nullable()
+    .or(z.literal("")),
   whatsappNumber: z.string().nullable(),
   enderecos: z.array(enderecoSchema),
 });
@@ -212,60 +232,69 @@ export default function SiteConfigForm({
                         placeholder="https://exemplo.com/logo.png"
                         {...field}
                         value={field.value ?? ""}
-                        onChange={(e) => {
-                          field.onChange(e.target.value);
-                          setPreviewLogo(e.target.value);
-                        }}
+                        // onChange={(e) => {
+                        //   // field.onChange(e.target.value);
+                        //   setPreviewLogo(e.target.value);
+                        // }}
                       />
                     </FormControl>
-
-                    <div className="flex items-center gap-3">
-                      <CldUploadWidget
-                        options={{
-                          clientAllowedFormats: ["png", "jpeg", "jpg", "webp", "svg"],
-                          multiple: false,
-                        }}
-                        uploadPreset="grupo-souze-unsigned"
-                        onSuccess={(result) => {
-                          if (result?.info && typeof result.info !== "string") {
-                            const url = result.info.secure_url as string;
-                            const publicId = result.info.public_id as string;
-                            field.onChange(url);
-                            form.setValue("publicId", publicId);
-                            setPreviewLogo(url);
-                            toast.success("Logo enviado.");
-                          }
-                        }}
-                        onError={(err) => {
-                          console.error(err);
-                          toast.error("Falha no upload do logo.");
-                        }}
-                      >
-                        {({ open }: { open: () => void }) => (
-                          <button
-                            type="button"
-                            onClick={open}
-                            className="text-sm text-blue-700 font-semibold bg-blue-50 hover:bg-blue-100 rounded-md px-3 py-1.5 cursor-pointer inline-flex items-center gap-2"
-                          >
-                            <ImageIcon className="h-4 w-4" />
-                            Enviar imagem
-                          </button>
-                        )}
-                      </CldUploadWidget>
-
-                      {previewLogo ? (
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="cursor-pointer h-8 px-2"
-                          onClick={clearLogo}
+                    <FormControl>
+                      <div className="flex items-center gap-3">
+                        <CldUploadWidget
+                          options={{
+                            clientAllowedFormats: [
+                              "png",
+                              "jpeg",
+                              "jpg",
+                              "webp",
+                              "svg",
+                            ],
+                            multiple: false,
+                          }}
+                          uploadPreset="grupo-souze-unsigned"
+                          onSuccess={(result) => {
+                            if (
+                              result?.info &&
+                              typeof result.info !== "string"
+                            ) {
+                              const url = result.info.secure_url;
+                              const publicId = result.info.public_id;
+                              field.onChange(url);
+                              form.setValue("publicId", publicId);
+                              setPreviewLogo(url);
+                              toast.success("Logo enviado.");
+                            }
+                          }}
+                          onError={(err) => {
+                            console.error(err);
+                            toast.error("Falha no upload do logo.");
+                          }}
                         >
-                          <X className="h-4 w-4 mr-1" />
-                          Remover logo
-                        </Button>
-                      ) : null}
-                    </div>
+                          {({ open }: { open: () => void }) => (
+                            <button
+                              type="button"
+                              onClick={() => open()}
+                              className="text-sm text-blue-700 font-semibold bg-blue-50 hover:bg-blue-100 rounded-md px-3 py-1.5 cursor-pointer inline-flex items-center gap-2"
+                            >
+                              <ImageIcon className="h-4 w-4" />
+                              Enviar imagem
+                            </button>
+                          )}
+                        </CldUploadWidget>
 
+                        {previewLogo ? (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="cursor-pointer h-8 px-2"
+                            onClick={clearLogo}
+                          >
+                            <X className="h-4 w-4 mr-1" />
+                            Remover logo
+                          </Button>
+                        ) : null}
+                      </div>
+                    </FormControl>
                     {previewLogo ? (
                       <div className="mt-1">
                         <Image
@@ -273,7 +302,7 @@ export default function SiteConfigForm({
                           alt="Preview do logo"
                           width={200}
                           height={80}
-                          className="rounded-md border border-gray-200 object-contain bg-white"
+                          className="rounded-md border-gray-200 object-contain bg-white"
                         />
                       </div>
                     ) : null}
@@ -709,7 +738,11 @@ export default function SiteConfigForm({
             Adicionar Endereço
           </Button>
 
-          <Button type="submit" className="mt-6 cursor-pointer" disabled={isPending}>
+          <Button
+            type="submit"
+            className="mt-6 cursor-pointer"
+            disabled={isPending}
+          >
             {isPending ? "Salvando..." : "Salvar Configurações"}
           </Button>
         </div>
