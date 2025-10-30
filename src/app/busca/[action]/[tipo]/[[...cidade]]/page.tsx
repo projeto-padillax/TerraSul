@@ -164,10 +164,15 @@ export default async function Imoveis({ searchParams }: Props) {
     empreendimento: awaitedSearchParams.empreendimento || ""
   };
 
+    const tituloH1 = buildUrl(initialFiltros);
+
   return (
     <ClientLayout>
       <Header />
-      <ImoveisPage filtros={initialFiltros}/>
+      <main>
+        <h1 className="sr-only">{tituloH1}</h1>
+        <ImoveisPage filtros={initialFiltros}/>
+      </main>
       <ScrollHandler />
       <Footer />
     </ClientLayout>
