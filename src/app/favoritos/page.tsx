@@ -8,7 +8,7 @@ import { getSecao } from "@/lib/actions/secoes";
 import { Metadata } from "next/types";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const secao = await getSecao(5);
+  const secao = await getSecao(6);
 
   return {
     title: secao?.titulo,
