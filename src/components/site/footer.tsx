@@ -51,20 +51,20 @@ export default async function Footer() {
                 >
                   <FaFacebook className="w-7 h-7 text-site-primary" />
                 </a>)}
-                <a
-                  href="https://www.instagram.com/terrasul_imoveis/"
+                {siteConfig?.instagramUrl && <a
+                  href={siteConfig.instagramUrl}
                   className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
                   aria-label="Instagram"
                 >
                   <FaInstagram className="w-7 h-7 text-site-primary" />
-                </a>
-                <a
-                  href="https://www.youtube.com/@souzasouza3147"
+                </a>}
+                {siteConfig?.youtubeUrl && <a
+                  href={siteConfig?.youtubeUrl}
                   className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
                   aria-label="YouTube"
                 >
                   <FaYoutube className="w-7 h-7 text-site-primary" />
-                </a>
+                </a>}
               </div>
             </div>
           </div>

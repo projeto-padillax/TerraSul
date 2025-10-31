@@ -13,7 +13,6 @@ import FavoriteButton from "@/components/site/favoritosButton";
 import BreadCrumb from "@/components/site/filteredBreadcrumb";
 import LocalizacaoBox from "@/components/site/localizacaobox";
 import { Metadata } from "next/dist/types";
-import "./page.css";
 import { formatBRL0, formatIntPtBR, lower } from "@/utils/format";
 
 export async function generateMetadata({
@@ -185,7 +184,7 @@ export default async function ImovelPage({
       </div>
       <main className="flex-1 pb-8">
         <div className="py-4 justify-items-center">
-          <section className="px-8 sm:px-10 md:px-0 w-full max-w-7xl mb-4">
+          <section className="px-8 hidden md:block sm:px-10 md:px-0 w-full max-w-7xl mb-4">
             <div className="justify-between items-center">
               <nav className="text-sm text-gray-500">
                 <BreadCrumb />

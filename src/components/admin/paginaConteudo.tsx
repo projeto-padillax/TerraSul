@@ -64,6 +64,7 @@ export default function PaginaConteudo({ initialContentPages }: Props) {
   });
 
   useEffect(() => {
+    console.log(initialContentPages)
     const combinedData = [...pages].map((item) => ({
       id: item.id,
       titulo: item.titulo,
@@ -79,7 +80,7 @@ export default function PaginaConteudo({ initialContentPages }: Props) {
   }, [pages]);
 
   function formatPageUrl(titulo: string) {
-    return `${process.env.NEXT_PUBLIC_BASE_URL || ""}/pagina/${encodeURIComponent(titulo.toLowerCase())}`;
+    return `${process.env.NEXT_PUBLIC_BASE_URL || ""}pagina/${encodeURIComponent(titulo.toLowerCase())}`;
   }
 
   const formattedDate = (date: Date) => {

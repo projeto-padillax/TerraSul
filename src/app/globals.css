@@ -173,7 +173,7 @@ html {
   }
 
   .text-shadow {
-    text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.50);
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.50);
   }
 
   .text-shadow-lg {

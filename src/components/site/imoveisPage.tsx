@@ -334,31 +334,12 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   const handleSearchByCode = async (code: string) => {
     if (!code) return;
     try {
-      if (!searchData) {
-        console.error("searchData não definido");
-        return;
-      }
-
-      const tipo =
-        searchData.tipos && searchData.tipos.length > 0
-          ? searchData.tipos[0].replace("/", "-")
-          : "Imovel";
-
-      const location =
-        searchData.locations && searchData.locations.length > 0
-          ? searchData.locations[0].split(":")[0] +
-          "+" +
-          searchData.locations[0].split(":")[1]
-          : "porto alegre";
-
-      if (!code) {
-        console.error("code não definido");
-        return;
-      }
+      const res = await fetch(`/api/vista/imoveis/${code}`)
+      const data = await res.json()
 
       router.push(
-        `/imovel/comprar+${tipo}+em+${location}/${code}${isMobile ? "#main" : ""
-        }`
+        `/imovel/${toSlug(gerarTitulos(data))}/${code}${isMobile ? "#main" : ""
+        }`,
       );
     } catch (error) {
       console.error("Falha ao buscar imóveis:", error);
@@ -754,13 +735,13 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         <h1 className="sr-only">
           {titulo || "Imóveis à venda e para alugar em Porto Alegre"}
         </h1>
-        <div className="py-8 justify-items-center scroll-smooth">
+        {!isMobile && (<div className="py-8 justify-items-center scroll-smooth">
           <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl">
             <div className="rounded-sm select-none mt-3">
               <BreadCrumb />
             </div>
           </div>
-        </div>
+        </div>)}
         <div
           className="justify-items-center scroll-mt-8 scroll-smooth"
           id="ImoveisSection"

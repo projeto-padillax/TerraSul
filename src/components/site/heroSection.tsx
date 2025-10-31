@@ -330,14 +330,14 @@ export function HeroSection(banner: HeroSectionProps) {
           <div className="flex justify-start items-center text-white mt-2 mb-3 bg-transparent">
             <Button
               onClick={() => handleAdvancedSearch()}
-              className="text-xs w-[152px] font-semibold flex items-center border border-transparent gap-1 bg-transparent hover:bg-transparent focus:ring-2 focus:ring-white has-[>svg]:px-0 cursor-pointer mr-4"
+              className="text-xs w-[152px] font-semibold flex items-center shadow-none border-transparent gap-1 bg-transparent hover:bg-transparent focus:ring-2 focus:ring-white has-[>svg]:px-0 cursor-pointer mr-4"
             >
-              BUSCA AVANÇADA <SlidersHorizontal className="h-4 w-5" />
+              <span className="text-shadow">BUSCA AVANÇADA</span> <SlidersHorizontal className="h-4 w-5" />
             </Button>
             {!isSearching ? (
               <Button
                 onClick={() => setIsSearching(true)}
-                className="text-xs w-[152px] font-semibold flex items-center border border-transparent gap-1 bg-transparent hover:bg-transparent focus:ring-2 focus:ring-white has-[>svg]:px-0 cursor-pointer"
+                className="text-xs w-[152px] font-semibold flex items-center shadow-none border-transparent gap-1 bg-transparent hover:bg-transparent focus:ring-2 focus:ring-white has-[>svg]:px-0 cursor-pointer"
               >
                 <span className="text-shadow">BUSCA POR CÓDIGO</span> <Search className="h-4 w-5" />
               </Button>

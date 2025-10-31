@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Header from "@/components/site/header";
 import Footer from "@/components/site/footer";
-import { getPaginaByTitle } from "@/lib/actions/contentPages";
+import { getPaginaByUrl } from "@/lib/actions/contentPages";
 import "@/app/html-padrao.css";
 import BreadCrumb from "@/components/site/filteredBreadcrumb";
 
@@ -11,8 +11,22 @@ interface DynamicPageProps {
 
 export default async function DynamicPage({ params }: DynamicPageProps) {
   const tituloOriginal = await params.then((p) => p.titulo);
-  const titulo = decodeURIComponent(tituloOriginal);
-  const pageData = await getPaginaByTitle(titulo);
+  const formatPageUrl = (titulo: string) => {
+    return `${process.env.NEXT_PUBLIC_BASE_URL || ""}/pagina/${slugify(
+      titulo
+    )}`;
+  };
+
+  function slugify(text: string): string {
+    return text
+      .normalize("NFD") // separa acentos das letras
+      .replace(/[\u0300-\u036f]/g, "") // remove acentos
+      .replace(/[^a-zA-Z0-9\s-]/g, "") // remove caracteres especiais
+      .trim() // remove espaços no início e fim
+      .replace(/\s+/g, "-") // troca espaços por hífens
+  }
+  const titulo = formatPageUrl(tituloOriginal);
+  const pageData = await getPaginaByUrl(titulo);
   if (!pageData) notFound();
 
   return (

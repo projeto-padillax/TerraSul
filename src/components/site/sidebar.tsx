@@ -73,7 +73,7 @@ export default function Sidebar({ dynamicItems }: SidebarProps) {
     { title: "Sobre a Empresa", href: "/empresa" },
     { title: "Contato", href: "/contato" },
     { title: "Política de Privacidade", href: "/politica-de-privacidade" },
-  ];
+  ];  
 
   const handleDynamicItemClick = async (item: PaginasConteudo) => {
     if (item.tipo === "link" && item.url) {
@@ -83,7 +83,7 @@ export default function Sidebar({ dynamicItems }: SidebarProps) {
         router.push(item.url);
       }
     } else if (item.tipo === "pagina" && item.titulo) {
-      router.push(`/pagina/${encodeURIComponent(item.titulo)}`);
+      router.push(item.url || "/");
     }
     setIsOpen(false);
   };
@@ -216,16 +216,11 @@ export default function Sidebar({ dynamicItems }: SidebarProps) {
 
           {dynamicItems.length > 0 && (
             <div className="border-b border-site-primary w-9/12 ml-4">
-              <div className="py-3">
-                <h3 className="font-semibold text-gray-800 text-sm uppercase tracking-wide">
-                  Páginas Adicionais
-                </h3>
-              </div>
               {dynamicItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => handleDynamicItemClick(item)}
-                  className="w-full flex items-center justify-between py-3 text-gray-600 hover:text-site-primary transition-colors text-left"
+                  className="w-full flex items-center cursor-pointer justify-between py-3 text-gray-600 hover:text-site-primary transition-colors text-left"
                 >
                   <span>{item.titulo}</span>
                 </button>

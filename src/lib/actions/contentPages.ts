@@ -179,10 +179,22 @@ export async function getPaginaById(id: number) {
 
 export async function getPaginaByTitle(titulo: string) {
   try {
-    console.log(titulo)
     return await prisma.paginasConteudo.findFirst({
       where: { titulo: {
         equals: titulo,
+        mode: 'insensitive'
+      } }
+    });
+  } catch (error) {
+    console.error('Erro ao buscar página:', error);
+    throw new Error('Erro ao buscar página');
+  }
+}
+export async function getPaginaByUrl(url: string) {
+  try {
+    return await prisma.paginasConteudo.findFirst({
+      where: { url: {
+        equals: url,
         mode: 'insensitive'
       } }
     });
