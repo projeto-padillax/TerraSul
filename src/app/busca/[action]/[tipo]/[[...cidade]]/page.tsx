@@ -73,45 +73,6 @@ const buildUrl = (filtros: Filtros) => {
   return titulo.trim();
 };
 
-const canonicalFrom = (f: Filtros) => {
-  // Ordena/normaliza para evitar canônicas diferentes com mesma intenção.
-  const params = new URLSearchParams();
-  if (f.action) params.set("action", f.action);
-  if (f.tipo?.length) params.set("tipos", f.tipo.join("_"));
-  if (f.cidade) params.set("cidade", f.cidade);
-  if (f.bairro?.length) params.set("bairro", f.bairro.join("_"));
-  if (f.valorMin) params.set("valorMin", f.valorMin);
-  if (f.valorMax) params.set("valorMax", f.valorMax);
-  if (f.quartos) params.set("quartos", f.quartos);
-  if (f.areaMinima) params.set("areaMinima", f.areaMinima);
-  if (f.suites) params.set("suites", f.suites);
-  if (f.vagas) params.set("vagas", f.vagas);
-  if (f.caracteristicas?.length) params.set("caracteristicas", f.caracteristicas.join("_"));
-  if (f.lancamentos) params.set("lancamentos", f.lancamentos);
-  if (f.codigo) params.set("codigo", f.codigo);
-  if (f.sort) params.set("sort", f.sort);
-  if (f.empreendimento) params.set("empreendimento", f.empreendimento);
-  // Inclui paginação na canonical para evitar conteúdos “idênticos” com URLs diferentes.
-  if (f.page) params.set("page", f.page);
-
-  const qs = params.toString();
-  return qs ? `/busca?${qs}` : `/busca`;
-};
-
-const buildKeywords = (f: Filtros) => {
-  const base = [
-    "imóveis", "imobiliária", "comprar imóvel", "alugar imóvel", "apartamento", "casa", "lançamento",
-  ];
-  const extras = [
-    f.cidade, ...(f.bairro || []),
-    ...(f.tipo || []).flatMap(t => t.split(",").map(s => s.trim())),
-  ].filter(Boolean) as string[];
-
-  // dedup/limpa
-  const set = new Set<string>([...base, ...extras].map(k => k.toLowerCase()));
-  return Array.from(set);
-};
-
 // --- types ---
 interface Props {
   searchParams: Promise<{
