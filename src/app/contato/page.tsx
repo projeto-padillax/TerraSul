@@ -69,11 +69,42 @@ export default async function Contatos() {
             <h1 className="text-2xl md:text-3xl font-semibold text-[#111] mb-4">
               {secao.tituloh1 || "Fale conosco"}
             </h1>
-            <p className="text-lg text-[#444] leading-relaxed whitespace-pre-line">
+
+            <p className="text-lg text-[#444] leading-relaxed whitespace-pre-line mb-6">
               {secao.textoPagina?.trim()
                 ? secao.textoPagina
-                : "Conteúdo indisponível no momento."}
+                : `Entre em contato com nossa equipe para tirar dúvidas, solicitar avaliações de imóveis,
+agendar visitas ou obter suporte sobre anúncios. Atendemos proprietários, compradores e locatários com respostas rápidas e objetivas.`}
             </p>
+
+            {/* Texto adicional para SEO (sem alterar CSS/estrutura) */}
+            <div className="space-y-4 text-[#444] leading-relaxed">
+              <p>
+                Se você quer vender ou alugar, informe dados essenciais: endereço, metragem, número de quartos e vagas,
+                valor pretendido e diferenciais do imóvel. Quanto mais detalhes, mais assertivo será nosso retorno.
+              </p>
+              <p>
+                Para quem busca um imóvel, descreva a região de interesse, faixa de preço, tipologia (casa, apartamento,
+                sala comercial), metragem mínima, número de quartos/suítes e vagas. Assim filtramos as melhores opções.
+              </p>
+              <p>
+                Canais de atendimento: formulário desta página, e-mail e telefone. Nosso time prioriza solicitações com
+                informações completas e fotos atualizadas. Em caso de visita, indique sua disponibilidade de dias e horários.
+              </p>
+              <p>
+                Política de privacidade e LGPD: tratamos seus dados apenas para responder à sua solicitação e intermediar
+                o atendimento. Você pode pedir atualização ou exclusão a qualquer momento.
+              </p>
+              <p>
+                Dúvidas frequentes: prazos para retorno, documentos necessários para avaliação, como anunciar um imóvel,
+                como agendar visita e formas de pagamento de caução/garantia. Se preferir, descreva seu caso no campo de
+                mensagem que retornamos com as instruções.
+              </p>
+              <p className="mb-0">
+                Endereços e áreas de atendimento: trabalhamos com os principais bairros e empreendimentos da região. Caso
+                seu imóvel esteja fora da área de atuação, indicamos parceiros qualificados para agilizar o processo.
+              </p>
+            </div>
           </div>
         </section>
 
