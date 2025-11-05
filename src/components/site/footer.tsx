@@ -44,27 +44,33 @@ export default async function Footer() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
               <span className="text-sm">Siga-nos</span>
               <div className="flex space-x-3">
-                {siteConfig?.facebookUrl && (<a
-                  href={siteConfig.facebookUrl}
-                  className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
-                  aria-label="Instagram"
-                >
-                  <FaFacebook className="w-7 h-7 text-site-primary" />
-                </a>)}
-                {siteConfig?.instagramUrl && <a
-                  href={siteConfig.instagramUrl}
-                  className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
-                  aria-label="Instagram"
-                >
-                  <FaInstagram className="w-7 h-7 text-site-primary" />
-                </a>}
-                {siteConfig?.youtubeUrl && <a
-                  href={siteConfig?.youtubeUrl}
-                  className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
-                  aria-label="YouTube"
-                >
-                  <FaYoutube className="w-7 h-7 text-site-primary" />
-                </a>}
+                {siteConfig?.facebookUrl && (
+                  <a
+                    href={siteConfig.facebookUrl}
+                    className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
+                    aria-label="Instagram"
+                  >
+                    <FaFacebook className="w-7 h-7 text-site-primary" />
+                  </a>
+                )}
+                {siteConfig?.instagramUrl && (
+                  <a
+                    href={siteConfig.instagramUrl}
+                    className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
+                    aria-label="Instagram"
+                  >
+                    <FaInstagram className="w-7 h-7 text-site-primary" />
+                  </a>
+                )}
+                {siteConfig?.youtubeUrl && (
+                  <a
+                    href={siteConfig?.youtubeUrl}
+                    className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
+                    aria-label="YouTube"
+                  >
+                    <FaYoutube className="w-7 h-7 text-site-primary" />
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -108,7 +114,21 @@ export default async function Footer() {
                     {endereco.titulo || "Sede"} {index + 1}
                   </h2>
                   <div className="flex flex-row flex-wrap items-center text-[#303030] gap-4">
-                    <span className="w-max text-sm">{endereco.rua}</span>
+                    {endereco.linkGoogleMaps ? (
+                      <Link
+                        href={endereco.linkGoogleMaps}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-max text-sm hover:underline"
+                      >
+                        {endereco.rua}
+                      </Link>
+                    ) : (
+                      <span className="w-max text-sm cursor-default">
+                        {endereco.rua}
+                      </span>
+                    )}
+
                     {endereco.telefone1 && (
                       <Link
                         href={
@@ -120,7 +140,9 @@ export default async function Footer() {
                       >
                         <span className="lg:ml-2 flex items-center gap-0.5 text-sm">
                           {endereco.tituloTelefone1 != "" ? (
-                            <strong className="text-sm">{endereco.tituloTelefone1}</strong>
+                            <strong className="text-sm">
+                              {endereco.tituloTelefone1}
+                            </strong>
                           ) : endereco.isWhatsApp1 ? (
                             <FaWhatsapp></FaWhatsapp>
                           ) : (
@@ -141,7 +163,9 @@ export default async function Footer() {
                       >
                         <span className="lg:ml-2 flex items-center gap-0.5 text-sm text-[#303030]">
                           {endereco.tituloTelefone2 != "" ? (
-                            <strong className="text-sm">{endereco.tituloTelefone2}</strong>
+                            <strong className="text-sm">
+                              {endereco.tituloTelefone2}
+                            </strong>
                           ) : endereco.isWhatsApp2 ? (
                             <FaWhatsapp></FaWhatsapp>
                           ) : (
@@ -162,7 +186,9 @@ export default async function Footer() {
                       >
                         <span className="lg:ml-2 flex items-center gap-0.5 text-sm text-[#303030]">
                           {endereco.tituloTelefone3 != "" ? (
-                            <strong className="text-sm">{endereco.tituloTelefone3}</strong>
+                            <strong className="text-sm">
+                              {endereco.tituloTelefone3}
+                            </strong>
                           ) : endereco.isWhatsApp3 ? (
                             <FaWhatsapp></FaWhatsapp>
                           ) : (

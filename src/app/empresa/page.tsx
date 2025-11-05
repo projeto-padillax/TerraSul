@@ -1,4 +1,4 @@
-export const revalidate = 3600;
+export const revalidate = 0;
 
 import Image from "next/image";
 import Header from "@/components/site/header";
