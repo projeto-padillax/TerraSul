@@ -134,10 +134,31 @@ interface Props {
   }>;
 }
 
-// --- metadata (única fonte de metas para evitar duplicatas) ---
+// helpers
+const canonicalFromRaw = (q: Record<string, string | undefined>) => {
+  const params = new URLSearchParams();
+  const keys = [
+    "action","tipos","cidade","bairro","valorMin","valorMax",
+    "quartos","areaMinima","suites","vagas","caracteristicas",
+    "lancamentos","codigo","sort","empreendimento","page",
+  ];
+
+  for (const k of keys) {
+    const v = q[k];
+    if (!v) continue;
+    if (k === "page" && v === "1") continue; // não canonicar page=1
+    params.set(k, v);
+  }
+
+  const qs = params.toString();
+  return qs ? `/busca?${qs}` : `/busca`;
+};
+
+// metadata
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const q = await searchParams;
 
+  // monta filtros como antes (para title/description)
   const filtros: Filtros = {
     action: q.action ?? "comprar",
     tipo: q.tipos ? q.tipos.split("_") : [],
@@ -160,26 +181,15 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   const tituloBase = buildUrl(filtros);
   const title = `${tituloBase} | TerraSul`;
   const description = `Lista de ${tituloBase}. Explore ofertas atualizadas com filtros por preço, quartos, vagas e localização.`;
-  const canonical = canonicalFrom(filtros);
-  const keywords = buildKeywords(filtros);
+  const canonical = canonicalFromRaw(q); // << usa a query bruta, sem defaults
 
   return {
     title,
     description,
     alternates: { canonical },
-    keywords,
-    openGraph: {
-      type: "website",
-      url: canonical,
-      title,
-      description,
-    },
-    twitter: {
-      card: "summary",
-      title,
-      description,
-    },
-    robots: { index: true, follow: true }, // ajuste se quiser noindex em páginas profundas
+    openGraph: { type: "website", url: canonical, title, description },
+    twitter: { card: "summary", title, description },
+    robots: { index: true, follow: true },
   };
 }
 
