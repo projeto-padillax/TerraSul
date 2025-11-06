@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/imovel-:slug(.*)-:codigo",
+        destination: "/imovel/:slug/:codigo",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
@@ -9,9 +18,9 @@ const nextConfig: NextConfig = {
         pathname: "**", // aceita qualquer path desse domínio
       },
       {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        pathname: '**',
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "**",
       },
     ],
   },
