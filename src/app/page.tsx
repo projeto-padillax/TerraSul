@@ -37,7 +37,7 @@ export default async function Home() {
         <Header />
         <main className="flex-1 pb-8">
           <h1 className="sr-only">
-            Imobiliária TerraSul - Encontre seu imóvel ideal em Porto Alegre e região
+            Imobiliária TerraSul - Imóveis à Venda e Locação em Porto Alegre
           </h1>
 
           <HeroSection
@@ -51,50 +51,43 @@ export default async function Home() {
           <DestaquesSection destaques={destaques} />
           <MostSearched />
 
-          {/* Texto oculto apenas para SEO */}
+          {/* Conteúdo otimizado para SEO */}
           <div className="sr-only">
+            <h2>Imóveis em Porto Alegre e Região</h2>
             <p>
               A <strong>TerraSul Imóveis</strong> é referência no mercado imobiliário de Porto Alegre,
-              oferecendo uma ampla variedade de imóveis à venda e para locação nas principais regiões
-              da cidade e da Grande Porto Alegre. Nosso compromisso é conectar pessoas aos seus
-              objetivos, seja encontrar o lar ideal, investir com segurança ou comercializar com
-              agilidade.
+              oferecendo imóveis à venda e para locação em bairros como Tristeza, Cristal, Cavalhada, 
+              Jardim Isabel, Ipanema, Petrópolis e Bela Vista. Nosso compromisso é conectar pessoas aos 
+              seus objetivos imobiliários com segurança e transparência.
             </p>
+
+            <h2>Apartamentos, Casas e Imóveis Comerciais</h2>
             <p>
               Trabalhamos com apartamentos, coberturas, casas, sobrados, terrenos, salas comerciais
-              e lançamentos, sempre prezando pela qualidade e transparência nas negociações. Cada
-              imóvel é cuidadosamente selecionado para garantir as melhores oportunidades em
-              localização, valor e potencial de valorização.
+              e lançamentos imobiliários. Cada imóvel é selecionado para garantir as melhores 
+              oportunidades em localização e valorização no mercado imobiliário gaúcho.
             </p>
+
+            <h3>Corretores Especializados</h3>
             <p>
-              Nossa equipe de corretores é formada por profissionais credenciados, preparados para
-              atender com agilidade e ética, oferecendo suporte completo durante todas as etapas da
-              compra, venda ou locação. Valorizamos o atendimento humanizado e o relacionamento
-              duradouro com nossos clientes.
+              Nossa equipe de corretores credenciados no CRECI oferece atendimento personalizado e 
+              suporte completo durante compra, venda ou locação de imóveis. Valorizamos o relacionamento 
+              duradouro e a confiança com nossos clientes.
             </p>
+
+            <h3>Tecnologia e Busca Inteligente</h3>
             <p>
-              Acreditamos que a tecnologia é uma aliada essencial na busca pelo imóvel ideal. Por isso,
-              nosso site foi desenvolvido para proporcionar uma experiência intuitiva e eficiente:
-              filtros inteligentes, tour virtual, busca por bairros e tipos de imóvel, além de um
-              sistema de favoritos para facilitar comparações e decisões.
+              Nosso site oferece filtros inteligentes, tour virtual 360°, busca por bairros e tipos 
+              de imóvel, além de sistema de favoritos para facilitar sua decisão de compra ou locação 
+              em Porto Alegre e Grande Porto Alegre.
             </p>
+
+            <h2>Por que escolher a TerraSul Imóveis</h2>
             <p>
-              Entre as regiões mais procuradas de Porto Alegre estão bairros tradicionais como
-              Tristeza, Cristal, Cavalhada, Jardim Isabel, Ipanema, Petrópolis e Bela Vista. Cada um
-              oferece características únicas, desde áreas residenciais tranquilas até zonas com intensa
-              vida comercial e cultural.
-            </p>
-            <p>
-              Se você está buscando um novo imóvel, explore nossas seções de Destaques, Lançamentos e
-              Mais Procurados. Lá você encontra as melhores ofertas atualizadas diariamente. E, se
-              preferir, entre em contato para receber uma consultoria personalizada conforme seu perfil
-              e necessidades.
-            </p>
-            <p>
-              A <strong>Imobiliária TerraSul</strong> atua há anos no mercado imobiliário gaúcho com
-              credibilidade e resultados comprovados. Nosso objetivo é tornar a jornada de compra ou
-              venda de um imóvel mais simples, segura e transparente. Seja bem-vindo ao seu novo
-              começo com a TerraSul Imóveis.
+              A Imobiliária TerraSul atua há anos no mercado com credibilidade e resultados comprovados. 
+              Oferecemos consultoria personalizada, suporte para financiamento imobiliário, avaliação 
+              gratuita de imóveis e gestão completa de locação. Explore nossos Destaques e Lançamentos 
+              ou entre em contato para atendimento personalizado.
             </p>
           </div>
 
