@@ -846,44 +846,44 @@ export async function PUT() {
   }
 }
 
-export async function DELETE() {
-  try {
-    // 1. Deletar todas as Características
-    // Isso deve ser feito antes de deletar os Imóveis se não houver onDelete: Cascade
-    const deleteCaracteristicasResult = await prisma.caracteristica.deleteMany(
-      {}
-    );
-    console.log(
-      `Deletadas ${deleteCaracteristicasResult.count} características.`
-    );
+// export async function DELETE() {
+//   try {
+//     // 1. Deletar todas as Características
+//     // Isso deve ser feito antes de deletar os Imóveis se não houver onDelete: Cascade
+//     const deleteCaracteristicasResult = await prisma.caracteristica.deleteMany(
+//       {}
+//     );
+//     console.log(
+//       `Deletadas ${deleteCaracteristicasResult.count} características.`
+//     );
 
-    // 2. Deletar todas as Fotos
-    // Isso também deve ser feito antes de deletar os Imóveis se não houver onDelete: Cascade
-    const deleteFotosResult = await prisma.foto.deleteMany({});
-    console.log(`Deletadas ${deleteFotosResult.count} fotos.`);
+//     // 2. Deletar todas as Fotos
+//     // Isso também deve ser feito antes de deletar os Imóveis se não houver onDelete: Cascade
+//     const deleteFotosResult = await prisma.foto.deleteMany({});
+//     console.log(`Deletadas ${deleteFotosResult.count} fotos.`);
 
-    // 3. Deletar todos os Imóveis
-    // Agora que as relações (filhos) foram deletadas, os Imóveis (pais) podem ser deletados
-    const deleteImoveisResult = await prisma.imovel.deleteMany({});
-    console.log(`Deletados ${deleteImoveisResult.count} imóveis.`);
+//     // 3. Deletar todos os Imóveis
+//     // Agora que as relações (filhos) foram deletadas, os Imóveis (pais) podem ser deletados
+//     const deleteImoveisResult = await prisma.imovel.deleteMany({});
+//     console.log(`Deletados ${deleteImoveisResult.count} imóveis.`);
 
-    return NextResponse.json({
-      message:
-        "Todos os dados (características, fotos e imóveis) foram deletados com sucesso.",
-      totalCaracteristicasDeleted: deleteCaracteristicasResult.count,
-      totalFotosDeleted: deleteFotosResult.count,
-      totalImoveisDeleted: deleteImoveisResult.count,
-    });
-  } catch (error: any) {
-    console.error("Erro ao deletar todos os dados:", error);
-    return NextResponse.json(
-      {
-        error: "Erro interno do servidor ao deletar todos os dados.",
-        details: error.message,
-      },
-      { status: 500 }
-    );
-  } finally {
-    await prisma.$disconnect(); // Desconecta o Prisma Client após a operação
-  }
-}
+//     return NextResponse.json({
+//       message:
+//         "Todos os dados (características, fotos e imóveis) foram deletados com sucesso.",
+//       totalCaracteristicasDeleted: deleteCaracteristicasResult.count,
+//       totalFotosDeleted: deleteFotosResult.count,
+//       totalImoveisDeleted: deleteImoveisResult.count,
+//     });
+//   } catch (error: any) {
+//     console.error("Erro ao deletar todos os dados:", error);
+//     return NextResponse.json(
+//       {
+//         error: "Erro interno do servidor ao deletar todos os dados.",
+//         details: error.message,
+//       },
+//       { status: 500 }
+//     );
+//   } finally {
+//     await prisma.$disconnect(); // Desconecta o Prisma Client após a operação
+//   }
+// }
