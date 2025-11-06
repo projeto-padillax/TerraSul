@@ -204,6 +204,15 @@ export default async function Footer() {
             </div>
           </div>
         </div>
+        <div className="py-4 border-b">
+          <p className="text-xs text-[#303030]">
+            TerraSul nasceu e cresceu junto com a zona Sul de Porto Alegre. São
+            50 anos ajudando pessoas e famílias inteiras a encontrar muito mais
+            que um endereço: um lar, um ponto de partida para novas histórias. A
+            cada chave entregue, um sonho realizado, uma família que começa um
+            novo capítulo - e é isso que nos move até hoje.
+          </p>
+        </div>
         <div className="justify-center sm:justify-between pt-4 flex flex-col sm:flex-row items-center w-full pb-16 gap-2">
           <a
             href="https://www.leadlink.com.br/imobiliarias/template/"
