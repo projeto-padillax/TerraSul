@@ -36,7 +36,7 @@ export default async function Home() {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 pb-8">
-          <h1 className="sr-only">
+          <h1 className="absolute">
             Imobiliária TerraSul - Imóveis à Venda e Locação em Porto Alegre
           </h1>
 
