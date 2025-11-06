@@ -215,7 +215,7 @@ export default async function Footer() {
         </div>
         <div className="justify-center sm:justify-between pt-4 flex flex-col sm:flex-row items-center w-full pb-16 gap-2">
           <a
-            href="https://www.leadlink.com.br/imobiliarias/template/"
+            href="https://www.leadlink.com.br/templateseo/"
             className="text-sm text-[#303030]"
           >
             Site desenvolvido por{" "}
