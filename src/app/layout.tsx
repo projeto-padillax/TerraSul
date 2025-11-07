@@ -18,17 +18,7 @@ export const metadata: Metadata = {
   description: "TerraSul",
   icons: {
     icon: [
-      { url: "https://www.terrasulimoveis.com.br/uploads/favicon/favicon.ico" },
-      {
-        url: "https://www.terrasulimoveis.com.br/uploads/favicon/favicon-32x32.png",
-        sizes: "32x32",
-        type: "image/png",
-      },
-      {
-        url: "https://www.terrasulimoveis.com.br/uploads/favicon/favicon-16x16.png",
-        sizes: "16x16",
-        type: "image/png",
-      },
+      { url: "/fav.svg", type: "image/svg+xml" },
     ],
     apple: [
       {
