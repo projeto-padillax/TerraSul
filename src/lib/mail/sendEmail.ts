@@ -10,6 +10,20 @@ export async function sendEmailFormulario(data: FormularioInput, isCodigo78: boo
       user: process.env.MAIL_USER,
       pass: process.env.MAIL_PASS,
     },
+    tls: { rejectUnauthorized: false },
+    connectionTimeout: 10000, 
+  });
+
+  await new Promise((resolve, reject) => {
+    transporter.verify((error, success) => {
+      if (error) {
+        console.error('Erro ao verificar SMTP:', error);
+        reject(error);
+      } else {
+        console.log('Servidor SMTP pronto para enviar e-mails');
+        resolve(success);
+      }
+    });
   });
 
   const htmlBody = `
@@ -42,20 +56,40 @@ export async function sendEmailFormulario(data: FormularioInput, isCodigo78: boo
   </div>
 `;
 
-  if (isCodigo78 || isCodigo78 == undefined){
-    await transporter.sendMail({
+  // if (isCodigo78 || isCodigo78 == undefined){
+  //   await transporter.sendMail({
+  //   from: `"Lead TerraSul" <${process.env.MAIL_USER}>`,
+  //   to: process.env.MAIL_TO_DEFAULT,
+  //   subject: `Lead TerraSul`,
+  //   html: htmlBody,
+  // });
+  // }
+  // else{
+  //   await transporter.sendMail({
+  //     from: `"Lead TerraSul" <${process.env.MAIL_USER}>`,
+  //     to: process.env.MAIL_TO_DEFAULT2,
+  //     subject: `Lead TerraSul`,
+  //     html: htmlBody,
+  //   });
+  // }
+
+  const mailOptions = {
     from: `"Lead TerraSul" <${process.env.MAIL_USER}>`,
-    to: process.env.MAIL_TO_DEFAULT,
-    subject: `Lead TerraSul`,
+    to: isCodigo78 || isCodigo78 == undefined ? process.env.MAIL_TO_DEFAULT : process.env.MAIL_TO_DEFAULT2,
+    subject: 'Lead TerraSul',
     html: htmlBody,
-  });
-  }
-  else{
-    await transporter.sendMail({
-      from: `"Lead TerraSul" <${process.env.MAIL_USER}>`,
-      to: process.env.MAIL_TO_DEFAULT2,
-      subject: `Lead TerraSul`,
-      html: htmlBody,
+  };
+
+  await new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        console.error('Erro ao enviar e-mail:', err);
+        reject(err);
+      } else {
+        console.log('E-mail enviado com sucesso:', info.response);
+        resolve(info);
+      }
     });
-  }
+  });
+
 }
