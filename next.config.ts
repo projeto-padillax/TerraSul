@@ -10,6 +10,18 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: "/blog",
+        destination: "https://blog.terrasulimoveis.com.br/",
+      },
+      {
+        source: "/blog/:path*",
+        destination: "https://blog.terrasulimoveis.com.br/:path*",
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
