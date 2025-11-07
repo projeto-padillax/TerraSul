@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://www.terrasulimoveis.com.br/',
+    sitemap: 'https://www.terrasulimoveis.com.br/sitemap.xml',
   }
 }
