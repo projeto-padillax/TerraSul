@@ -1,30 +1,8 @@
-import nodemailer from 'nodemailer'
 import { FormularioInput } from "../actions/formularios";
+import { Resend } from 'resend';
 
-export async function sendEmailFormulario(data: FormularioInput, isCodigo78: boolean) {
-  const transporter = nodemailer.createTransport({
-    port: 465,
-    host: process.env.MAIL_HOST,
-    secure: true,
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS,
-    },
-    tls: { rejectUnauthorized: false },
-    connectionTimeout: 10000, 
-  });
-
-  await new Promise((resolve, reject) => {
-    transporter.verify((error, success) => {
-      if (error) {
-        console.error('Erro ao verificar SMTP:', error);
-        reject(error);
-      } else {
-        console.log('Servidor SMTP pronto para enviar e-mails');
-        resolve(success);
-      }
-    });
-  });
+export async function sendEmailFormulario(data: FormularioInput, isCodigo78?: boolean) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   const htmlBody = `
   <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; color: #333;">
@@ -56,40 +34,24 @@ export async function sendEmailFormulario(data: FormularioInput, isCodigo78: boo
   </div>
 `;
 
-  // if (isCodigo78 || isCodigo78 == undefined){
-  //   await transporter.sendMail({
-  //   from: `"Lead TerraSul" <${process.env.MAIL_USER}>`,
-  //   to: process.env.MAIL_TO_DEFAULT,
-  //   subject: `Lead TerraSul`,
-  //   html: htmlBody,
-  // });
-  // }
-  // else{
-  //   await transporter.sendMail({
-  //     from: `"Lead TerraSul" <${process.env.MAIL_USER}>`,
-  //     to: process.env.MAIL_TO_DEFAULT2,
-  //     subject: `Lead TerraSul`,
-  //     html: htmlBody,
-  //   });
-  // }
+  const to =
+    isCodigo78 || isCodigo78 == undefined
+      ? process.env.MAIL_TO_DEFAULT
+      : process.env.MAIL_TO_DEFAULT2;
 
-  const mailOptions = {
-    from: `"Lead TerraSul" <${process.env.MAIL_USER}>`,
-    to: isCodigo78 || isCodigo78 == undefined ? process.env.MAIL_TO_DEFAULT : process.env.MAIL_TO_DEFAULT2,
-    subject: 'Lead TerraSul',
-    html: htmlBody,
-  };
+  const from = process.env.MAIL_USER;
 
-  await new Promise((resolve, reject) => {
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) {
-        console.error('Erro ao enviar e-mail:', err);
-        reject(err);
-      } else {
-        console.log('E-mail enviado com sucesso:', info.response);
-        resolve(info);
-      }
+  try {
+    const result = await resend.emails.send({
+      from: `TerraSul <${from}>`,
+      to: to!,
+      subject: 'Lead TerraSul',
+      html: htmlBody,
     });
-  });
+
+    console.log('E-mail enviado:', result);
+  } catch (error) {
+    console.error('Erro ao enviar e-mail:', error);
+  }
 
 }
