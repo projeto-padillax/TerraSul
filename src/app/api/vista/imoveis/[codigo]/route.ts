@@ -8,10 +8,10 @@ export async function GET(
 ) {
   try {
     const { codigo } = await params; // Destructure codigo directly from params
-
+    const codigoUppercase = codigo.toUpperCase()
     const imovel = await prisma.imovel.findUnique({
       where: {
-        id: codigo, // Query by the 'Codigo' field in your Prisma schema
+        id: codigoUppercase, // Query by the 'Codigo' field in your Prisma schema
       },
       include: {
         fotos: {

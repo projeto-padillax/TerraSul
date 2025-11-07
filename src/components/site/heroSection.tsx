@@ -101,7 +101,7 @@ export function HeroSection(banner: HeroSectionProps) {
         : "porto alegre"
     }`;
     router.push(
-      `${decodeURIComponent(path)}?${decodeURIComponent(
+      `${decodeURIComponent(path).replaceAll(" ", "-")}?${decodeURIComponent(
         params.toString()
       )}${isMobile ? "#ImoveisSection" : ""}`
     );
@@ -140,7 +140,7 @@ export function HeroSection(banner: HeroSectionProps) {
             searchData.locations[0].split(":")[1]
           : "porto alegre";
 
-      router.push(`/imovel/comprar+${tipo}+em+${location}/${codigo}`);
+      router.push(`/imovel/comprar-${tipo.replace(/[\u0300-\u036f]/g, "")}-em-${location.replaceAll(" ", "-")}/${codigo}`);
     } catch (error) {
       console.error("Falha ao buscar imóveis:", error);
     }

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import MaisInformacoesForm from "./maisInformacoesForm";
 import FormularioModal from "./formularioModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AgendamentoModal from "./agendamentoModal";
 import { CorretorExterno } from "@prisma/client";
 import Link from "next/link";
@@ -31,6 +31,10 @@ export default function ImovelContatoBox({
   const [modalAberta, setModalAberta] = useState(false);
   const [tipoModal, setTipoModal] = useState<"whatsapp" | "financiamento" | null>(null);
   const { setIsModalOpen } = useModal();
+
+  useEffect(()=>{
+    console.log(corretor)
+  },[])
 
   const abrirModal = (tipo: "whatsapp" | "financiamento") => {
     setTipoModal(tipo);
@@ -65,14 +69,14 @@ export default function ImovelContatoBox({
               <div className="text-[12px] text-black flex items-center gap-5">
                 <button
                   type="button"
-                  className="bg-[#25d366] hover:bg-[#1ebe5d] p-1 px-2 rounded-lg text-white transition duration-300 transform hover:shadow-lg cursor-pointer"
+                  className="bg-[#25d366]  hover:bg-[#1ebe5d] p-1 px-2 rounded-lg text-white transition duration-300 transform hover:shadow-lg cursor-pointer"
                   onClick={() => abrirModal("whatsapp")}
                 >
                   Enviar WhatsApp
                 </button>
 
                 <Link
-                  href="https://wa.me/5551981214507"
+                  href="tel:+555132577777"
                   className="bg-black p-1 px-2 rounded-lg text-white transition duration-300 transform hover:bg-[#303030] hover:shadow-lg cursor-pointer"
                   aria-label="Ligar para o número (51) 3257-7777"
                 >
@@ -101,7 +105,7 @@ export default function ImovelContatoBox({
             {isVenda && (
               <button
                 onClick={() => abrirModal("financiamento")}
-                className="text-[12px] border-b border-grey-300 pb-[1px] text-[#303030] hover:text-black hover:border-black transition lg:w-fit"
+                className="text-[12px] cursor-pointer border-b border-grey-300 pb-[1px] text-[#303030] hover:text-black hover:border-black transition lg:w-fit"
               >
                 Simular financiamento
               </button>
@@ -117,7 +121,7 @@ export default function ImovelContatoBox({
 
           <button
             onClick={() => setAbrirAgendamento(true)}
-            className="mt-4 w-full hover:bg-gray-100 text-black font-medium text-sm py-3 px-4 rounded-[8px] flex items-center gap-2 justify-center transition"
+            className="mt-4 w-full cursor-pointer hover:bg-gray-100 text-black font-medium text-sm py-3 px-4 rounded-[8px] flex items-center gap-2 justify-center transition"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

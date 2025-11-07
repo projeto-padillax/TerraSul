@@ -152,7 +152,7 @@ export default function ContatoForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex items-center gap-3 px-6 py-3 rounded-md bg-site-primary hover:bg-[#426db0] text-white font-medium transition"
+          className="inline-flex items-center cursor-pointer gap-3 px-6 py-3 rounded-md bg-site-primary hover:bg-[#426db0] text-white font-medium transition"
         >
           {isPending ? (
             <div className="h-4 w-4 animate-spin border-2 border-white border-t-transparent rounded-full" />

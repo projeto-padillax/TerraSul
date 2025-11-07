@@ -38,10 +38,6 @@ function formatPtBR(d: Date | string | null | undefined): string {
     });
 }
 
-function shortId(id: string): string {
-    if (!id) return "-";
-    return id.slice(-6).toUpperCase();
-}
 
 function humanizeEnum(value?: string | null): string {
     if (!value) return "-";
@@ -66,7 +62,7 @@ export function FormulariosTable({
         { key: "url", label: "URL" },
         { key: "formulario", label: "Formulário" },
         { key: "origem", label: "Origem" },
-        { key: "interesse", label: "Interesse" },
+        // { key: "interesse", label: "Interesse" },
         { key: "data", label: "Data" },
     ] as const;
 
@@ -111,7 +107,7 @@ export function FormulariosTable({
                             </TableCell>
 
                             <TableCell className="py-5 text-center">
-                                <span className="text-gray-900 text-base">{shortId(item.id)}</span>
+                                <span className="text-gray-900 text-base">{item.codigoImovel || "-"}</span>
                             </TableCell>
 
                             <TableCell className="py-5 text-center">
@@ -157,11 +153,11 @@ export function FormulariosTable({
                                 <span className="text-gray-900 text-base">{humanizeEnum(item.origem)}</span>
                             </TableCell>
 
-                            <TableCell className="py-5 text-center">
+                            {/* <TableCell className="py-5 text-center">
                                 <span className="text-gray-900 text-base">
                                     {item.interesse ? humanizeEnum(item.interesse) : "-"}
                                 </span>
-                            </TableCell>
+                            </TableCell> */}
 
                             <TableCell className="py-5 text-center">
                                 <span className="text-gray-900 text-base">{formatPtBR(item.dataEnvio)}</span>

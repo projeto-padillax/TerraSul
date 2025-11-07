@@ -90,7 +90,7 @@ export default function FormularioModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
       <div className="bg-white w-full max-w-md p-6 rounded-2xl shadow-lg relative">
-        <button onClick={onClose} className="absolute top-4 right-4">
+        <button onClick={onClose} className="absolute top-4 right-4 cursor-pointer">
           <X className="w-5 h-5" />
         </button>
 
@@ -169,7 +169,7 @@ export default function FormularioModal({
           <button
             type="submit"
             disabled={isPending}
-            className="mt-3 w-full bg-site-primary hover:bg-site-primary-hover text-white font-medium text-sm py-3 px-4 rounded-xl flex items-center gap-2 justify-center transition"
+            className="mt-3 w-full cursor-pointer bg-site-primary hover:bg-site-primary-hover text-white font-medium text-sm py-3 px-4 rounded-xl flex items-center gap-2 justify-center transition"
           >
             {isPending ? (
               <div className="h-4 w-4 animate-spin border-2 border-white border-t-transparent rounded-full" />

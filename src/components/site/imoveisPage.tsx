@@ -94,9 +94,9 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       locations: searchParams.get("cidade")
         ? searchParams.get("bairro")
           ? searchParams
-            .get("bairro")!
-            .split(",")
-            .map((b) => `${searchParams.get("cidade")}:${b}`)
+              .get("bairro")!
+              .split(",")
+              .map((b) => `${searchParams.get("cidade")}:${b}`)
           : [searchParams.get("cidade")!] // só cidade, sem ":"
         : [],
       valueRange: {
@@ -132,10 +132,11 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
       pathLocation = bairro ? `${cidade}+${bairro}` : cidade;
     }
 
-    const path = `/busca/${searchData.action}/${searchData.tipos.length > 0
+    const path = `/busca/${searchData.action}/${
+      searchData.tipos.length > 0
         ? searchData.tipos[0].replace("/", "-")
         : "imoveis"
-      }/${pathLocation}`;
+    }/${pathLocation.replaceAll(" ", "-")}`;
     if (searchData.action) newSearchParams.set("action", searchData.action);
     if (searchData.tipos?.length > 0)
       newSearchParams.set("tipos", searchData.tipos.join(","));
@@ -169,7 +170,8 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     if (sortOrder) newSearchParams.set("sort", sortOrder);
     newSearchParams.set("page", String(page));
     router.push(
-      `${path}?${decodeURIComponent(newSearchParams.toString())}${isMobile ? "#ImoveisSection" : ""
+      `${path}?${decodeURIComponent(newSearchParams.toString())}${
+        isMobile ? "#ImoveisSection" : ""
       }`,
       { scroll: false }
     );
@@ -217,20 +219,23 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
 
     // Quartos
     if (searchData.quartos !== "") {
-      titulo += `, com ${searchData.quartos}+ quarto${searchData.quartos !== "1" ? "s" : ""
-        }`;
+      titulo += `, com ${searchData.quartos}+ quarto${
+        searchData.quartos !== "1" ? "s" : ""
+      }`;
     }
 
     // Suítes
     if (searchData.suites !== "") {
-      titulo += `, com ${searchData.suites}+ suíte${searchData.suites !== "1" ? "s" : ""
-        }`;
+      titulo += `, com ${searchData.suites}+ suíte${
+        searchData.suites !== "1" ? "s" : ""
+      }`;
     }
 
     // Vagas
     if (searchData.vagas !== "") {
-      titulo += `, com ${searchData.vagas}+ vaga${searchData.vagas !== "1" ? "s" : ""
-        }`;
+      titulo += `, com ${searchData.vagas}+ vaga${
+        searchData.vagas !== "1" ? "s" : ""
+      }`;
     }
 
     // Área mínima
@@ -270,10 +275,16 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   function toSlug(text: string): string {
     return (
       text
-        // .normalize("NFD") // separa acentos das letras
-        .trim() // remove espaços extras do começo/fim
-        .replace(/\s+/g, "-") // troca espaços por -
-        .replace(/-+/g, "-")
+        .normalize("NFD") // separa acentos das letras
+        .replace(/[\u0300-\u036f]/g, "") // remove os acentos
+        .toLowerCase() // converte pra minúsculas
+        // .replace(/(?!\d\.\d)\./g, "") // remove outros pontos que não fazem parte de números
+        // remove tudo que não for letra, número, espaço, ponto ou hífen
+        .replace(/[^a-z0-9.\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-") // troca espaços por hífen
+        .replace(/-+/g, "-") // evita múltiplos hífens
+        .replace(" ", "-")
     ); // evita múltiplos hífens
     // .toLowerCase();
   }
@@ -284,7 +295,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
 
     let categoria = imovel.Categoria ? imovel.Categoria : "Imóvel";
 
-    categoria = categoria.replaceAll(" ", "_");
+    categoria = categoria.replaceAll(" ", "-");
     const area =
       imovel.AreaUtil || imovel.AreaTotal
         ? `${imovel.AreaUtil || imovel.AreaTotal}m²`
@@ -300,17 +311,10 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         ? `${imovel.Suites} suíte${imovel.Suites === "1" ? "" : "s"}`
         : "";
 
-    const vagas =
-      imovel.Vagas && imovel.Vagas !== "0"
-        ? `${imovel.Vagas} vaga${imovel.Vagas === "1" ? "" : "s"}`
-        : "";
-
-    const bairro = imovel.Bairro
-      ? `no bairro ${capitalizar(imovel.Bairro)}`
-      : "";
+    const bairro = imovel.Bairro ? `${capitalizar(imovel.Bairro)}` : "";
     const cidade = imovel.Cidade ? `em ${capitalizar(imovel.Cidade)}` : "";
 
-    const detalhes = [area && `com ${area}`, quartos, suites, vagas]
+    const detalhes = [area && `com ${area}`, quartos, suites]
       .filter(Boolean)
       .join("-");
 
@@ -333,16 +337,31 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
 
   const handleSearchByCode = async (code: string) => {
     if (!code) return;
+    const codeUpper = code.toLocaleUpperCase();
     try {
-      const res = await fetch(`/api/vista/imoveis/${code}`)
-      const data = await res.json()
+      const res = await fetch(`/api/vista/imoveis/${codeUpper}`);
+
+      if (!res.ok) {
+        if (res.status === 404) {
+          // router.push(`/busca/comprar/imovel/porto-alegre?action=comprar&codigo=${codeUpper}&page=1`);
+          setImoveis([]);
+          setTotalPages(0);
+          setTotalImoveis(0);
+          gerarTitulo(0);
+          setCodigo('')
+          return;
+        }
+      }
+
+      const data = await res.json();
 
       router.push(
-        `/imovel/${toSlug(gerarTitulos(data))}/${code}${isMobile ? "#main" : ""
-        }`,
+        `/imovel/${toSlug(
+          gerarTitulos(data).replaceAll(" ", "-")
+        )}/${codeUpper}${isMobile ? "#main" : ""}`
       );
     } catch (error) {
-      console.error("Falha ao buscar imóveis:", error);
+      console.error(error)
       setImoveis([]);
     } finally {
       setLoading(false);
@@ -354,19 +373,22 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     try {
       setLoading(true);
 
-      const path = `/busca/${searchData.action}/${searchData.tipos.length > 0
+      const path = `/busca/${searchData.action}/${
+        searchData.tipos.length > 0
           ? searchData.tipos[0].replace("/", "-")
           : "imoveis"
-        }/${searchData.locations.length > 0
+      }/${
+        searchData.locations.length > 0
           ? searchData.locations[0].split(":")[0] +
-          "+" +
-          searchData.locations[0].split(":")[1]
+            "+" +
+            searchData.locations[0].split(":")[1]
           : "porto alegre"
-        }`;
+      }`;
       router.push(
         `${decodeURIComponent(
           path
-        )}?action=comprar&empreendimento=${name}&page=1${isMobile ? "#ImoveisSection" : ""
+        )}?action=comprar&empreendimento=${name}&page=1${
+          isMobile ? "#ImoveisSection" : ""
         }`,
         { scroll: false }
       );
@@ -443,10 +465,11 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                         setPage(1);
                         setEmpreendimento("");
                       }}
-                      className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${searchData.quartos === num.toString()
+                      className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${
+                        searchData.quartos === num.toString()
                           ? "bg-site-primary text-white font-bold"
                           : "bg-white text-black font-normal"
-                        }  hover:bg-site-primary hover:text-white hover:font-bold`}
+                      }  hover:bg-site-primary hover:text-white hover:font-bold`}
                     >
                       {num}+
                     </button>
@@ -559,8 +582,9 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
           </div>
         </div>
         <div
-          className={`bg-white max-w-7xl mx-auto px-4 overflow-hidden border-t-1 transition-all duration-500 scroll-smooth ease-in-out ${showFilters ? "opacity-100 max-h-96 py-4" : "opacity-0 max-h-0 py-0"
-            }`}
+          className={`bg-white max-w-7xl mx-auto px-4 overflow-hidden border-t-1 transition-all duration-500 scroll-smooth ease-in-out ${
+            showFilters ? "opacity-100 max-h-96 py-4" : "opacity-0 max-h-0 py-0"
+          }`}
         >
           <div className="flex flex-col md:flex-row w-[full] justify-start items-center md:gap-2">
             <div className="gap-4 w-full grid grid-cols-2 md:grid md:grid-cols-3 lg:grid lg:auto-cols-auto lg:grid-flow-col lg:grid-cols-none lg:gap-x-1">
@@ -606,10 +630,11 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                         setPage(1); // Reset page to 1 when suites changes
                         setEmpreendimento("");
                       }}
-                      className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${searchData.suites === num.toString()
+                      className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${
+                        searchData.suites === num.toString()
                           ? "bg-site-primary text-white font-bold"
                           : "bg-white text-black font-normal"
-                        }  hover:bg-site-primary hover:text-white hover:font-bold`}
+                      }  hover:bg-site-primary hover:text-white hover:font-bold`}
                     >
                       {num}+
                     </button>
@@ -634,10 +659,11 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                         setPage(1);
                         setEmpreendimento("");
                       }}
-                      className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${searchData.vagas === num.toString()
+                      className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${
+                        searchData.vagas === num.toString()
                           ? "bg-site-primary text-white font-bold"
                           : "bg-white text-black font-normal"
-                        }  hover:bg-site-primary hover:text-white hover:font-bold`}
+                      }  hover:bg-site-primary hover:text-white hover:font-bold`}
                     >
                       {num}+
                     </button>
@@ -653,10 +679,11 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                   {caracteristicas.map((type) => (
                     <div
                       key={type.id}
-                      className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors border-0 shadow-none ${searchData.caracteristicas.includes(type.id)
+                      className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors border-0 shadow-none ${
+                        searchData.caracteristicas.includes(type.id)
                           ? " border shadow-sm"
                           : "hover:bg-gray-50 border border-transparent"
-                        }`}
+                      }`}
                       onClick={() => {
                         setSearchData((prev) => ({
                           ...prev,
@@ -664,8 +691,8 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                             type.id
                           )
                             ? prev.caracteristicas.filter(
-                              (id) => id !== type.id
-                            )
+                                (id) => id !== type.id
+                              )
                             : [...prev.caracteristicas, type.id],
                         }));
                         setPage(1); // Reset page to 1 when caracteristicas changes
@@ -680,8 +707,8 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                             caracteristicas: checked
                               ? [...prev.caracteristicas, type.id] // agora sim, adiciona quando checked = true
                               : prev.caracteristicas.filter(
-                                (id) => id !== type.id
-                              ), // remove quando false
+                                  (id) => id !== type.id
+                                ), // remove quando false
                           }));
                           setPage(1); // Reset page to 1 when caracteristicas changes
                           setEmpreendimento("");
@@ -735,13 +762,15 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
         <h1 className="sr-only">
           {titulo || "Imóveis à venda e para alugar em Porto Alegre"}
         </h1>
-        {!isMobile && (<div className="py-8 justify-items-center scroll-smooth">
-          <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl">
-            <div className="rounded-sm select-none mt-3">
-              <BreadCrumb />
+        {!isMobile && (
+          <div className="py-8 justify-items-center scroll-smooth">
+            <div className="px-8 sm:px-10 md:px-0 w-full max-w-7xl">
+              <div className="rounded-sm select-none mt-3">
+                <BreadCrumb />
+              </div>
             </div>
           </div>
-        </div>)}
+        )}
         <div
           className="justify-items-center scroll-mt-8 scroll-smooth"
           id="ImoveisSection"
@@ -755,7 +784,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                 value={sortOrder}
                 onValueChange={(value) => setSortOrder(value)}
               >
-                <SelectTrigger className="lg:data-[size=default]:h-12 border w-full has-[>svg]:px-3 md:w-fit shadow-none cursor-pointer">
+                <SelectTrigger className="lg:data-[size=default]:h-10 border w-full has-[>svg]:px-3 md:w-fit shadow-none cursor-pointer">
                   <SelectValue placeholder={"Mais recentes"} />
                 </SelectTrigger>
                 <SelectContent>
@@ -784,8 +813,9 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
               imoveis.map((imovel: Destaque) => (
                 <Link
                   key={imovel.id}
-                  href={`/imovel/${toSlug(gerarTitulos(imovel))}/${imovel.Codigo
-                    }${isMobile ? "#main" : ""}`}
+                  href={`/imovel/${toSlug(gerarTitulos(imovel))}/${
+                    imovel.Codigo
+                  }${isMobile ? "#main" : ""}`}
                 >
                   <ImovelCard imovel={imovel} activeTab={searchData.action} />
                 </Link>

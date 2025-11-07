@@ -52,10 +52,11 @@ export async function generateMetadata({
   if (imovel.Vagas && imovel.Vagas != "0") {
     title += `e ${imovel.Vagas} vagas`;
   }
-
+  title += `-${imovel.Codigo}`
+  
   return {
     title: title,
-    description: imovel.Descricao,
+    description: imovel.Descricao + " - " + imovel.Codigo,
     openGraph: {
       images: [
         {
@@ -216,7 +217,7 @@ export default async function ImovelPage({
             <div className="grid grid-cols-1 lg:grid-cols-[3fr_1.25fr] gap-6 lg:gap-8">
               <div className="space-y-8">
                 <div className="space-y-4">
-                  <h1 className="hidden sm:block text-3xl sm:text-4xl font-semibold title-mobile-small">
+                  <h1 className="hidden sm:block text-lg sm:text-xl font-semibold title-mobile-small">
                     {gerarTitulo()}
                   </h1>
 

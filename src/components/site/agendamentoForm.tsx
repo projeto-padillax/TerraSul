@@ -133,8 +133,8 @@ export default function AgendamentoForm({ codigo, codigoCorretor }: AgendamentoF
                             setStartOffset((prev) => Math.max(prev - (isMobile ? 3 : 9), 1))
                         }}
                         className={[
-                            "shrink-0 rounded-xl border border-gray-400 px-2 py-2 hover:bg-gray-50",
-                            canGoBack ? "" : "opacity-40 pointer-events-none"
+                            "shrink-0 rounded-xl border cursor-pointer border-gray-400 px-2 py-2 hover:bg-gray-50",
+                            canGoBack ? "" : "opacity-40 pointer-events-none cursor-pointer"
                         ].join(" ")}
                         aria-label="Voltar datas"
                     >
@@ -156,8 +156,8 @@ export default function AgendamentoForm({ codigo, codigoCorretor }: AgendamentoF
                                             setValue('data', data)
                                         }}
                                         className={[
-                                            'min-w-[85px] rounded-md px-3 py-2 text-[12px] text-center font-semibold',
-                                            'border transition-colors',
+                                            'min-w-[85px] cursor-pointer rounded-md px-3 py-2 text-[12px] text-center font-semibold',
+                                            'border transition-colors cursor-pointer',
                                             isSelecionado
                                                 ? 'bg-site-primary border-site-primary-hover text-white'
                                                 : 'bg-white border-gray-400 text-gray-800 hover:bg-gray-50'
@@ -178,8 +178,8 @@ export default function AgendamentoForm({ codigo, codigoCorretor }: AgendamentoF
                             setStartOffset((prev) => Math.min(prev + (isMobile ? 3 : 9), 14))
                         }}
                         className={[
-                            "shrink-0 rounded-xl border border-gray-400 px-2 py-2 hover:bg-gray-50",
-                            canGoForward ? "" : "opacity-40 pointer-events-none"
+                            "shrink-0 rounded-xl cursor-pointer border border-gray-400 px-2 py-2 hover:bg-gray-50",
+                            canGoForward ? "" : "opacity-40 pointer-events-none cursor-pointer"
                         ].join(" ")}
                         aria-label="Avançar datas"
                     >
@@ -229,7 +229,7 @@ export default function AgendamentoForm({ codigo, codigoCorretor }: AgendamentoF
                         <button
                             type="submit"
                             disabled={isPending}
-                            className="grid h-[50px] place-items-center rounded-xl bg-site-primary px-4 py-3 text-white hover:bg-site-primary-hover disabled:opacity-70"
+                            className="grid h-[50px] place-items-center rounded-xl bg-site-primary px-4 py-3 text-white hover:bg-site-primary-hover disabled:opacity-70 cursor-pointer"
                         >
                             {isPending
                                 ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

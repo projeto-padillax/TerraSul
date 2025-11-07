@@ -4,15 +4,21 @@ import { Imovel } from "@prisma/client";
 import { getAllImoveisForSitemap } from "@/lib/actions/imovel";
 
 function toSlug(text: string): string {
-  return (
-    text
-      // .normalize("NFD") // separa acentos das letras
-      .trim() // remove espaços extras do começo/fim
-      .replace(/\s+/g, "-") // troca espaços por -
-      .replace(/-+/g, "-")
-  ); // evita múltiplos hífens
-  // .toLowerCase();
-}
+    return (
+      text
+        .normalize("NFD") // separa acentos das letras
+        .replace(/[\u0300-\u036f]/g, "") // remove os acentos
+        .toLowerCase() // converte pra minúsculas
+        // .replace(/(?!\d\.\d)\./g, "") // remove outros pontos que não fazem parte de números
+        // remove tudo que não for letra, número, espaço, ponto ou hífen
+        .replace(/[^a-z0-9.\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-") // troca espaços por hífen
+        .replace(/-+/g, "-") // evita múltiplos hífens
+        .replace(" ", "-")
+    ); // evita múltiplos hífens
+    // .toLowerCase();
+  }
 
 type ImovelSitemap = Pick<
   Imovel,
@@ -49,15 +55,11 @@ function gerarTitulos(imovel: ImovelSitemap) {
       ? `${imovel.Suites} suíte${imovel.Suites === "1" ? "" : "s"}`
       : "";
 
-  const vagas =
-    imovel.Vagas && imovel.Vagas !== "0"
-      ? `${imovel.Vagas} vaga${imovel.Vagas === "1" ? "" : "s"}`
-      : "";
 
-  const bairro = imovel.Bairro ? `no bairro ${capitalizar(imovel.Bairro)}` : "";
+  const bairro = imovel.Bairro ? `${capitalizar(imovel.Bairro)}` : "";
   const cidade = imovel.Cidade ? `em ${capitalizar(imovel.Cidade)}` : "";
 
-  const detalhes = [area && `com ${area}`, quartos, suites, vagas]
+  const detalhes = [area && `com ${area}`, quartos, suites]
     .filter(Boolean)
     .join("-");
 
@@ -113,7 +115,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const buildQuery = (params: Record<string, string>) =>
     new URLSearchParams(params).toString().replace(/&/g, "&amp;");
 
-  const cidades = ["porto%20alegre", "eldorado%20do%20sul", "viamão"];
+  const cidades = ["porto-alegre", "eldorado-do-sul", "viamao"];
 
   const searchImoveisRoutes = cidades.flatMap((cidade) =>
     residenciaisTypes.map((tipo) => {

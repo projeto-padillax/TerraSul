@@ -61,6 +61,8 @@ export async function findFormulario(id: string): Promise<Formulario | null> {
 }
 
 export async function createFormulario(input: FormularioInput, codigoCorretor?: string): Promise<void> {
+  console.log(input)
+  console.log(codigoCorretor)
   const validated = formularioServerSchema.parse(input);
 
   await prisma.formulario.create({

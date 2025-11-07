@@ -20,7 +20,7 @@ export default function LocalizacaoBox({
   numero = "",
   cep = "",
 }: LocalizacaoBoxProps) {
-  const [mapaAberto, setMapaAberto] = useState(false);
+  const [mapaAberto, setMapaAberto] = useState(true);
 
   const toPascalCase = (text: string) =>
     text

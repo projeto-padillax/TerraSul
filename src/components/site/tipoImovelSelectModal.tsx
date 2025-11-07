@@ -73,16 +73,16 @@ export function TypeSelectModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-h-[80vh] sm:max-w-sm max-w-sm overflow-hidden flex flex-col w-[80%]">
+      <DialogContent className="max-h-[80vh] max-w-sm overflow-hidden flex flex-col w-fit">
         <DialogHeader className="border-b pb-4">
           <DialogTitle>Tipos de Imóveis</DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto px-6">
+        <div className="flex-1 overflow-y-auto">
           <div className="justify-items-center">
             {/* Residenciais */}
-            <div className="border rounded-lg overflow-hidden">
-              <div className="py-2 pl-3 border-b flex items-center gap-2 border-0 shadow-none bg-site-primary">
+            <div className="rounded-lg overflow-hidden">
+              <div className="flex items-center gap-2 bg-site-primary text-white px-3 py-2 rounded-md">
                 <Checkbox
                   checked={allResidenciaisSelected}
                   ref={(el) => {
