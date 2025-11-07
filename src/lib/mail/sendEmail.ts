@@ -3,9 +3,9 @@ import { FormularioInput } from "../actions/formularios";
 
 export async function sendEmailFormulario(data: FormularioInput, isCodigo78: boolean) {
   const transporter = nodemailer.createTransport({
-    port: 587,
+    port: 465,
     host: process.env.MAIL_HOST,
-    secure: false, // TLS → usar false para 587
+    secure: true,
     auth: {
       user: process.env.MAIL_USER,
       pass: process.env.MAIL_PASS,
