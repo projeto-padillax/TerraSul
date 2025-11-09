@@ -9,7 +9,7 @@ export async function sendEmailFormulario(data: FormularioInput, isCodigo78?: bo
     <div style="max-width: 600px; margin: auto; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
 
       <div style="display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #eee; padding-bottom: 16px; margin-bottom: 24px;">
-        <img src="https://www.terrasulimoveis.com.br/fav.svg" alt="Logo TerraSul" width="40" height="40" style="display: block;" />
+        <img src="https://terra-sul.vercel.app/fav.svg" alt="Logo TerraSul" width="40" height="40" style="display: block;" />
         <h2 style="margin: 0; color: #eda141; font-size: 20px;">Novo Formulário Recebido</h2>
       </div>
 
