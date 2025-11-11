@@ -71,6 +71,7 @@ export default function ImovelContatoBox({
                   type="button"
                   className="bg-[#25d366]  hover:bg-[#1ebe5d] p-1 px-2 rounded-lg text-white transition duration-300 transform hover:shadow-lg cursor-pointer"
                   onClick={() => abrirModal("whatsapp")}
+                  id="form_whats"
                 >
                   Enviar WhatsApp
                 </button>
@@ -79,6 +80,7 @@ export default function ImovelContatoBox({
                   href="tel:+555132577777"
                   className="bg-black p-1 px-2 rounded-lg text-white transition duration-300 transform hover:bg-[#303030] hover:shadow-lg cursor-pointer"
                   aria-label="Ligar para o número (51) 3257-7777"
+                  id="form_ligar"
                 >
                   Ligar
                 </Link>
@@ -106,6 +108,7 @@ export default function ImovelContatoBox({
               <button
                 onClick={() => abrirModal("financiamento")}
                 className="text-[12px] cursor-pointer border-b border-grey-300 pb-[1px] text-[#303030] hover:text-black hover:border-black transition lg:w-fit"
+                id="form_financiamento"
               >
                 Simular financiamento
               </button>
@@ -122,6 +125,7 @@ export default function ImovelContatoBox({
           <button
             onClick={() => setAbrirAgendamento(true)}
             className="mt-4 w-full cursor-pointer hover:bg-gray-100 text-black font-medium text-sm py-3 px-4 rounded-[8px] flex items-center gap-2 justify-center transition"
+            id="form_agendarVisita"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
