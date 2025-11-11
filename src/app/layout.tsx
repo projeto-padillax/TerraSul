@@ -16,6 +16,9 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "LeadLink - TerraSul",
   description: "TerraSul",
+  verification: {
+    google: "Zpz5JJ2ZL7dcNOMPR5VcmDbVRxLHByfCMF_OzC443RQ",
+  },
   icons: {
     apple: [
       {
