@@ -52,8 +52,8 @@ export async function generateMetadata({
   if (imovel.Vagas && imovel.Vagas != "0") {
     title += `e ${imovel.Vagas} vagas`;
   }
-  title += `-${imovel.Codigo}`
-  
+  title += `-${imovel.Codigo}`;
+
   return {
     title: title,
     description: imovel.Descricao + " - " + imovel.Codigo,
@@ -177,6 +177,7 @@ export default async function ImovelPage({
 
   const valorAtual = parseFloat(imovel.ValorVenda || imovel.ValorLocacao);
   const valorAnterior = parsePtBrCurrency(imovel.Desconto);
+  const isRelease = imovel.Lancamento === "Sim";
 
   return (
     <div className="min-h-screen flex flex-col scroll-smooth">
@@ -251,7 +252,9 @@ export default async function ImovelPage({
                           parseFloat(imovel.ValorCondominio) > 0 && (
                             <span>
                               Condomínio R${" "}
-                              {formatIntPtBR(parseFloat(imovel.ValorCondominio))}
+                              {formatIntPtBR(
+                                parseFloat(imovel.ValorCondominio)
+                              )}
                               /mês
                             </span>
                           )}
@@ -270,7 +273,9 @@ export default async function ImovelPage({
                           parseFloat(imovel.ValorIptu) > 0 && (
                             <span>
                               IPTU R${" "}
-                              {formatIntPtBR(parseFloat(imovel.ValorCondominio))}
+                              {formatIntPtBR(
+                                parseFloat(imovel.ValorCondominio)
+                              )}
                             </span>
                           )}
                       </div>
@@ -309,7 +314,6 @@ export default async function ImovelPage({
                     {imovel.Dormitorios > 0 && (
                       <div className="flex flex-col sm:flex-row sm:items-end sm:ml-2">
                         {" "}
-                        {/* Adicionado ml-4 para espaçamento */}
                         <Dot
                           size={25}
                           className="text-site-primary hidden sm:inline-block mr-2"
@@ -515,24 +519,60 @@ export default async function ImovelPage({
                         </div>
                       </div>
                     )}
+
+                    <div className="hidden sm:flex flex-col sm:flex-row sm:items-end sm:ml-2">
+                      <Dot
+                        size={25}
+                        className="text-site-primary hidden sm:inline-block mx-2"
+                      />
+                      <div className="flex flex-col sm:items-start">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
+                          {isRelease && (
+                            <p className="text-xs text-[#303030] leading-none">
+                              A partir de
+                            </p>
+                          )}
+
+                          {typeof valorAnterior === "number" &&
+                            valorAnterior > valorAtual && (
+                              <span className="text-xs sm:text-sm text-gray-500 line-through leading-none">
+                                {valorAnterior.toLocaleString("pt-BR", {
+                                  style: "currency",
+                                  currency: "BRL",
+                                  minimumFractionDigits: 0,
+                                })}
+                              </span>
+                            )}
+                        </div>
+                        <p className="text-[20px] sm:text-[20px] font-semibold text-[#303030] mt-[2px]">
+                          {valorAtual > 0
+                            ? valorAtual.toLocaleString("pt-BR", {
+                                style: "currency",
+                                currency: "BRL",
+                                minimumFractionDigits: 0,
+                              })
+                            : "Consultar"}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-               <div className="sm:hidden my-4">
-  <div className="border-t border-gray-200 mb-3" />
-  <div className="w-full flex items-baseline justify-center gap-3 text-center">
-    {typeof valorAnterior === "number" &&
-      valorAnterior > 0 &&
-      valorAnterior > valorAtual && (
-        <span className="text-sm text-gray-500 line-through">
-          {formatBRL0(valorAnterior)}
-        </span>
-      )}
-    <span className="text-2xl font-semibold text-[#303030]">
-      {formatBRL0(valorAtual)}
-    </span>
-  </div>
-</div>
+                <div className="sm:hidden my-4">
+                  <div className="border-t border-gray-200 mb-3" />
+                  <div className="w-full flex items-baseline justify-center gap-3 text-center">
+                    {typeof valorAnterior === "number" &&
+                      valorAnterior > 0 &&
+                      valorAnterior > valorAtual && (
+                        <span className="text-sm text-gray-500 line-through">
+                          {formatBRL0(valorAnterior)}
+                        </span>
+                      )}
+                    <span className="text-2xl font-semibold text-[#303030]">
+                      {formatBRL0(valorAtual)}
+                    </span>
+                  </div>
+                </div>
 
                 <div className="border-t"></div>
 
@@ -542,7 +582,9 @@ export default async function ImovelPage({
                   </p>
                 </div>
 
-                <CaracteristicasBox caracteristicas={imovel.caracteristicas}></CaracteristicasBox>
+                <CaracteristicasBox
+                  caracteristicas={imovel.caracteristicas}
+                ></CaracteristicasBox>
 
                 <EmpreendimentoBox
                   empreendimento={imovel.Empreendimento}

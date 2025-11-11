@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
+// import Image from "next/image";
 import MaisInformacoesForm from "./maisInformacoesForm";
 import FormularioModal from "./formularioModal";
 import { useEffect, useState } from "react";
 import AgendamentoModal from "./agendamentoModal";
 import { CorretorExterno } from "@prisma/client";
-import Link from "next/link";
+// import Link from "next/link";
 import { useModal } from "@/utils/ModalContext";
 
 interface ImovelContatoBoxProps {
@@ -21,36 +21,38 @@ interface ImovelContatoBoxProps {
 export default function ImovelContatoBox({
   codigoImovel,
   valor,
-  valorAnterior,
+  // valorAnterior,
   corretor,
-  isRelease = false,
+  // isRelease = false,
 }: ImovelContatoBoxProps) {
-  const isVenda = true;
+  // const isVenda = true;
 
   const [abrirAgendamento, setAbrirAgendamento] = useState(false);
   const [modalAberta, setModalAberta] = useState(false);
-  const [tipoModal, setTipoModal] = useState<"whatsapp" | "financiamento" | null>(null);
+  // const [tipoModal, setTipoModal] = useState<"whatsapp" | "financiamento" | null>(null);
+    const [tipoModal] = useState<"whatsapp" | "financiamento" | null>(null);
+
   const { setIsModalOpen } = useModal();
 
   useEffect(()=>{
     console.log(corretor)
   },[])
 
-  const abrirModal = (tipo: "whatsapp" | "financiamento") => {
-    setTipoModal(tipo);
-    setModalAberta(true);
-    setIsModalOpen(true);
-  };
+  // const abrirModal = (tipo: "whatsapp" | "financiamento") => {
+  //   setTipoModal(tipo);
+  //   setModalAberta(true);
+  //   setIsModalOpen(true);
+  // };
 
-  const fmt = (n: number) =>
-    n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
+  // const fmt = (n: number) =>
+  //   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
 
-  const mostrarAnterior = typeof valorAnterior === "number" && valorAnterior > valor;
+  // const mostrarAnterior = typeof valorAnterior === "number" && valorAnterior > valor;
 
   return (
     <div id="sendMessage" className="block scroll-mt-6">
       <div className="lg:sticky lg:top-2">
-        <div className="flex justify-center mb-6 lg:mb-8">
+        {/* <div className="flex justify-center mb-6 lg:mb-8">
           <div className="flex items-start gap-4">
             <div className="w-[70px] h-[70px] rounded-md overflow-hidden">
               <Image
@@ -87,10 +89,10 @@ export default function ImovelContatoBox({
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="bg-white rounded-2xl shadow-md lg:shadow-[0_0_15px_5px_rgba(0,0,0,0.12)] p-4 sm:p-5 lg:p-8 w-full lg:max-w-[460px] mx-auto">
-          <p className={`text-xs text-[#303030] ${isRelease ? "block" : "hidden"}`}>A partir de</p>
+          {/* <p className={`text-xs text-[#303030] ${isRelease ? "block" : "hidden"}`}>A partir de</p>
 
           <div className="flex items-center justify-between gap-2 mb-1">
             <div className="flex flex-col">
@@ -113,7 +115,7 @@ export default function ImovelContatoBox({
                 Simular financiamento
               </button>
             )}
-          </div>
+          </div> */}
 
           <div className="mt-2 sm:mt-2">
             <MaisInformacoesForm
