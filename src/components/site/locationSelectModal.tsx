@@ -19,7 +19,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { is } from "date-fns/locale";
 
 interface LocationOption {
   cidade: string;

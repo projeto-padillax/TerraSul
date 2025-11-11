@@ -4,7 +4,7 @@ import { SendHorizonal, ChevronRight, ChevronLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, addDays, isSaturday, isSunday } from "date-fns";
+import { format, addDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
