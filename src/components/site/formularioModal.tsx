@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { createFormulario } from "@/lib/actions/formularios";
+import { useRouter } from "next/navigation";
 
 interface FormularioModalProps {
   open: boolean;
@@ -41,6 +42,7 @@ export default function FormularioModal({
 
   type FormInput = z.infer<typeof schema>;
 
+  const router = useRouter()
   const [isPending, startTransition] = useTransition();
 
   const {
@@ -51,6 +53,22 @@ export default function FormularioModal({
   } = useForm<FormInput>({
     resolver: zodResolver(schema),
   });
+
+  function getCodigoImovelFromUrl(url: string): string {
+  try {
+    const path = new URL(url).pathname; // ex: "/imovel/casa-com-280m.../IPA15147"
+    const parts = path.split("/").filter(Boolean);
+
+    if (parts[0] === "imovel" && parts.length > 2) {
+      // último segmento é o código
+      return parts[parts.length - 1];
+    }
+
+    return "";
+  } catch {
+    return "";
+  }
+}
 
   const onSubmit = (data: FormInput) => {
     startTransition(async () => {
@@ -66,13 +84,14 @@ export default function FormularioModal({
           email: data.email,
           telefone: data.celular,
           urlRespondida: typeof window !== "undefined" ? window.location.href : "",
-          codigoImovel,
+          codigoImovel: codigoImovel || getCodigoImovelFromUrl(window.location.href),
           mensagem: mensagemFinal,
         },codigoCorretor);
 
         toast.success("Mensagem enviada com sucesso!");
         reset();
         onClose();
+        router.push("https://wa.me/5551981214507")
       } catch {
         toast.error("Erro ao enviar mensagem.");
       }
@@ -168,13 +187,14 @@ export default function FormularioModal({
           {/* Botão */}
           <button
             type="submit"
+            id="form_whats"
             disabled={isPending}
             className="mt-3 w-full cursor-pointer bg-site-primary hover:bg-site-primary-hover text-white font-medium text-sm py-3 px-4 rounded-xl flex items-center gap-2 justify-center transition"
           >
             {isPending ? (
               <div className="h-4 w-4 animate-spin border-2 border-white border-t-transparent rounded-full" />
             ) : (
-              "Enviar mensagem"
+              "Enviar conversa"
             )}
           </button>
         </form>
