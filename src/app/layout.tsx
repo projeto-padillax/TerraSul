@@ -17,10 +17,6 @@ export const metadata: Metadata = {
   title: "LeadLink - TerraSul",
   description: "TerraSul",
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
-    ],
     apple: [
       {
         url: "https://www.terrasulimoveis.com.br/uploads/favicon/apple-icon-57x57.png",
