@@ -123,7 +123,10 @@ export default function ImovelContatoBox({
           </div>
 
           <button
-            onClick={() => setAbrirAgendamento(true)}
+            onClick={() => {
+              setAbrirAgendamento(true)
+              setIsModalOpen(true)
+            }}
             className="mt-4 w-full cursor-pointer hover:bg-gray-100 text-black font-medium text-sm py-3 px-4 rounded-[8px] flex items-center gap-2 justify-center transition"
             id="form_agendarVisita"
           >
@@ -173,7 +176,10 @@ export default function ImovelContatoBox({
 
       <AgendamentoModal
         open={abrirAgendamento}
-        onClose={() => setAbrirAgendamento(false)}
+        onClose={() => {
+          setAbrirAgendamento(false)
+          setIsModalOpen(false)}
+        }
         codigoImovel={codigoImovel}
         codigoCorretor={corretor?.codigo}
       />

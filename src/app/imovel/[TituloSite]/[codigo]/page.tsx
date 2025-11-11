@@ -14,6 +14,8 @@ import BreadCrumb from "@/components/site/filteredBreadcrumb";
 import LocalizacaoBox from "@/components/site/localizacaobox";
 import { Metadata } from "next/dist/types";
 import { formatBRL0, formatIntPtBR, lower } from "@/utils/format";
+import "./page.css";
+import FixedForm from "@/components/site/fixedForm";
 
 export async function generateMetadata({
   params,
@@ -600,7 +602,7 @@ export default async function ImovelPage({
         </div>
       </main>
       <Footer />
-      {/* <FixedForm/> */}
+      <FixedForm/>
     </div>
   );
 }

@@ -73,7 +73,7 @@ export function TypeSelectModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-h-[80vh] max-w-sm overflow-hidden flex flex-col w-fit">
+      <DialogContent className="sm:w-fit max-w-4xl max-h-[80vh] overflow-hidden flex flex-col w-[80%]">
         <DialogHeader className="border-b pb-4">
           <DialogTitle>Tipos de Imóveis</DialogTitle>
         </DialogHeader>
@@ -81,8 +81,8 @@ export function TypeSelectModal({
         <div className="flex-1 overflow-y-auto">
           <div className="justify-items-center">
             {/* Residenciais */}
-            <div className="rounded-lg overflow-hidden">
-              <div className="flex items-center gap-2 bg-site-primary text-white px-3 py-2 rounded-md">
+            <div className=" w-full">
+              <label className="flex items-center gap-2 bg-[#505050] text-white px-3 py-2 rounded-md">
                 <Checkbox
                   checked={allResidenciaisSelected}
                   ref={(el) => {
@@ -95,10 +95,10 @@ export function TypeSelectModal({
                   }
                 />
                 <h3 className="font-medium text-white">Selecionar Todos</h3>
-              </div>
+              </label>
               <div className="flex flex-col gap-2 py-3 mr-10">
                 {residenciaisTypes.map((type) => (
-                  <div
+                  <label
                     key={type.id}
                     className={`flex items-center gap-2 px-3 rounded-lg cursor-pointer transition-colors pr-0 border-0 shadow-none ${
                       tempSelectedTypes.includes(type.id)
@@ -120,7 +120,7 @@ export function TypeSelectModal({
                       onClick={(e) => e.stopPropagation()}
                     />
                     <span className="text-sm">{type.label}</span>
-                  </div>
+                  </label>
                 ))}
               </div>
             </div>

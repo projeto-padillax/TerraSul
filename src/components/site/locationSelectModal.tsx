@@ -18,6 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { is } from "date-fns/locale";
 
 interface LocationOption {
   cidade: string;
@@ -43,6 +45,7 @@ export function LocationSelectModal({
     []
   );
   const [selectedCidade, setSelectedCidade] = useState<string>("");
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     if (isOpen) {
@@ -140,7 +143,7 @@ export function LocationSelectModal({
         </DialogHeader>
 
         {/* Select de Cidades */}
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-row sm:flex-row gap-4">
           <Select
             value={selectedCidade}
             onValueChange={(value) => {
@@ -163,7 +166,7 @@ export function LocationSelectModal({
           <div className="relative mb-4 w-full sm:w-96">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              placeholder="Buscar bairro..."
+              placeholder={`${isMobile ? "Buscar" : "Buscar Bairro..."}`}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 focus-visible:ring-[0px] text-sm"
@@ -175,7 +178,7 @@ export function LocationSelectModal({
 
         {/* Lista de bairros */}
         {/* Lista de bairros */}
-        <div className="flex-1 overflow-y-auto pr-4">
+        <div className="flex-1 overflow-y-auto ">
           {cidadeAtual && (
             <>
               {(() => {
@@ -228,7 +231,7 @@ export function LocationSelectModal({
                   return (
                     <div className="space-y-2">
                       {/* Cabeçalho da seção com checkbox */}
-                      <div className="flex items-center gap-2 bg-site-primary text-white px-3 py-2 rounded-md">
+                      <label  className="flex items-center gap-2 bg-[#505050] text-white px-3 py-2 rounded-md">
                         <Checkbox
                           checked={allSelected}
                           onCheckedChange={(checked) => {
@@ -263,7 +266,7 @@ export function LocationSelectModal({
                           className="border-white data-[state=checked]:bg-white data-[state=checked]:text-[#4F7DC3] data-[state=checked]:border-white"
                         />
                         <span className="font-medium">{titulo}</span>
-                      </div>
+                      </label >
 
                       {/* Lista de bairros */}
                       <div className="columns-1 sm:columns-3 lg:columns-4 gap-4 bg-white p-3 rounded-md">
@@ -319,7 +322,7 @@ export function LocationSelectModal({
             onClick={handleConfirm}
             className="bg-site-primary hover:bg-site-primary-hover cursor-pointer"
           >
-            Confirmar Seleção
+            Selecionar Bairros
           </Button>
         </div>
       </DialogContent>

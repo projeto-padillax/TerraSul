@@ -28,7 +28,7 @@ function getDiasUteis(inicio: Date, qtd: number) {
   const datas: Date[] = [];
   let dia = inicio;
   while (datas.length < qtd) {
-    if (!isSaturday(dia) && !isSunday(dia)) datas.push(dia);
+    datas.push(dia);
     dia = addDays(dia, 1);
   }
   return datas;
@@ -49,7 +49,7 @@ export default function AgendamentoForm({
   const [dataSelecionada, setDataSelecionada] = useState<Date>(datas[0]);
   const [isPending, startTransition] = useTransition();
   const canGoBack = startOffset > 1;
-  const canGoForward = startOffset + 5 <= 14;
+  const canGoForward = startOffset + 7 <= 14;
 
   const {
     register,
