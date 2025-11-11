@@ -2,7 +2,6 @@
 
 import { FaWhatsapp } from "react-icons/fa";
 import FormularioModal from "./formularioModal";
-import { Button } from "../ui/button";
 import { useState } from "react";
 
 export default function WhatsAppButton() {
