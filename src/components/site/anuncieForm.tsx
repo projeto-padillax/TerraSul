@@ -139,8 +139,9 @@ export default function AnuncieForm() {
 
                 <button
                     type="submit"
+                    id="form_anuncie"
                     disabled={isPending}
-                    className="inline-flex items-center gap-3 px-10 py-3 rounded-md bg-site-primary hover:bg-[#426db0] text-white font-medium transition"
+                    className="inline-flex items-center gap-3 px-10 py-3 rounded-md bg-site-primary hover:bg-site-primary-hover cursor-pointer text-white font-medium transition"
                 >
                     {isPending ? "Enviando..." : "Enviar"}
                     <SendHorizonal size={18} />

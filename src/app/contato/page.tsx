@@ -1,4 +1,4 @@
-export const revalidate = 3600;
+export const revalidate = 0;
 
 import Image from "next/image";
 import Header from "@/components/site/header";
@@ -78,7 +78,7 @@ agendar visitas ou obter suporte sobre anúncios. Atendemos proprietários, comp
             </p>
 
             {/* Texto adicional para SEO (sem alterar CSS/estrutura) */}
-            <div className="space-y-4 text-[#444] leading-relaxed">
+            <div className="space-y-4 text-[#444] leading-relaxed hidden">
               <p>
                 Se você quer vender ou alugar, informe dados essenciais: endereço, metragem, número de quartos e vagas,
                 valor pretendido e diferenciais do imóvel. Quanto mais detalhes, mais assertivo será nosso retorno.

@@ -1,4 +1,4 @@
-export const revalidate = 3600;
+export const revalidate = 0;
 
 import Image from "next/image";
 import Header from "@/components/site/header";
@@ -79,7 +79,7 @@ export default async function AnuncieImovel() {
             </p>
 
             {/* Texto adicional para SEO */}
-            <div className="space-y-4 text-[#444] leading-relaxed text-justify">
+            <div className="space-y-4 text-[#444] leading-relaxed text-justify hidden">
               <p>
                 Ao anunciar conosco, você garante que seu imóvel apareça nas primeiras páginas dos buscadores,
                 com otimização de SEO, descrição completa e palavras-chave relacionadas ao mercado imobiliário.
