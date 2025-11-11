@@ -18,7 +18,8 @@ export const metadata: Metadata = {
   description: "TerraSul",
   icons: {
     icon: [
-      { url: "/fav.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico" },
+      { url: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
     ],
     apple: [
       {
