@@ -44,7 +44,7 @@ export function LocationSelectModal({
     []
   );
   const [selectedCidade, setSelectedCidade] = useState<string>("");
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (isOpen) {
@@ -116,10 +116,10 @@ export function LocationSelectModal({
   };
 
   const handleConfirm = () => {
-    if(tempSelectedLocations.length > 0){
+    if (tempSelectedLocations.length > 0) {
       onSelectionChange(tempSelectedLocations);
-    }else{
-      onSelectionChange([selectedCidade])
+    } else {
+      onSelectionChange([selectedCidade]);
     }
     onClose();
   };
@@ -134,6 +134,7 @@ export function LocationSelectModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
+        aria-describedby="Modal location"
         onOpenAutoFocus={(e) => e.preventDefault()}
         className="sm:max-w-4xl max-w-4xl max-h-[80vh] overflow-hidden flex flex-col w-[80%]"
       >
@@ -230,7 +231,7 @@ export function LocationSelectModal({
                   return (
                     <div className="space-y-2">
                       {/* Cabeçalho da seção com checkbox */}
-                      <label  className="flex items-center gap-2 bg-[#505050] text-white px-3 py-2 rounded-md">
+                      <label className="flex items-center gap-2 bg-[#505050] text-white px-3 py-2 rounded-md">
                         <Checkbox
                           checked={allSelected}
                           onCheckedChange={(checked) => {
@@ -265,7 +266,7 @@ export function LocationSelectModal({
                           className="border-white data-[state=checked]:bg-white data-[state=checked]:text-[#4F7DC3] data-[state=checked]:border-white"
                         />
                         <span className="font-medium">{titulo}</span>
-                      </label >
+                      </label>
 
                       {/* Lista de bairros */}
                       <div className="columns-1 sm:columns-3 lg:columns-4 gap-4 bg-white p-3 rounded-md">
@@ -274,28 +275,39 @@ export function LocationSelectModal({
                           return (
                             <div
                               key={bairro}
-                              className="break-inside-avoid flex items-center gap-2 mb-2"
+                              className="break-inside-avoid flex items-center gap-2 mb-2 w-full cursor-pointer"
+                              onClick={() => {
+                                handleLocationChange(
+                                  locationKey,
+                                  !tempSelectedLocations.some(
+                                    (loc) =>
+                                      loc.toLowerCase() ===
+                                      locationKey.toLowerCase()
+                                  )
+                                );
+                              }}
                             >
                               <Checkbox
-                                id={locationKey}
+                                // id={locationKey}
                                 checked={tempSelectedLocations.some(
                                   (loc) =>
                                     loc.toLowerCase() ===
                                     locationKey.toLowerCase()
                                 )}
-                                onCheckedChange={(checked) =>
-                                  handleLocationChange(
-                                    locationKey,
-                                    checked as boolean
-                                  )
-                                }
+                                // onCheckedChange={(checked) =>
+                                //   handleLocationChange(
+                                //     locationKey,
+                                //     checked as boolean
+                                //   )
+                                // }
+                                // onClick={(e) => e.stopPropagation()}
                               />
-                              <label
-                                htmlFor={locationKey}
+                              <span
+                                // htmlFor={locationKey}
                                 className="text-sm cursor-pointer"
                               >
                                 {bairro}
-                              </label>
+                              </span>
                             </div>
                           );
                         })}

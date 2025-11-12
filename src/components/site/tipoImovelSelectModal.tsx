@@ -73,7 +73,10 @@ export function TypeSelectModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:w-fit max-w-4xl max-h-[80vh] overflow-hidden flex flex-col w-[80%]">
+      <DialogContent
+        aria-describedby="modal tipo"
+        className="sm:w-fit max-w-4xl max-h-[80vh] overflow-hidden flex flex-col w-[80%]"
+      >
         <DialogHeader className="border-b pb-4">
           <DialogTitle>Tipos de Imóveis</DialogTitle>
         </DialogHeader>
@@ -96,11 +99,11 @@ export function TypeSelectModal({
                 />
                 <h3 className="font-medium text-white">Selecionar Todos</h3>
               </label>
-              <div className="flex flex-col gap-2 py-3 mr-10">
+              <div className="flex flex-col gap-2 py-3">
                 {residenciaisTypes.map((type) => (
-                  <label
+                  <div
                     key={type.id}
-                    className={`flex items-center gap-2 px-3 rounded-lg cursor-pointer transition-colors pr-0 border-0 shadow-none ${
+                    className={`flex w-full items-center gap-2 px-3 rounded-lg cursor-pointer transition-colors pr-0 border-0 shadow-none ${
                       tempSelectedTypes.includes(type.id)
                         ? "border  shadow-none"
                         : "hover:bg-gray-50 border border-transparent"
@@ -114,13 +117,13 @@ export function TypeSelectModal({
                   >
                     <Checkbox
                       checked={tempSelectedTypes.includes(type.id)}
-                      onCheckedChange={(checked) =>
-                        handleTypeChange(type.id, checked as boolean)
-                      }
-                      onClick={(e) => e.stopPropagation()}
+                      // onCheckedChange={(checked) =>
+                      //   handleTypeChange(type.id, checked as boolean)
+                      // }
+                      // onClick={(e) => e.stopPropagation()}
                     />
                     <span className="text-sm">{type.label}</span>
-                  </label>
+                  </div>
                 ))}
               </div>
             </div>
