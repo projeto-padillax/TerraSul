@@ -22,10 +22,10 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "https://www.terrasulimoveis.leadlink.com.br/uploads/favicon/favicon.ico",
+        url: "https://www.terrasulimoveis.com.br/uploads/favicon/favicon.ico",
       },
       {
-        url: "https://www.terrasulimoveis.leadlink.com.br/uploads/favicon/favicon-32x32.png",
+        url: "https://www.terrasulimoveis.com.br/uploads/favicon/favicon-32x32.png",
         sizes: "32x32",
         type: "image/png",
       },
