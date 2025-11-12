@@ -20,6 +20,21 @@ export const metadata: Metadata = {
     google: "Zpz5JJ2ZL7dcNOMPR5VcmDbVRxLHByfCMF_OzC443RQ",
   },
   icons: {
+    icon: [
+      {
+        url: "https://www.terrasulimoveis.leadlink.com.br/uploads/favicon/favicon.ico",
+      },
+      {
+        url: "https://www.terrasulimoveis.leadlink.com.br/uploads/favicon/favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+      {
+        url: "https://www.terrasulimoveis.com.br/uploads/favicon/favicon-16x16.png",
+        sizes: "16x16",
+        type: "image/png",
+      },
+    ],
     apple: [
       {
         url: "https://www.terrasulimoveis.com.br/uploads/favicon/apple-icon-57x57.png",
