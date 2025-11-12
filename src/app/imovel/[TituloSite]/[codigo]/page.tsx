@@ -276,7 +276,7 @@ export default async function ImovelPage({
                             <span>
                               IPTU R${" "}
                               {formatIntPtBR(
-                                parseFloat(imovel.ValorCondominio)
+                                parseFloat(imovel.ValorIptu)
                               )}
                             </span>
                           )}

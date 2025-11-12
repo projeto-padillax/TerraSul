@@ -1,6 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async headers() {
+    return [
+      {
+        source: "/favicon.ico",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+        ],
+      },
+    ];
+  },
   async redirects() {
     return [
       {
@@ -23,6 +33,11 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    formats: ["image/webp"],
+    // 31 days (seconds)
+    minimumCacheTTL: 2_678_400,
+    deviceSizes: [360, 414, 768, 1024, 1280],
+    imageSizes: [16, 24, 32, 48, 64, 96, 128],
     remotePatterns: [
       {
         protocol: "https",

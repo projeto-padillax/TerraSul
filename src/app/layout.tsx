@@ -16,10 +16,10 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "LeadLink - TerraSul",
   description: "TerraSul",
+  verification: {
+    google: "Zpz5JJ2ZL7dcNOMPR5VcmDbVRxLHByfCMF_OzC443RQ",
+  },
   icons: {
-    icon: [
-      { url: "/fav.svg", type: "image/svg+xml" },
-    ],
     apple: [
       {
         url: "https://www.terrasulimoveis.com.br/uploads/favicon/apple-icon-57x57.png",
