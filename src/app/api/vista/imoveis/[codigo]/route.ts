@@ -122,15 +122,54 @@ async function fetchFromVista(codigo: string): Promise<VistaImovel | null> {
   if (!key) throw new Error("VISTA_KEY não configurada no .env");
 
   const base = "https://terrasul-rest.vistahost.com.br/imoveis/detalhes";
+
+  const pesquisa = {
+    fields: [
+      "Codigo",
+      "ValorIptu",
+      "ValorCondominio",
+      "Categoria",
+      "AreaTerreno",
+      "Bairro",
+      "GMapsLatitude",
+      "GMapsLongitude",
+      "Cidade",
+      "ValorVenda",
+      "ValorLocacao",
+      "Dormitorios",
+      "Suites",
+      "Vagas",
+      "AreaTotal",
+      "Caracteristicas",
+      "InfraEstrutura",
+      "Descricao",
+      "DataHoraAtualizacao",
+      "Lancamento",
+      "Status",
+      "Empreendimento",
+      "Endereco",
+      "AreaUtil",
+      "Exclusivo",
+      "EstudaDacao",
+      "Numero",
+      "Complemento",
+      "UF",
+      "CEP",
+      "DestaqueWeb",
+      "FotoDestaque",
+      "Latitude",
+      "Longitude",
+      "FotoDestaqueEmpreendimento",
+      "VideoDestaque",
+      { Video: ["ExibirNoSite", "Descricao", "Destaque", "Tipo", "Video"] },
+      { Foto: ["Foto", "FotoPequena", "Destaque"] },
+    ],
+  };
+
   const url =
     `${base}?key=${encodeURIComponent(key)}` +
     `&imovel=${encodeURIComponent(codigo)}` +
-    `&pesquisa={"fields":["Codigo","ValorIptu", "ValorCondominio", "Categoria",
-                          "AreaTerreno", "Bairro", "GMapsLatitude", "GMapsLongitude", "Cidade",
-                          "ValorVenda", "ValorLocacao", "Dormitorios", "Suites", "Vagas", "AreaTotal",
-                          "Caracteristicas", "InfraEstrutura", "Descricao", "DataHoraAtualizacao", "Lancamento",
-                          "Status", "Empreendimento", "Endereco", "AreaUtil", "Exclusivo", "EstudaDacao",
-                          "Numero", "Complemento", "UF", "CEP", "DestaqueWeb", "FotoDestaque", "Latitude", "Longitude", "FotoDestaqueEmpreendimento", "VideoDestaque",{ Video: ["ExibirNoSite","Descricao","Destaque","Tipo","Video"]},{"Foto":["Foto","FotoPequena","Destaque"]}]}`;
+    `&pesquisa=${encodeURIComponent(JSON.stringify(pesquisa))}`;
 
   const res = await fetch(url, {
     cache: "no-store",
@@ -138,6 +177,7 @@ async function fetchFromVista(codigo: string): Promise<VistaImovel | null> {
       Accept: "application/json",
     },
   });
+
   if (!res.ok) {
     const text = await res.text().catch(() => "");
     throw new Error(`Vista HTTP ${res.status} - ${text}`);
@@ -147,7 +187,7 @@ async function fetchFromVista(codigo: string): Promise<VistaImovel | null> {
   if (!data) return null;
   if (Array.isArray(data) && data.length === 0) return null;
 
-  return data;
+  return data as VistaImovel;
 }
 
 export async function PUT(
