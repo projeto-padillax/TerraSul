@@ -887,3 +887,118 @@ export async function PUT() {
 //     await prisma.$disconnect(); // Desconecta o Prisma Client após a operação
 //   }
 // }
+
+const updatePhotosForProperty = async (code: string) => {
+  // garante que o imóvel existe
+  const existing = await prisma.imovel.findUnique({
+    where: { id: code },
+    select: { id: true },
+  });
+
+  if (!existing) {
+    throw new Error(`Imóvel ${code} não encontrado no banco`);
+  }
+
+  const details: VistaPropertyDetails = await fetchData<VistaPropertyDetails>(
+    buildDetailsUrl(code)
+  ).catch((err) => {
+    throw new Error(
+      `Não foi possível buscar detalhes para o imóvel ${code}: ${err.message}`
+    );
+  });
+
+  const photosToCreate = Object.values(details.Foto || {}).map(
+    (photo: VistaPropertyDetailPhoto) => ({
+      destaque:
+        photo.Destaque !== undefined && photo.Destaque !== null
+          ? String(photo.Destaque)
+          : null,
+      codigo: photo.Codigo ?? null,
+      url: photo.Foto ?? null,
+      urlPequena: photo.FotoPequena ?? null,
+    })
+  );
+
+  const videosToCreate = Object.values(details.Video || {}).map(
+    (video: VistaPropertyDetailVideo) => ({
+      destaque:
+        video.Destaque !== undefined && video.Destaque !== null
+          ? String(video.Destaque)
+          : null,
+      video: video.Video ?? null,
+    })
+  );
+
+  const fotosData: any = { deleteMany: {} };
+  if (photosToCreate.length > 0) {
+    fotosData.create = photosToCreate;
+  }
+
+  const videosData: any = { deleteMany: {} };
+  if (videosToCreate.length > 0) {
+    videosData.create = videosToCreate;
+  }
+
+  await prisma.imovel.update({
+    where: { id: code },
+    data: {
+      fotos: fotosData,
+      videos: videosData,
+    },
+  });
+};
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const searchParams = request.nextUrl.searchParams;
+    const codigo = searchParams.get("codigo");
+
+    // Se vier um código, atualiza só esse imóvel
+    if (codigo) {
+      await updatePhotosForProperty(codigo);
+      return NextResponse.json({
+        message: `Fotos (e vídeos) do imóvel ${codigo} atualizadas com sucesso.`,
+      });
+    }
+
+    // Sem código: atualiza todos os imóveis existentes no banco
+    const imoveis = await prisma.imovel.findMany({
+      select: { id: true },
+    });
+
+    if (imoveis.length === 0) {
+      return NextResponse.json({
+        message: "Nenhum imóvel encontrado para atualizar fotos.",
+        totalAttempted: 0,
+        successful: 0,
+        failed: 0,
+      });
+    }
+
+    const limit = pLimit(5);
+
+    const results = await Promise.allSettled(
+      imoveis.map((i) =>
+        limit(() => updatePhotosForProperty(String(i.id)))
+      )
+    );
+
+    const successful = results.filter((r) => r.status === "fulfilled").length;
+    const failed = results.filter((r) => r.status === "rejected").length;
+
+    return NextResponse.json({
+      message: "Atualização de fotos (e vídeos) concluída.",
+      totalAttempted: imoveis.length,
+      successful,
+      failed,
+    });
+  } catch (error: any) {
+    console.error("Erro ao atualizar fotos:", error.message);
+    return NextResponse.json(
+      { error: "Erro interno ao atualizar fotos dos imóveis" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}
