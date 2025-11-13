@@ -16,6 +16,7 @@ import { Metadata } from "next/dist/types";
 import { formatBRL0, formatIntPtBR, lower } from "@/utils/format";
 import "./page.css";
 import FixedForm from "@/components/site/fixedForm";
+import NewForm from "@/components/site/newForm";
 
 export async function generateMetadata({
   params,
@@ -249,7 +250,14 @@ export default async function ImovelPage({
                     {(imovel.ValorCondominio &&
                       parseFloat(imovel.ValorCondominio) > 0.1) ||
                     (imovel.ValorIptu && parseFloat(imovel.ValorIptu) > 0) ? (
-                      <div className="flex items-center gap-2 text-xs text-black whitespace-nowrap">
+                      <div className="flex items-center gap-0 sm:gap-2 text-xs text-black whitespace-nowrap">
+                        {imovel.ValorCondominio && imovel.Codigo > 0 && (
+                          <span>Código {imovel.Codigo}</span>
+                        )}
+                        <Dot
+                          size={30}
+                          className="text-gray-500 relative top-[1px]"
+                        />
                         {imovel.ValorCondominio &&
                           parseFloat(imovel.ValorCondominio) > 0 && (
                             <span>
@@ -275,9 +283,7 @@ export default async function ImovelPage({
                           parseFloat(imovel.ValorIptu) > 0 && (
                             <span>
                               IPTU R${" "}
-                              {formatIntPtBR(
-                                parseFloat(imovel.ValorIptu)
-                              )}
+                              {formatIntPtBR(parseFloat(imovel.ValorIptu))}
                             </span>
                           )}
                       </div>
@@ -599,6 +605,13 @@ export default async function ImovelPage({
                   codigoCorretor={imovel.corretor?.codigo}
                 />
 
+                <NewForm
+                  className="flex sm:hidden"
+                  codigoImovel={imovel.Codigo}
+                  valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
+                  corretor={imovel.corretor}
+                ></NewForm>
+
                 <MidiaBox
                   imagens={imagensGaleria}
                   videos={
@@ -623,18 +636,25 @@ export default async function ImovelPage({
                   cep={imovel.cep}
                 />
               </div>
-
-              <ImovelContatoBox
-                financiamento={
-                  imovel.Status === "VENDA" ||
-                  imovel.Status === "VENDA E ALUGUEL"
-                }
-                codigoImovel={imovel.Codigo}
-                valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
-                valorAnterior={valorAnterior ?? undefined}
-                corretor={imovel.corretor}
-                isRelease={imovel.Lancamento == "Sim"}
-              />
+              <div>
+                <ImovelContatoBox
+                  financiamento={
+                    imovel.Status === "VENDA" ||
+                    imovel.Status === "VENDA E ALUGUEL"
+                  }
+                  codigoImovel={imovel.Codigo}
+                  valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
+                  valorAnterior={valorAnterior ?? undefined}
+                  corretor={imovel.corretor}
+                  isRelease={imovel.Lancamento == "Sim"}
+                />
+                <NewForm
+                  className="hidden sm:flex"
+                  codigoImovel={imovel.Codigo}
+                  valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
+                  corretor={imovel.corretor}
+                ></NewForm>
+              </div>
             </div>
 
             <div>
@@ -644,7 +664,7 @@ export default async function ImovelPage({
         </div>
       </main>
       <Footer />
-      <FixedForm/>
+      <FixedForm />
     </div>
   );
 }

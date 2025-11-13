@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "https://www.terrasulimoveis.com.br/uploads/favicon/favicon.ico",
+        url: "https://terra-sul.vercel.app/fav.svg",
       },
       {
         url: "https://www.terrasulimoveis.com.br/uploads/favicon/favicon-32x32.png",
