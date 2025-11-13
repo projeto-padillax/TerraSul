@@ -115,7 +115,7 @@ export function ImovelCard({ imovel, activeTab }: PropertyCardProps) {
           {imovel.EstudaDacao !== "Sim" && imovel.Exclusivo === "Sim" && (
             <ImageBadge text="EXCLUSIVO" />
           )}
-          <h3 className="text-white text-sm sm:text-base md:text-lg font-bold text-center">
+          <h3 className="text-white text-lg sm:text-base md:text-lg font-bold text-center">
             {imovel.Bairro}
           </h3>
         </div>

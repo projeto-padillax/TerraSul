@@ -17,8 +17,8 @@ export default function FixedForm() {
   };
 
   return (
-    <div className="bg-white md:hidden fixed left-0 z-50 bottom-0 w-full p-2">
-      <div className="flex justify-around w-full gap-1 pb-2 pl-20">
+    <div className="bg-white md:hidden fixed left-0 z-50 bottom-0 w-full p-2 shadow-[0_-6px_12px_rgba(0,0,0,0.4)]">
+      <div className="flex justify-around w-full gap-1 pl-20">
         <button
           onClick={() => scrollToSection("sendMessage")}
           className="w-full appearance-none inline-flex gap-1  items-center justify-center px-2 py-0 text-sm leading-4 whitespace-nowrap rounded-full cursor-pointer h-12 tracking-normal font-bold normal-case bg-transparent border  text-[#303030] transition-colors ease-in-out duration-700 lg:hidden"

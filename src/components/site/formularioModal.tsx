@@ -194,7 +194,7 @@ export default function FormularioModal({
             {isPending ? (
               <div className="h-4 w-4 animate-spin border-2 border-white border-t-transparent rounded-full" />
             ) : (
-              "Enviar conversa"
+              "Iniciar conversa"
             )}
           </button>
         </form>

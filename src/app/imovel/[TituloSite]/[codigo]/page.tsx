@@ -552,7 +552,7 @@ export default async function ImovelPage({
                               </span>
                             )}
                         </div>
-                        <p className="text-[20px] sm:text-[20px] font-semibold text-[#303030] mt-[2px]">
+                        <p className="text-xl sm:text-xl font-semibold text-[#303030] mt-0.5 mb-0.5 leading-5">
                           {valorAtual > 0
                             ? valorAtual.toLocaleString("pt-BR", {
                                 style: "currency",
@@ -636,18 +636,20 @@ export default async function ImovelPage({
                   cep={imovel.cep}
                 />
               </div>
-              <div>
-                <ImovelContatoBox
-                  financiamento={
-                    imovel.Status === "VENDA" ||
-                    imovel.Status === "VENDA E ALUGUEL"
-                  }
-                  codigoImovel={imovel.Codigo}
-                  valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
-                  valorAnterior={valorAnterior ?? undefined}
-                  corretor={imovel.corretor}
-                  isRelease={imovel.Lancamento == "Sim"}
-                />
+              <div className="block scroll-mt-6">
+                <div className="lg:sticky lg:top-2 z-50">
+                  <ImovelContatoBox
+                    financiamento={
+                      imovel.Status === "VENDA" ||
+                      imovel.Status === "VENDA E ALUGUEL"
+                    }
+                    codigoImovel={imovel.Codigo}
+                    valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
+                    valorAnterior={valorAnterior ?? undefined}
+                    corretor={imovel.corretor}
+                    isRelease={imovel.Lancamento == "Sim"}
+                  />
+                </div>
                 <NewForm
                   className="hidden sm:flex"
                   codigoImovel={imovel.Codigo}

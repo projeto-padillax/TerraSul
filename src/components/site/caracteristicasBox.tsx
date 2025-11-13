@@ -28,13 +28,13 @@ export default function CaracteristicasBox({
 
   return (
     <div className="bg-white rounded-lg border p-4 sm:p-6 shadow-sm mb-8">
-      <h2 className="text-xl font-semibold text-gray-800 mb-1 text-center sm:text-left">
-        CARACTERISTICAS
+      <h2 className="text-xl font-bold text-[#303030] mb-4 text-center sm:text-left">
+        Características
       </h2>
 
       <div className="flex gap-5 sm:gap-6 items-start">
 
-        <div className="grid grid-cols-3 gap-x-6 gap-y-2 text-sm text-gray-900 justify-items-center sm:justify-items-start text-center sm:text-left w-full">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-sm text-gray-900 justify-items-center sm:justify-items-start text-center sm:text-left w-full">
           {itensVisiveis.map((item, idx) => (
             <span key={`${item.nome}-${idx}`} className="leading-tight">
               {item.nome}

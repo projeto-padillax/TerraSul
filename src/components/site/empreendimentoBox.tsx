@@ -36,8 +36,8 @@ export default function EmpreendimentoBox({
 
   return (
     <div className="bg-white rounded-lg border p-4 sm:p-6 shadow-sm mb-8">
-      <h2 className="text-xl font-semibold text-gray-800 mb-1 text-center sm:text-left">
-        INFRAESTRUTURA
+      <h2 className="text-xl font-bold text-[#303030] mb-1 text-center sm:text-left">
+        Infraestrutura
       </h2>
 
       <Link
