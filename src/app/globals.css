@@ -87,9 +87,9 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --sitePrimary: oklch(76.722% 0.1409 68.77); 
+  --sitePrimary: oklch(76.722% 0.1409 68.77);
   --sitePrimaryHover: oklch(71.312% 0.15408 63.542);
-  --siteSecondary: oklch(42.83% 0.0865 166.881); 
+  --siteSecondary: oklch(42.83% 0.0865 166.881);
   --siteSecondaryHover: oklch(39.333% 0.07871 167.238);
 }
 
@@ -134,12 +134,21 @@
 
   body {
     font-family: var(--font-montserrat), sans-serif;
+    touch-action: manipulation;
+
     @apply bg-background text-foreground;
+  }
+
+  input,
+  textarea,
+  select {
+    @apply text-[16px];
   }
 }
 
 html {
   scroll-behavior: smooth;
+  touch-action: manipulation;
 }
 
 .data-\[placeholder\]\:text-muted-foreground[data-placeholder] {
@@ -173,11 +182,11 @@ html {
   }
 
   .text-shadow {
-    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.50);
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
   }
 
   .text-shadow-lg {
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.90);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
   }
 
   .animate-slide-left {
