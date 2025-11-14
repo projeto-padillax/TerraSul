@@ -17,7 +17,9 @@ type Midia = {
 
 export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
   const [modalAberta, setModalAberta] = useState(false);
-  const [midiasSelecionadas, setMidiasSelecionadas] = useState<Midia[] | null>(null);
+  const [midiasSelecionadas, setMidiasSelecionadas] = useState<Midia[] | null>(
+    null
+  );
 
   const handleAbrirGaleria = (tipo: "image" | "video") => {
     const midiasFiltradas: Midia[] =
@@ -53,12 +55,14 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
                 />
               ) : (
                 <>
+                  {/* Video thumb – no optimization */}
                   <Image
                     src={imagens[1]?.Foto}
                     alt="Thumb do vídeo"
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    unoptimized
                   />
                   <div className="absolute inset-0 bg-black/30" />
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -77,12 +81,14 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
                 className="relative group overflow-hidden rounded-lg shadow-md cursor-pointer h-64"
                 onClick={() => handleAbrirGaleria("video")}
               >
+                {/* Video thumb – no optimization */}
                 <Image
                   src={imagens[1]?.Foto}
                   alt={`Thumb do vídeo ${i + 1}`}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  unoptimized
                 />
                 <div className="absolute inset-0 bg-black/30" />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -109,6 +115,7 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
                 height={450}
                 className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
               />
+
               <div className="absolute inset-0 bg-black/30" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <button className="bg-white text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md pointer-events-none">
