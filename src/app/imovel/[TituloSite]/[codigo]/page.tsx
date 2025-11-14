@@ -637,7 +637,7 @@ export default async function ImovelPage({
                 />
               </div>
               <div className="block scroll-mt-6">
-                <div className="lg:sticky lg:top-2 z-50">
+                <div className="lg:sticky lg:top-2 z-30">
                   <ImovelContatoBox
                     financiamento={
                       imovel.Status === "VENDA" ||
