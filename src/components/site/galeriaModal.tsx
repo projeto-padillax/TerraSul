@@ -127,7 +127,7 @@ export default function GaleriaModal({ midias, onClose }: GaleriaModalProps) {
               <div
                 key={index}
                 onClick={() => setSelectedIndex(index)}
-                className="cursor-pointer relative aspect-[4/3] rounded overflow-hidden bg-black"
+                className="cursor-pointer relative aspect-[4/3] rounded overflow-hidden bg-gray-200"
               >
                 {item.type === "image" ? (
                   <Image
@@ -137,6 +137,7 @@ export default function GaleriaModal({ midias, onClose }: GaleriaModalProps) {
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     unoptimized
+                    placeholder="empty"
                   />
                 ) : (
                   <div className="relative w-full h-full bg-black flex items-center justify-center">

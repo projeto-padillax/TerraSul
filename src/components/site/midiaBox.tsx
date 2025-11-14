@@ -42,7 +42,7 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
           {videos.length === 1 ? (
             <div
               key="video-unico"
-              className="relative overflow-hidden rounded-lg shadow-md h-64 cursor-pointer"
+              className="relative overflow-hidden rounded-lg shadow-md h-64 cursor-pointer bg-gray-200"
               onClick={() => setVideoAberto(true)}
             >
               {videoAberto ? (
@@ -63,6 +63,7 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     unoptimized
+                    placeholder="empty"
                   />
                   <div className="absolute inset-0 bg-black/30" />
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -78,7 +79,7 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
             videos.map((video, i) => (
               <div
                 key={`video-${i}`}
-                className="relative group overflow-hidden rounded-lg shadow-md cursor-pointer h-64"
+                className="relative group overflow-hidden rounded-lg shadow-md cursor-pointer h-64 bg-gray-200"
                 onClick={() => handleAbrirGaleria("video")}
               >
                 {/* Video thumb – no optimization */}
@@ -89,6 +90,7 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   unoptimized
+                  placeholder="empty"
                 />
                 <div className="absolute inset-0 bg-black/30" />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -105,7 +107,7 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
           {imagens.slice(0, 1).map((img, i) => (
             <div
               key={`foto-${i}`}
-              className="relative group overflow-hidden rounded-lg shadow-md cursor-pointer"
+              className="relative group overflow-hidden rounded-lg shadow-md cursor-pointer bg-gray-200"
               onClick={() => handleAbrirGaleria("image")}
             >
               <Image
@@ -114,6 +116,7 @@ export default function MidiaBox({ imagens, videos = [] }: MidiaBoxProps) {
                 width={800}
                 height={450}
                 className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                placeholder="empty"
               />
 
               <div className="absolute inset-0 bg-black/30" />
