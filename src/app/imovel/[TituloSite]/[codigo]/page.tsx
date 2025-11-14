@@ -261,7 +261,7 @@ export default async function ImovelPage({
                         {imovel.ValorCondominio &&
                           parseFloat(imovel.ValorCondominio) > 0 && (
                             <span>
-                              Condomínio R${" "}
+                              Cond R${" "}
                               {formatIntPtBR(
                                 parseFloat(imovel.ValorCondominio)
                               )}

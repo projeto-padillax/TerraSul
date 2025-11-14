@@ -164,7 +164,7 @@ export function LocationSelectModal({
           </Select>
 
           <div className="relative mb-4 w-full sm:w-96">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 text-base transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               placeholder={`${isMobile ? "Buscar" : "Buscar Bairro..."}`}
               value={searchTerm}
