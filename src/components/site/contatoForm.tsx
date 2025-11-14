@@ -60,7 +60,7 @@ export default function ContatoForm() {
     "block text-[11px] font-semibold tracking-wide text-gray-800 uppercase mb-1";
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="text-sm">
+    <form onSubmit={handleSubmit(onSubmit)} className="text-sm lead" id="formulario_contato">
       <div className="rounded-lg border border-gray-500 overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-500">
           <div className={cell}>

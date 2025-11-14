@@ -63,7 +63,7 @@ export default function MaisInformacoesForm({ codigoImovel, codigoCorretor }: Ma
     const label = 'block text-[11px] font-semibold tracking-wide text-][#303030] uppercase mb-1'
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="text-sm">
+        <form onSubmit={handleSubmit(onSubmit)} className="text-sm lead" id="formulario_mais_informacoes">
             <div className="rounded-md border border-gray-400 overflow-hidden">
                 <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-gray-400">
                     <div className={cell}>

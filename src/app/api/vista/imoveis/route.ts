@@ -229,13 +229,43 @@ interface VistaPropertyData {
   [key: string]: any; // Permite outros campos dinâmicos da API Vista
 }
 
-// ... (restante do código até processAndUpsertProperty)
 
-/**
- * Processa um único imóvel, busca seus detalhes e o insere/atualiza no banco de dados.
- * @param {string} code O código do imóvel.
- * @param {VistaPropertyData} propertyData Os dados iniciais do imóvel.
- */
+function parseSimNao(value: string | null): "Sim" | "Nao" | null {
+  if (!value) return null;
+  const normalized = value.toLowerCase().trim();
+  if (["sim", "s", "true"].includes(normalized)) return "Sim";
+  if (["nao", "n", "false"].includes(normalized)) return "Nao";
+  return null;
+}
+
+const parseToInt = (value: unknown): number | null => {
+  if (value === null || value === undefined) return null;
+  const str = String(value).trim();
+  if (!str) return null;
+  const parsed = parseInt(str, 10);
+  return Number.isNaN(parsed) ? null : parsed;
+};
+
+const parseToFloat = (value: unknown): number | null => {
+  if (value === null || value === undefined) return null;
+  const str = String(value).trim();
+  if (!str) return null;
+  const parsed = parseFloat(str);
+  return Number.isNaN(parsed) ? null : parsed;
+};
+
+const getTimeSafe = (value: unknown): number => {
+  if (!value) return 0;
+  const t = new Date(value as any).getTime();
+  return Number.isNaN(t) ? 0 : t;
+};
+
+const normalizeVistaDate = (value: string | null | undefined): string => {
+  if (!value) return new Date().toISOString();
+  const parsed = Date.parse(value);
+  if (Number.isNaN(parsed)) return new Date().toISOString();
+  return new Date(parsed).toISOString();
+};
 
 const processAndUpsertProperty = async (
   code: string,
@@ -254,10 +284,9 @@ const processAndUpsertProperty = async (
       ...restOfProperty
     } = propertyData || {};
 
-    const validDataHoraAtualizacao: string =
-      DataHoraAtualizacao && !isNaN(Date.parse(DataHoraAtualizacao))
-        ? new Date(DataHoraAtualizacao).toISOString()
-        : new Date().toISOString();
+    const validDataHoraAtualizacao: string = normalizeVistaDate(
+      DataHoraAtualizacao
+    );
 
     const details: VistaPropertyDetails = await fetchData<VistaPropertyDetails>(
       buildDetailsUrl(code)
@@ -288,7 +317,7 @@ const processAndUpsertProperty = async (
           video.Destaque !== undefined && video.Destaque !== null
             ? String(video.Destaque)
             : null,
-        video: video.Video ?? null
+        video: video.Video ?? null,
       })
     );
 
@@ -308,21 +337,6 @@ const processAndUpsertProperty = async (
       })
     );
 
-    // Helpers
-    const parseToInt = (value: string | null | undefined): number | null => {
-      if (value === null || value === undefined || value.trim() === "") {
-        return null;
-      }
-      const parsed = parseInt(value, 10);
-      return isNaN(parsed) ? null : parsed;
-    };
-
-    const parseToFloat = (value: string | null | undefined): number | null => {
-      if (!value || value.trim() === "") return 0;
-      const parsed = parseFloat(value);
-      return isNaN(parsed) ? null : parsed;
-    };
-
     const valorVendaInt = parseToInt(restOfProperty.ValorVenda);
     const valorLocacaoInt = parseToInt(restOfProperty.ValorLocacao);
     const areaTotalFloat = parseToFloat(restOfProperty.AreaTotal);
@@ -331,90 +345,95 @@ const processAndUpsertProperty = async (
 
     // Prepara corretor
     let corretorId: string | null = null;
+
     if (Corretor) {
       const corretorValues = Object.values(Corretor);
       if (corretorValues.length > 0) {
         const corretorData: any = corretorValues[0];
-        const corretor = await prisma.corretorExterno.upsert({
-          where: { CRECI: corretorData.CRECI },
-          update: {
-            name: corretorData.Nome,
-            email: corretorData.Email,
-            telefone: corretorData.Celular,
-            nomeAgencia: corretorData.Agencia,
-            codigo: corretorData.Codigo,
-            codigoAgencia: corretorData.CodigoAgencia,
-            codigoEquipe: corretorData.CodigoEquipe,
-            foto: corretorData.Foto,
-            atuacaoLocacao: corretorData.AtuacaoLocacao,
-            atuacaoVenda: corretorData.AtuacaoVenda,
-          },
-          create: {
-            id: corretorData.Codigo,
-            name: corretorData.Nome,
-            email: corretorData.Email,
-            telefone: corretorData.Celular,
-            nomeAgencia: corretorData.Agencia,
-            codigo: corretorData.Codigo,
-            codigoAgencia: corretorData.CodigoAgencia,
-            codigoEquipe: corretorData.CodigoEquipe,
-            foto: corretorData.Foto,
-            atuacaoLocacao: corretorData.AtuacaoLocacao,
-            atuacaoVenda: corretorData.AtuacaoVenda,
-            CRECI: corretorData.CRECI,
-          },
-        });
-        corretorId = corretor.id;
-      }
 
-      // Upsert imóvel
-      await prisma.imovel.upsert({
-        where: { id: code },
-        update: {
-          ...restOfProperty,
-          Cidade,
-          ValorVenda: valorVendaInt,
-          ValorLocacao: valorLocacaoInt,
-          AreaTotal: areaTotalFloat,
-          AreaUtil: areaUtilFloat,
-          AreaTerreno: areaTerrenoFloat,
-          DataHoraAtualizacao: validDataHoraAtualizacao,
-          corretorId,
-          fotos:
-            photosToCreate.length > 0
-              ? { deleteMany: {}, create: photosToCreate }
-              : undefined,
-          videos:
-            VideosToCreate.length > 0
-              ? { deleteMany: {}, create: VideosToCreate }
-              : undefined,
-          caracteristicas:
-            characteristicsToCreate.length > 0
-              ? { deleteMany: {}, create: characteristicsToCreate }
-              : undefined,
-          infraestrutura:
-            infraToCreate.length > 0
-              ? { deleteMany: {}, create: infraToCreate }
-              : undefined,
-        },
-        create: {
-          id: code,
-          ...restOfProperty,
-          Cidade,
-          ValorVenda: valorVendaInt,
-          ValorLocacao: valorLocacaoInt,
-          AreaTotal: areaTotalFloat,
-          AreaUtil: areaUtilFloat,
-          AreaTerreno: areaTerrenoFloat,
-          DataHoraAtualizacao: validDataHoraAtualizacao,
-          corretorId,
-          fotos: { create: photosToCreate },
-          videos: {create : VideosToCreate},
-          caracteristicas: { create: characteristicsToCreate },
-          infraestrutura: { create: infraToCreate },
-        },
-      });
+        if (corretorData.CRECI) {
+          const corretor = await prisma.corretorExterno.upsert({
+            where: { CRECI: corretorData.CRECI },
+            update: {
+              name: corretorData.Nome,
+              email: corretorData.Email,
+              telefone: corretorData.Celular,
+              nomeAgencia: corretorData.Agencia,
+              codigo: corretorData.Codigo,
+              codigoAgencia: corretorData.CodigoAgencia,
+              codigoEquipe: corretorData.CodigoEquipe,
+              foto: corretorData.Foto,
+              atuacaoLocacao: corretorData.AtuacaoLocacao,
+              atuacaoVenda: corretorData.AtuacaoVenda,
+            },
+            create: {
+              id: corretorData.Codigo,
+              name: corretorData.Nome,
+              email: corretorData.Email,
+              telefone: corretorData.Celular,
+              nomeAgencia: corretorData.Agencia,
+              codigo: corretorData.Codigo,
+              codigoAgencia: corretorData.CodigoAgencia,
+              codigoEquipe: corretorData.CodigoEquipe,
+              foto: corretorData.Foto,
+              atuacaoLocacao: corretorData.AtuacaoLocacao,
+              atuacaoVenda: corretorData.AtuacaoVenda,
+              CRECI: corretorData.CRECI,
+            },
+          });
+
+          corretorId = corretor.id;
+        }
+      }
     }
+
+    // Upsert imóvel (sempre executa, com ou sem corretor)
+    await prisma.imovel.upsert({
+      where: { id: code },
+      update: {
+        ...restOfProperty,
+        Cidade,
+        ValorVenda: valorVendaInt,
+        ValorLocacao: valorLocacaoInt,
+        AreaTotal: areaTotalFloat,
+        AreaUtil: areaUtilFloat,
+        AreaTerreno: areaTerrenoFloat,
+        DataHoraAtualizacao: validDataHoraAtualizacao,
+        corretorId,
+        fotos:
+          photosToCreate.length > 0
+            ? { deleteMany: {}, create: photosToCreate }
+            : undefined,
+        videos:
+          VideosToCreate.length > 0
+            ? { deleteMany: {}, create: VideosToCreate }
+            : undefined,
+        caracteristicas:
+          characteristicsToCreate.length > 0
+            ? { deleteMany: {}, create: characteristicsToCreate }
+            : undefined,
+        infraestrutura:
+          infraToCreate.length > 0
+            ? { deleteMany: {}, create: infraToCreate }
+            : undefined,
+      },
+      create: {
+        id: code,
+        ...restOfProperty,
+        Cidade,
+        ValorVenda: valorVendaInt,
+        ValorLocacao: valorLocacaoInt,
+        AreaTotal: areaTotalFloat,
+        AreaUtil: areaUtilFloat,
+        AreaTerreno: areaTerrenoFloat,
+        DataHoraAtualizacao: validDataHoraAtualizacao,
+        corretorId,
+        fotos: { create: photosToCreate },
+        videos: { create: VideosToCreate },
+        caracteristicas: { create: characteristicsToCreate },
+        infraestrutura: { create: infraToCreate },
+      },
+    });
 
     console.log(`Imóvel ${code} processado e upserted com sucesso.`);
   } catch (error: any) {
@@ -746,14 +765,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-function parseSimNao(value: string | null): "Sim" | "Nao" | null {
-  if (!value) return null;
-  const normalized = value.toLowerCase().trim();
-  if (["sim", "s", "true"].includes(normalized)) return "Sim";
-  if (["nao", "n", "false"].includes(normalized)) return "Nao";
-  return null;
-}
-
 export async function PUT() {
   try {
     // 1. Fetch first page to determine total pages
@@ -801,15 +812,16 @@ export async function PUT() {
           (i) => String(i.id) === String(code)
         );
 
-        const apiDate = property.DataHoraAtualizacao
-          ? new Date(property.DataHoraAtualizacao).getTime()
-          : 0;
-        const dbDate = existing?.DataHoraAtualizacao
-          ? new Date(existing.DataHoraAtualizacao).getTime()
-          : 0;
+        const apiDate = getTimeSafe(property.DataHoraAtualizacao);
+        const dbDate = getTimeSafe(existing?.DataHoraAtualizacao);
 
         if (!existing || apiDate > dbDate) {
           await processAndUpsertProperty(code, property);
+          if (existing) {
+            console.log(`Imóvel ${code} atualizado.`);
+          } else {
+            console.log(`Imóvel ${code} criado.`);
+          }
         }
       })
     );
@@ -817,7 +829,12 @@ export async function PUT() {
     // 6. Delete properties not in API
     const deletePromises = existingImoveis
       .filter((i) => !apiIds.includes(String(i.id)))
-      .map((i) => limit(() => prisma.imovel.delete({ where: { id: i.id } })));
+      .map((i) =>
+        limit(async () => {
+          await prisma.imovel.delete({ where: { id: i.id } });
+          console.log(`Imóvel ${i.id} deletado.`);
+        })
+      );
 
     // 7. Wait for all operations
     const [upsertResults, deleteResults] = await Promise.all([
@@ -831,7 +848,7 @@ export async function PUT() {
         .length,
       deleted: deleteResults.filter((r) => r.status === "fulfilled").length,
       failedUpserts: upsertResults.filter((r) => r.status === "rejected")
-        .length,  
+        .length,
       failedDeletes: deleteResults.filter((r) => r.status === "rejected")
         .length,
     });
