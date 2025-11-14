@@ -169,7 +169,7 @@ export function LocationSelectModal({
               placeholder={`${isMobile ? "Buscar" : "Buscar Bairro..."}`}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 focus-visible:ring-[0px] text-sm"
+              className="pl-10 focus-visible:ring-[0px] text-base"
             />
           </div>
         </div>

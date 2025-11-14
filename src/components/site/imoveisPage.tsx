@@ -570,7 +570,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                   placeholder="Código"
                   value={codigo}
                   onChange={(e) => setCodigo(e.target.value)}
-                  className="placeholder:text-black border-0 text-sm focus:ring-0 focus:outline-none focus-visible:ring-0 shadow-none text-black"
+                  className="placeholder:text-black border-0 text-base focus:ring-0 focus:outline-none focus-visible:ring-0 shadow-none text-black"
                 />
                 <Button
                   onClick={() => handleSearchByCode(codigo)}
@@ -746,7 +746,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                   placeholder="Empreendimento"
                   value={empreendimento}
                   onChange={(e) => setEmpreendimento(e.target.value)}
-                  className="placeholder:text-black border-0 text-sm focus:ring-0 focus:outline-none focus-visible:ring-0 shadow-none text-black"
+                  className="placeholder:text-black border-0 text-base focus:ring-0 focus:outline-none focus-visible:ring-0 shadow-none text-black"
                 />
                 <Button
                   onClick={() => handleSearchByName(empreendimento)}

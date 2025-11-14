@@ -138,12 +138,6 @@
 
     @apply bg-background text-foreground;
   }
-
-  input,
-  textarea,
-  select {
-    @apply text-[16px];
-  }
 }
 
 [data-radix-portal] {

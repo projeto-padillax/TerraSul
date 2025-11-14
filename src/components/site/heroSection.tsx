@@ -317,7 +317,7 @@ export function HeroSection(banner: HeroSectionProps) {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") handleSearchByCode();
                   }}
-                  className="w-[132px] px-2 text-sm text-white outline-none text-shadow"
+                  className="w-[132px] px-2 text-base text-white outline-none text-shadow"
                 />
                 <Button
                   onClick={handleSearchByCode}
