@@ -20,23 +20,47 @@ export default function GaleriaModal({ midias, onClose }: GaleriaModalProps) {
   const selectedItem = selectedIndex !== null ? midias[selectedIndex] : null;
 
   const handleNext = () => {
-    if (selectedIndex !== null && selectedIndex < midias.length - 1) {
-      setSelectedIndex(selectedIndex + 1);
-    }
+    setSelectedIndex((prev) => {
+      if (prev === null) return 0;
+      if (prev >= midias.length - 1) return prev;
+      return prev + 1;
+    });
   };
 
   const handlePrev = () => {
-    if (selectedIndex !== null && selectedIndex > 0) {
-      setSelectedIndex(selectedIndex - 1);
-    }
+    setSelectedIndex((prev) => {
+      if (prev === null) return 0;
+      if (prev <= 0) return prev;
+      return prev - 1;
+    });
   };
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        handleNext();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        handlePrev();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        if (selectedIndex !== null) {
+          setSelectedIndex(null);
+        } else {
+          onClose();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
       document.body.style.overflow = "auto";
+      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [selectedIndex, midias.length, onClose]);
 
   return (
     <div className="fixed inset-0 z-50 w-screen h-screen bg-white flex items-center justify-center">
