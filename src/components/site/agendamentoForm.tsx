@@ -227,7 +227,7 @@ export default function AgendamentoForm({
             </label>
             <input
               {...register("nome")}
-              className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-sm text-gray-900
+              className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-base text-gray-900
                 focus:border-[#4f7dc3] focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
             />
             {errors.nome && (
@@ -241,7 +241,7 @@ export default function AgendamentoForm({
             </label>
             <input
               {...register("celular")}
-              className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-sm text-gray-900
+              className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-base text-gray-900
                 focus:border-[#4f7dc3] focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
             />
             {errors.celular && (
@@ -258,7 +258,7 @@ export default function AgendamentoForm({
               </label>
               <input
                 {...register("email")}
-                className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-sm text-gray-900
+                className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-base text-gray-900
                     focus:border-[#4f7dc3] focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
               />
               {errors.email && (

@@ -127,7 +127,7 @@ export default function AgendamentoModal({ open, onClose, codigoImovel, codigoCo
             </label>
             <input
               {...register("nome")}
-              className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-sm text-gray-900
+              className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-base text-gray-900
                          focus:border-site-primary-hover focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
             />
             {errors.nome && <p className="mt-1 text-xs text-red-500">{errors.nome.message}</p>}
@@ -139,7 +139,7 @@ export default function AgendamentoModal({ open, onClose, codigoImovel, codigoCo
             </label>
             <input
               {...register("email")}
-              className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-sm text-gray-900
+              className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-base text-gray-900
                          focus:border-site-primary-hover focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
             />
             {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
@@ -151,7 +151,7 @@ export default function AgendamentoModal({ open, onClose, codigoImovel, codigoCo
             </label>
             <input
               {...register("celular")}
-              className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-sm text-gray-900
+              className="w-full rounded-md border border-gray-400 bg-white px-3 pt-5 pb-2 text-base text-gray-900
                          focus:border-site-primary-hover focus:outline-none focus:ring-2 focus:ring-[#4f7dc3]/20"
             />
             {errors.celular && <p className="mt-1 text-xs text-red-500">{errors.celular.message}</p>}

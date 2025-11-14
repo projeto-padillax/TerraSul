@@ -114,7 +114,7 @@ export function AdminHeaderFormularios({
             <label className="text-sm font-medium text-gray-700 mb-2">Data de Início</label>
             <input
               type="date"
-              className="h-11 rounded-lg border border-gray-300 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="h-11 rounded-lg border border-gray-300 bg-white px-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={startDate ?? ""}
               onChange={(e) => onChangeStartDate(e.target.value)}
             />

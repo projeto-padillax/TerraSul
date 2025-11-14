@@ -53,7 +53,7 @@ export default function AnuncieForm() {
     };
 
     const baseInput =
-        "w-full bg-transparent outline-none border-0 focus:ring-0 placeholder:text-[#9aa2b1] text-[15px]";
+        "w-full bg-transparent outline-none border-0 focus:ring-0 placeholder:text-[#9aa2b1] text-[16px]";
     const cell =
         "p-3 md:p-2";
     const label =

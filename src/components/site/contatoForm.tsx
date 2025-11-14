@@ -54,7 +54,7 @@ export default function ContatoForm() {
   };
 
   const baseInput =
-    "w-full bg-transparent outline-none border-0 focus:ring-0 placeholder:text-[#9aa2b1] text-[15px]";
+    "w-full bg-transparent outline-none border-0 focus:ring-0 placeholder:text-[#9aa2b1] text-[16px]";
   const cell = "p-2 md:p-3";
   const label =
     "block text-[11px] font-semibold tracking-wide text-gray-800 uppercase mb-1";
