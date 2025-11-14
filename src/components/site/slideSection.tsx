@@ -18,7 +18,7 @@ export default function SlideSection({ slides }: SlideSectionProps) {
 
   useEffect(() => {
     if (!api) return;
-    if (slides.length <= 1) return;
+    if (slides && slides.length <= 1) return;
     const onSelect = () => {
       const index = api.selectedScrollSnap();
       setCurrentIndex(index);
@@ -34,7 +34,7 @@ export default function SlideSection({ slides }: SlideSectionProps) {
     return () => {
       api.off("select", onSelect);
     };
-  }, [api]);
+  }, [api, slides]);
 
   return (
     <section className="py-8 pt-16 justify-items-center">
