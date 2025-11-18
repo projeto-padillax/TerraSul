@@ -30,7 +30,7 @@ export default function FormularioModal({
     .object({
       nome: z.string().min(1, "Informe seu nome"),
       email: z.email("Email inválido"),
-      celular: z.string().min(1, "Informe seu telefone"),
+      celular: z.string().regex(/^\(\d{2}\)\d{5}-\d{4}$/, "Celular inválido"),
       mensagem: z.string().optional(),
       valorEntrada: z.number("Digite um valor válido").optional(),
     })
@@ -42,7 +42,7 @@ export default function FormularioModal({
 
   type FormInput = z.infer<typeof schema>;
 
-  const router = useRouter()
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const {
@@ -55,20 +55,20 @@ export default function FormularioModal({
   });
 
   function getCodigoImovelFromUrl(url: string): string {
-  try {
-    const path = new URL(url).pathname; // ex: "/imovel/casa-com-280m.../IPA15147"
-    const parts = path.split("/").filter(Boolean);
+    try {
+      const path = new URL(url).pathname; // ex: "/imovel/casa-com-280m.../IPA15147"
+      const parts = path.split("/").filter(Boolean);
 
-    if (parts[0] === "imovel" && parts.length > 2) {
-      // último segmento é o código
-      return parts[parts.length - 1];
+      if (parts[0] === "imovel" && parts.length > 2) {
+        // último segmento é o código
+        return parts[parts.length - 1];
+      }
+
+      return "";
+    } catch {
+      return "";
     }
-
-    return "";
-  } catch {
-    return "";
   }
-}
 
   const onSubmit = (data: FormInput) => {
     startTransition(async () => {
@@ -78,20 +78,25 @@ export default function FormularioModal({
             ? `${data.mensagem ?? ""}\nValor de entrada: ${data.valorEntrada}`
             : data.mensagem;
 
-        await createFormulario({
-          tipo: tipo === "whatsapp" ? "WHATSAPP" : "FINANCIAMENTO",
-          nome: data.nome,
-          email: data.email,
-          telefone: data.celular,
-          urlRespondida: typeof window !== "undefined" ? window.location.href : "",
-          codigoImovel: codigoImovel || getCodigoImovelFromUrl(window.location.href),
-          mensagem: mensagemFinal,
-        },codigoCorretor);
+        await createFormulario(
+          {
+            tipo: tipo === "whatsapp" ? "WHATSAPP" : "FINANCIAMENTO",
+            nome: data.nome,
+            email: data.email,
+            telefone: data.celular,
+            urlRespondida:
+              typeof window !== "undefined" ? window.location.href : "",
+            codigoImovel:
+              codigoImovel || getCodigoImovelFromUrl(window.location.href),
+            mensagem: mensagemFinal,
+          },
+          codigoCorretor
+        );
 
         toast.success("Mensagem enviada com sucesso!");
         reset();
         onClose();
-        router.push("https://wa.me/5551981214507")
+        router.push("https://wa.me/5551981214507");
       } catch {
         toast.error("Erro ao enviar mensagem.");
       }
@@ -102,14 +107,18 @@ export default function FormularioModal({
 
   // Estilos consistentes
   const baseInput =
-        'w-full bg-transparent outline-none border-0 focus:ring-0 placeholder:text-[#9aa2b1] text-[16px] text-gray-900'
-    const cell = 'p-4 sm:p-2'
-    const label = 'block text-[11px] font-semibold tracking-wide text-gray-800 uppercase mb-1'
+    "w-full bg-transparent outline-none border-0 focus:ring-0 placeholder:text-[#9aa2b1] text-[16px] text-gray-900";
+  const cell = "p-4 sm:p-2";
+  const label =
+    "block text-[11px] font-semibold tracking-wide text-gray-800 uppercase mb-1";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
       <div className="bg-white w-full max-w-md p-6 rounded-2xl shadow-lg relative">
-        <button onClick={onClose} className="absolute top-4 right-4 cursor-pointer">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 cursor-pointer"
+        >
           <X className="w-5 h-5" />
         </button>
 
@@ -124,66 +133,113 @@ export default function FormularioModal({
           </div>
         )}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-sm lead" id="formulario_simular_financiamento">
-
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4 text-sm lead"
+          id="formulario_simular_financiamento"
+        >
           <div className="rounded-md border border-gray-400 overflow-hidden">
-                <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-gray-400">
-                    <div className={cell}>
-                        <label className={label}>Nome</label>
-                        <input {...register('nome')} className={baseInput} />
-                        {errors.nome && <p className="text-red-500 text-xs mt-1">{errors.nome.message}</p>}
-                    </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-gray-400">
+              <div className={cell}>
+                <label className={label}>Nome</label>
+                <input {...register("nome")} className={baseInput} />
+                {errors.nome && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.nome.message}
+                  </p>
+                )}
+              </div>
 
-                    <div className={cell}>
-                        <label className={label}>Celular</label>
-                        <input
-                            {...register('celular')}
-                            className={baseInput}
-                        />
-                        {errors.celular && <p className="text-red-500 text-xs mt-1">{errors.celular.message}</p>}
-                    </div>
-                </div>
+              <div className={cell}>
+                <label className={label}>Celular</label>
+                <input
+                  {...register("celular")}
+                  onInput={(e) => {
+                    let v = e.currentTarget.value.replace(/\D+/g, "");
 
-                <div className="border-t border-gray-400">
-                    <div className={cell}>
-                        <label className={label}>E-mail</label>
-                        <input {...register('email')} className={baseInput} />
-                        {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
-                    </div>
-                </div>
+                    // permite apagar tudo
+                    if (v.length === 0) {
+                      e.currentTarget.value = "";
+                      return;
+                    }
 
-                  {tipo === "financiamento" && (
-            <>
-                  <div className="border-t border-gray-400">
-                    <div className={cell}>
-                         <label className={label}>Mensagem</label>
-                        <textarea
-                            {...register('mensagem')}
-                            className={`${baseInput} resize-none min-h-[50px]`}
-                        />
-                        {errors.mensagem && (
-                            <p className="text-red-500 text-xs mt-1">{errors.mensagem.message}</p>
-                        )}
-                    </div>
-                </div>
+                    // limita a 11 dígitos
+                    if (v.length > 11) v = v.slice(0, 11);
 
-          
-
-              {/* Valor de entrada */}
-               <div className="border-t border-gray-400">
-                    <div className={cell}>
-                        <label className={label}>Valor de Entrada</label>
-                        <input inputMode="numeric" {...register('valorEntrada', { setValueAs: (v) => (v === "" ? undefined : Number(v)) })} className={baseInput} />
-                        {errors.valorEntrada && <p className="text-red-500 text-xs mt-1">{errors.valorEntrada.message}</p>}
-                    </div>
-                </div>
-
-            </>
-          )}
-
-            
+                    // aplica máscaras progressivas
+                    if (v.length <= 2) {
+                      e.currentTarget.value = `(${v}`;
+                    } else if (v.length <= 7) {
+                      e.currentTarget.value = `(${v.slice(0, 2)})${v.slice(2)}`;
+                    } else {
+                      e.currentTarget.value = `(${v.slice(0, 2)})${v.slice(
+                        2,
+                        7
+                      )}-${v.slice(7)}`;
+                    }
+                  }}
+                  inputMode="numeric"
+                  className={baseInput}
+                />
+                {errors.celular && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.celular.message}
+                  </p>
+                )}
+              </div>
             </div>
-      
+
+            <div className="border-t border-gray-400">
+              <div className={cell}>
+                <label className={label}>E-mail</label>
+                <input {...register("email")} className={baseInput} />
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {tipo === "financiamento" && (
+              <>
+                <div className="border-t border-gray-400">
+                  <div className={cell}>
+                    <label className={label}>Mensagem</label>
+                    <textarea
+                      {...register("mensagem")}
+                      className={`${baseInput} resize-none min-h-[50px]`}
+                    />
+                    {errors.mensagem && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.mensagem.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Valor de entrada */}
+                <div className="border-t border-gray-400">
+                  <div className={cell}>
+                    <label className={label}>Valor de Entrada</label>
+                    <input
+                      inputMode="numeric"
+                      {...register("valorEntrada", {
+                        setValueAs: (v) => (v === "" ? undefined : Number(v)),
+                      })}
+                      className={baseInput}
+                    />
+                    {errors.valorEntrada && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.valorEntrada.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
           {/* Botão */}
           <button
             type="submit"
