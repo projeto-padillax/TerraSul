@@ -19,6 +19,9 @@ export const metadata: Metadata = {
   verification: {
     google: "Zpz5JJ2ZL7dcNOMPR5VcmDbVRxLHByfCMF_OzC443RQ",
   },
+   alternates: {
+    canonical: "https://terrasulimoveis.com.br",
+  },
 };
 
 export default function RootLayout({
