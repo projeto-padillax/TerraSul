@@ -162,7 +162,7 @@ async function fetchFromVista(codigo: string): Promise<VistaImovel | null> {
       "FotoDestaqueEmpreendimento",
       "VideoDestaque",
       { Video: ["ExibirNoSite", "Descricao", "Destaque", "Tipo", "Video"] },
-      { Foto: ["Foto", "FotoPequena", "Destaque"] },
+      { Foto: ["Foto", "FotoPequena", "Destaque", "Ordem"] },
     ],
   };
 
@@ -273,6 +273,22 @@ export async function PUT(
 }
 
 function mapVistaToDb(v: VistaImovel) {
+  type VistaFoto = {
+    Ordem?: string;
+    Codigo?: string;
+    Foto?: string;
+    FotoPequena?: string;
+    Destaque?: string;
+  };
+
+  const fotosOrdenadas = Object.values(v.Foto ?? {} as Record<string, VistaFoto>).sort(
+    (a: VistaFoto, b: VistaFoto) => {
+      const aOrdem = parseInt(a.Ordem ?? "9999", 10);
+      const bOrdem = parseInt(b.Ordem ?? "9999", 10);
+      return aOrdem - bOrdem;
+    }
+  );
+
   return {
     Codigo: v.Codigo,
     Categoria: v.Categoria,
@@ -308,7 +324,7 @@ function mapVistaToDb(v: VistaImovel) {
     EstudaDacao: v.EstudaDacao,
     Exclusivo: v.Exclusivo,
 
-    fotos: Object.values(v.Foto ?? {}).map((f) => ({
+    fotos: fotosOrdenadas.map((f: VistaFoto) => ({
       codigo: f.Codigo,
       url: f.Foto,
       urlPequena: f.FotoPequena,
