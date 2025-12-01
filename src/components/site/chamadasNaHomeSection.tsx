@@ -26,7 +26,10 @@ export default async function CategoryCards() {
                 >
                   <div className="relative w-full h-full">
                     <Image
-                      src={category.imagem}
+                      src={`${category.imagem.replace(
+                        "/upload/",
+                        "/upload/f_auto,q_auto,w_600,c_fill/"
+                      )}`}
                       alt={category.titulo}
                       fill
                       className="object-cover"
@@ -41,7 +44,9 @@ export default async function CategoryCards() {
                     />
 
                     <CardContent className="absolute bottom-0 z-10 p-4 text-white">
-                      <p className="text-lg font-semibold mb-1 font-sans">{category.titulo}</p>
+                      <p className="text-lg font-semibold mb-1 font-sans">
+                        {category.titulo}
+                      </p>
                       <h3 className="text-sm opacity-90">
                         {category.subtitulo}
                       </h3>

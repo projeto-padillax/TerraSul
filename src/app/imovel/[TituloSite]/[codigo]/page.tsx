@@ -93,6 +93,7 @@ export default async function ImovelPage({
   }
 
   const imovel = await res.json();
+  console.log(imovel)
   const imagensGaleria: { Foto: string }[] = (() => {
     const fotos = (imovel.fotos ?? []).map((foto: { url: string }) => ({
       Foto: foto.url,
