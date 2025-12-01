@@ -22,8 +22,9 @@ export default function GaleriaImagens({ imagens, principal, video }: GaleriaIma
 
   // converter para tipo unificado
   const midias: Midia[] = [
-    ...imagens.map(img => ({ type: "image" as const, src: img.Foto })),
-    ...video.map(v => ({ type: "video" as const, src: v.url })),
+    ...(principal ? [{ type: "image" as const, src: principal }] : []),
+    ...imagens.map((f): Midia => ({ type: "image", src: f.Foto })),
+    ...video.map((v): Midia => ({ type: "video", src: v.url })),
   ];
 
   const temVideo = midias.some(m => m.type === "video");
@@ -70,7 +71,7 @@ export default function GaleriaImagens({ imagens, principal, video }: GaleriaIma
               {imagens.length > 3 && (
                 <div
                   className={`bg-white text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md cursor-pointer ${videoAberto ? "opacity-50" : ""
-                    }` } onClick={() => {setModalAberta(true); setVideoAberto(false);}}
+                    }`} onClick={() => { setModalAberta(true); setVideoAberto(false); }}
                 >
                   <Camera size={16} />
                   <span>{imagens.length} Fotos</span>
@@ -81,11 +82,11 @@ export default function GaleriaImagens({ imagens, principal, video }: GaleriaIma
         </div>
 
         <div className="grid grid-cols-2 grid-rows-2 gap-[6px] w-full md:w-1/2 h-full">
-          {midias.slice(0, 4).map((m, i) => (
+          {midias.filter(m => m.src !== principal).slice(0, 4).map((m, i) => (
             <div
               key={i}
               className="relative w-full h-full rounded-md overflow-hidden cursor-pointer"
-              onClick={() => {setModalAberta(true); setVideoAberto(false);}}
+              onClick={() => { setModalAberta(true); setVideoAberto(false); }}
             >
               {m.type === "image" ? (
                 <Image

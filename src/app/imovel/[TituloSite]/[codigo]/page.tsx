@@ -93,18 +93,14 @@ export default async function ImovelPage({
   }
 
   const imovel = await res.json();
-  console.log(imovel)
-  const imagensGaleria: { Foto: string }[] = (() => {
-    const fotos = (imovel.fotos ?? []).map((foto: { url: string }) => ({
-      Foto: foto.url,
-    }));
 
-    if (fotos.length > 1) {
-      fotos.push(fotos.shift()!);
-    }
+  type FotoObj = { Foto: string };
 
-    return fotos;
-  })();
+  const imagensGaleria: { Foto: string }[] = (imovel.fotos ?? [])
+    .map((foto: { url: string }) => ({ Foto: foto.url }))
+    .filter((f: FotoObj) => f.Foto !== imovel.FotoDestaque);
+
+ 
 
   const hasBadges =
     imovel.Lancamento === "Sim" ||
