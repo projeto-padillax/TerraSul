@@ -28,7 +28,7 @@ export async function generateMetadata({
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/vista/imoveis/${codigo}`,
     {
-      cache: "no-store",
+      next: { revalidate: 60 },
     }
   );
 
@@ -84,7 +84,7 @@ export default async function ImovelPage({
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/vista/imoveis/${parsedParams.codigo}`,
     {
-      cache: "no-store",
+      next: { revalidate: 60 },
     }
   );
 

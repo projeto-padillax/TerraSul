@@ -172,7 +172,7 @@ async function fetchFromVista(codigo: string): Promise<VistaImovel | null> {
     `&pesquisa=${encodeURIComponent(JSON.stringify(pesquisa))}`;
 
   const res = await fetch(url, {
-    cache: "no-store",
+    next: { revalidate: 60 },
     headers: {
       Accept: "application/json",
     },
