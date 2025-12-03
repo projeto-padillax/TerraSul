@@ -291,6 +291,7 @@ function mapVistaToDb(v: VistaImovel) {
 
   return {
     Codigo: v.Codigo,
+    Descricao: v.Descricao ?? null,
     Categoria: v.Categoria,
     Bairro: v.Bairro,
     Cidade: v.Cidade,
@@ -302,7 +303,7 @@ function mapVistaToDb(v: VistaImovel) {
     AreaTotal: v.AreaTotal ? parseFloat(v.AreaTotal) : 0,
     AreaUtil: v.AreaUtil ? parseFloat(v.AreaUtil) : 0,
     DataHoraAtualizacao: new Date(),
-
+    Desconto: v.Desconto,
     ValorIptu: v.ValorIptu,
     ValorCondominio: v.ValorCondominio,
     GMapsLatitude: v.GMapsLatitude,
