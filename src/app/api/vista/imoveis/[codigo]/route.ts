@@ -196,21 +196,27 @@ export async function PUT(
 ) {
   try {
     const { codigo } = await params;
+    const codigoUppercase = codigo.toUpperCase();
 
-    const vistaImovel = await fetchFromVista(codigo);
+    // Busca no Vista
+    const vistaImovel = await fetchFromVista(codigoUppercase);
+
+    // Busca no banco pelo ID (mesma chave que o GET usa)
     const imovelExistente = await prisma.imovel.findUnique({
-      where: { Codigo: codigo },
+      where: { id: codigoUppercase },
     });
 
+    // CASO 3: já foi removido do Vista -> excluir do site
     if (!vistaImovel) {
       if (imovelExistente) {
-        await prisma.foto.deleteMany({
-          where: { imovelId: imovelExistente.id },
-        });
-        await prisma.caracteristica.deleteMany({
-          where: { imovelId: imovelExistente.id },
-        });
-        await prisma.imovel.delete({ where: { id: imovelExistente.id } });
+        await prisma.$transaction([
+          prisma.foto.deleteMany({ where: { imovelId: imovelExistente.id } }),
+          prisma.video.deleteMany({ where: { imovelId: imovelExistente.id } }),
+          prisma.caracteristica.deleteMany({
+            where: { imovelId: imovelExistente.id },
+          }),
+          prisma.imovel.delete({ where: { id: imovelExistente.id } }),
+        ]);
       }
 
       return NextResponse.json(
@@ -222,53 +228,62 @@ export async function PUT(
       );
     }
 
+    // CASOS 1 e 2: importar ou atualizar
     const data = mapVistaToDb(vistaImovel);
-
-    let imovel: typeof imovelExistente;
-
     const { fotos, videos, caracteristicas, ...dadosImovel } = data;
 
-    if (imovelExistente) {
-      await prisma.foto.deleteMany({ where: { imovelId: imovelExistente.id } });
-      await prisma.caracteristica.deleteMany({
-        where: { imovelId: imovelExistente.id },
-      });
+    const result = await prisma.$transaction(async (tx) => {
+      let imovelTx = imovelExistente;
 
-      imovel = await prisma.imovel.update({
-        where: { id: imovelExistente.id },
-        data: dadosImovel,
-      });
-    } else {
-      imovel = await prisma.imovel.create({
-        data: {
-          id: codigo,
-          ...dadosImovel,
-        },
-      });
-    }
+      if (imovelTx) {
+        // Atualiza imóvel existente
+        await tx.foto.deleteMany({ where: { imovelId: imovelTx.id } });
+        await tx.video.deleteMany({ where: { imovelId: imovelTx.id } });
+        await tx.caracteristica.deleteMany({
+          where: { imovelId: imovelTx.id },
+        });
 
-    if (fotos?.length) {
-      await prisma.foto.createMany({
-        data: fotos.map((f) => ({ ...f, imovelId: imovel.id })),
-      });
-    }
+        imovelTx = await tx.imovel.update({
+          where: { id: imovelTx.id },
+          data: dadosImovel,
+        });
+      } else {
+        // Importa imóvel novo
+        imovelTx = await tx.imovel.create({
+          data: {
+            id: codigoUppercase,
+            ...dadosImovel,
+          },
+        });
+      }
 
-    if (videos?.length) {
-      await prisma.video.createMany({
-        data: videos.map((f) => ({ ...f, imovelId: imovel.id })),
-      });
-    }
+      if (fotos?.length) {
+        await tx.foto.createMany({
+          data: fotos.map((f) => ({ ...f, imovelId: imovelTx.id })),
+        });
+      }
 
-    if (caracteristicas?.length) {
-      await prisma.caracteristica.createMany({
-        data: caracteristicas.map((c) => ({ ...c, imovelId: imovel.id })),
-      });
-    }
+      if (videos?.length) {
+        await tx.video.createMany({
+          data: videos.map((v) => ({ ...v, imovelId: imovelTx.id })),
+        });
+      }
 
-    return NextResponse.json({ ok: true, imovel });
+      if (caracteristicas?.length) {
+        await tx.caracteristica.createMany({
+          data: caracteristicas.map((c) => ({ ...c, imovelId: imovelTx.id })),
+        });
+      }
+
+      return imovelTx;
+    });
+
+    return NextResponse.json({ ok: true, imovel: result });
   } catch (err) {
     console.error("PUT /api/vista/imoveis/[codigo] error:", err);
-    return NextResponse.json({ status: 500 });
+    return NextResponse.json({ error: "Erro interno do servidor" }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
 }
 
