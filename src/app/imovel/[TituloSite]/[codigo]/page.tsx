@@ -108,8 +108,11 @@ export default async function ImovelPage({
     imovel.Exclusivo === "Sim";
 
   function gerarTitulo() {
-    const capitalizar = (str: string) =>
-      str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    const capitalizar = (str: string) => {
+      const palavras = str.split(" ");
+      const novasPalavras = palavras.map((x) => x = x.charAt(0).toUpperCase() + x.slice(1).toLowerCase())
+      return novasPalavras.join(" ")
+    }
 
     let status = "";
     if (imovel.Status == "VENDA") {
