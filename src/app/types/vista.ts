@@ -1,5 +1,6 @@
 export type VistaImovel = {
   Codigo: string;
+  Descricao?: string;
   Categoria?: string;
   Bairro?: string;
   Cidade?: string;
@@ -32,6 +33,7 @@ export type VistaImovel = {
   VideoDestaque?: string;
   EstudaDacao?: string;
   Exclusivo?: string;
+  Desconto?: string;
 
   Foto?: Record<
     string,
@@ -53,3 +55,4 @@ export type VistaImovel = {
 
   Caracteristicas?: Record<string, string>;
 };
+

@@ -32,6 +32,7 @@ interface VistaPropertyDetailPhoto {
   Codigo?: string;
   Foto?: string;
   FotoPequena?: string;
+  Ordem?: string
 }
 
 interface VistaPropertyDetailVideo {
@@ -112,7 +113,7 @@ const LISTING_RESEARCH_FIELDS = [
 // Campos para os detalhes (detalhes) - inclui a estrutura de fotos
 const DETAIL_RESEARCH_FIELDS: (string | Record<string, string[]>)[] = [
   ...LISTING_RESEARCH_FIELDS, // Inclui todos os campos da listagem
-  { Foto: ["Foto", "FotoPequena", "Destaque"] }, // ✨ ADICIONADO: Para buscar detalhes da foto
+  { Foto: ["Foto", "FotoPequena", "Destaque", "Ordem"] }, // ✨ ADICIONADO: Para buscar detalhes da foto
   { Video: ["ExibirNoSite", "Descricao", "Destaque", "Tipo", "Video"] }, // ✨ ADICIONADO: Para buscar detalhes do video
 ];
 
@@ -298,17 +299,14 @@ const processAndUpsertProperty = async (
     });
 
     // Fotos
-    const photosToCreate = Object.values(details.Foto || {}).map(
-      (photo: VistaPropertyDetailPhoto) => ({
-        destaque:
-          photo.Destaque !== undefined && photo.Destaque !== null
-            ? String(photo.Destaque)
-            : null,
-        codigo: photo.Codigo ?? null,
-        url: photo.Foto ?? null,
-        urlPequena: photo.FotoPequena ?? null,
-      })
-    );
+const photosToCreate = Object.values(details.Foto || {})
+  .sort((a, b) => parseInt(a.Ordem ?? "9999") - parseInt(b.Ordem ?? "9999"))
+  .map(photo => ({
+    destaque: photo.Destaque != null ? String(photo.Destaque) : null,
+    codigo: photo.Codigo ?? null,
+    url: photo.Foto ?? null,
+    urlPequena: photo.FotoPequena ?? null,
+  }));
 
     // Videos
     const VideosToCreate = Object.values(details.Video || {}).map(
