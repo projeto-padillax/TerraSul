@@ -17,7 +17,7 @@ export default function WhatsAppButton() {
         id="form_whats_flutuante"
         aria-label="WhatsApp Button"
       >
-        <FaWhatsapp size={32} color="#fff" />
+        <FaWhatsapp aria-label="WhatsApp Button" size={32} color="#fff" />
       </button>
       <FormularioModal
         open={modalAberta}

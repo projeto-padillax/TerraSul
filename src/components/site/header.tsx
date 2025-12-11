@@ -34,9 +34,7 @@ export default async function Header() {
                 </Link>
               </div>
               <div className="hidden sm:flex items-center space-x-4 text-sm text-site-secondary">
-                <Link aria-label="Favoritos" href={"/favoritos"}>
-                  <FavoriteIcon />
-                </Link>
+                <FavoriteIcon />
                 <Link
                   href="tel:+555132577777"
                   className="flex items-center text-[#303030] hover:text-site-secondary-hover"

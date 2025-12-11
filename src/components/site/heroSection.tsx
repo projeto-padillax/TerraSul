@@ -215,7 +215,7 @@ export function HeroSection(banner: HeroSectionProps) {
       <Image
         src={banner.imageUrl.replace(
           "/upload/",
-          "/upload/f_auto,q_auto:best,w_3000,dpr_2/"
+          "/upload/f_auto,q_auto,1200/"
         )}
         alt="Imagem do banner"
         fill
