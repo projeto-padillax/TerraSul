@@ -29,7 +29,7 @@ export type PaginaInput = z.infer<typeof paginaSchema>;
 
 export async function createPagina(data: PaginaInput) {
   try {
-    console.log(data)
+    
     const validatedData = paginaSchema.parse(data);
 
     const pagina = await prisma.paginasConteudo.create({
@@ -75,7 +75,7 @@ export async function updatePagina(id: number, data: PaginaInput) {
   });
 
   revalidatePath("/admin/paginas");
-  console.log(`✅ Página atualizada:`, updatedPagina.id);
+  
   return updatedPagina;
 }
 
@@ -88,7 +88,7 @@ export async function activatePaginas(ids: number[]) {
     });
 
     revalidatePath('/admin/paginas');
-    console.log(`✅ ${ids.length} páginas ativadas:`, ids);
+    
   } catch (error) {
     console.error('Erro ao ativar páginas:', error);
     throw new Error('Erro ao ativar páginas');
@@ -103,7 +103,7 @@ export async function deactivatePaginas(ids: number[]) {
     });
 
     revalidatePath('/admin/paginas');
-    console.log(`✅ ${ids.length} páginas desativadas:`, ids);
+    
   } catch (error) {
     console.error('Erro ao desativar páginas:', error);
     throw new Error('Erro ao desativar páginas');
@@ -139,7 +139,7 @@ export async function deletePaginas(ids: number[]) {
   ]);
 
   revalidatePath("/admin/paginas");
-  console.log(`✅ ${validIds.length} páginas excluídas:`, validIds);
+  
 }
 
 

@@ -55,7 +55,6 @@ export async function sendEmailFormulario(data: FormularioInput, isCodigo78?: bo
       html: htmlBody,
     });
 
-    console.log('E-mail enviado:', result);
   } catch (error) {
     console.error('Erro ao enviar e-mail:', error);
   }

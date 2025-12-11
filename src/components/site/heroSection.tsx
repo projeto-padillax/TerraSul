@@ -15,6 +15,7 @@ import { TypeSelectModal } from "@/components/site/tipoImovelSelectModal";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { Imovel } from "@prisma/client";
 
 interface HeroSectionProps {
   imageUrl: string;
@@ -123,27 +124,88 @@ export function HeroSection(banner: HeroSectionProps) {
     const params = new URLSearchParams();
     if (searchData.action) params.set("action", searchData.action);
     params.set("page", "1");
-    router.push(`${path}?${decodeURIComponent(params.toString())}${isMobile ? '#ImoveisSection' : ''}`);
+    router.push(
+      `${path}?${decodeURIComponent(params.toString())}${
+        isMobile ? "#ImoveisSection" : ""
+      }`
+    );
   };
 
-  const handleSearchByCode = async () => {
-    if (!codigo) return;
-    try {
-      const tipo =
-        searchData.tipos && searchData.tipos.length > 0
-          ? searchData.tipos[0].replace("/", "-")
-          : "Imovel";
-      const location =
-        searchData.locations && searchData.locations.length > 0
-          ? searchData.locations[0].split(":")[0] +
-            "+" +
-            searchData.locations[0].split(":")[1]
-          : "porto alegre";
+  function gerarTitulos(imovel: Imovel) {
+    const capitalizar = (str: string) =>
+      str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
-      router.push(`/imovel/comprar-${tipo.replace(/[\u0300-\u036f]/g, "")}-em-${location.replaceAll(" ", "-")}/${codigo}`);
-    } catch (error) {
-      console.error("Falha ao buscar imóveis:", error);
+    let categoria = imovel.Categoria ? imovel.Categoria : "Imóvel";
+
+    categoria = categoria.replaceAll(" ", "-");
+    const area =
+      imovel.AreaUtil || imovel.AreaTotal
+        ? `${imovel.AreaUtil || imovel.AreaTotal}m²`
+        : "";
+
+    const quartos =
+      imovel.Dormitorios && imovel.Dormitorios !== "0"
+        ? `${imovel.Dormitorios} quarto${imovel.Dormitorios === "1" ? "" : "s"}`
+        : "";
+
+    const suites =
+      imovel.Suites && imovel.Suites !== "0"
+        ? `${imovel.Suites} suíte${imovel.Suites === "1" ? "" : "s"}`
+        : "";
+
+    const bairro = imovel.Bairro ? `${capitalizar(imovel.Bairro)}` : "";
+    const cidade = imovel.Cidade ? `em ${capitalizar(imovel.Cidade)}` : "";
+
+    const detalhes = [area && `com ${area}`, quartos, suites]
+      .filter(Boolean)
+      .join("-");
+
+    const localizacao = [bairro, cidade].filter(Boolean).join(" ");
+
+    if (!detalhes) {
+      return [categoria, localizacao].filter(Boolean).join(" ");
     }
+
+    return [categoria, detalhes, localizacao].filter(Boolean).join(" ");
+  }
+
+  function toSlug(text: string): string {
+    return (
+      text
+        .normalize("NFD") // separa acentos das letras
+        .replace(/[\u0300-\u036f]/g, "") // remove os acentos
+        .toLowerCase() // converte pra minúsculas
+        // .replace(/(?!\d\.\d)\./g, "") // remove outros pontos que não fazem parte de números
+        // remove tudo que não for letra, número, espaço, ponto ou hífen
+        .replace(/[^a-z0-9.\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-") // troca espaços por hífen
+        .replace(/-+/g, "-") // evita múltiplos hífens
+        .replace(" ", "-")
+    ); // evita múltiplos hífens
+    // .toLowerCase();
+  }
+
+const handleSearchByCode = async (code: string) => {
+    if (!code) return;
+    const codeUpper = code.toLocaleUpperCase()
+    try {
+      const res = await fetch(`/api/vista/imoveis/${codeUpper}`);
+
+      if (!res.ok) {
+        return
+      }
+
+      const data = await res.json();
+
+      router.push(
+        `/imovel/${toSlug(
+          gerarTitulos(data).replaceAll(" ", "-")
+        )}/${codeUpper}${isMobile ? "#main" : ""}`
+      );
+    } catch (error) {
+      console.error(error)
+    } 
   };
 
   return (
@@ -164,7 +226,8 @@ export function HeroSection(banner: HeroSectionProps) {
             className="text-4xl md:text-5xl font-semibold text-white mb-4 leading-tight font-[Montserrat, sans-serif]"
           >
             <h1 className="inline">
-              {banner.titulo || "Imobiliária TerraSul – Encontre seu imóvel ideal"}
+              {banner.titulo ||
+                "Imobiliária TerraSul – Encontre seu imóvel ideal"}
             </h1>
           </Link>
 
@@ -224,7 +287,11 @@ export function HeroSection(banner: HeroSectionProps) {
                   >
                     <SelectValue placeholder="Valor de" />
                   </SelectTrigger>
-                  <SelectContent position="popper" side="bottom" avoidCollisions={false}>
+                  <SelectContent
+                    position="popper"
+                    side="bottom"
+                    avoidCollisions={false}
+                  >
                     <SelectItem value="100000">R$ 100.000</SelectItem>
                     <SelectItem value="200000">R$ 200.000</SelectItem>
                     <SelectItem value="300000">R$ 300.000</SelectItem>
@@ -259,7 +326,11 @@ export function HeroSection(banner: HeroSectionProps) {
                   >
                     <SelectValue placeholder="Valor até" />
                   </SelectTrigger>
-                  <SelectContent position="popper" side="bottom" avoidCollisions={false}>
+                  <SelectContent
+                    position="popper"
+                    side="bottom"
+                    avoidCollisions={false}
+                  >
                     <SelectItem value="100000">R$ 100.000</SelectItem>
                     <SelectItem value="200000">R$ 200.000</SelectItem>
                     <SelectItem value="300000">R$ 300.000</SelectItem>
@@ -315,12 +386,12 @@ export function HeroSection(banner: HeroSectionProps) {
                   onChange={(e) => setCodigo(e.target.value)}
                   onBlur={handleBlur}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") handleSearchByCode();
+                    if (e.key === "Enter") handleSearchByCode(codigo);
                   }}
                   className="w-[132px] px-2 text-base text-white outline-none text-shadow"
                 />
                 <Button
-                  onClick={handleSearchByCode}
+                  onClick={() => handleSearchByCode(codigo)}
                   className="bg-transparent hover:cursor-pointer text-white hover:bg-transparent has-[>svg]:px-0 has-[>svg]:pr-1"
                   aria-label="Buscar imóveis por código"
                 >

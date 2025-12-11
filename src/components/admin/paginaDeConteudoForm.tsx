@@ -108,7 +108,6 @@ export default function PaginaDeConteudoForm({
           await updatePagina(paginaDeConteudo.id, dataToSubmit);
           toast.success("Página editada com sucesso!");
         } else {
-          console.log("URL que vai ser salva:", dataToSubmit.url);
           await createPagina(dataToSubmit);
           toast.success("Página criada com sucesso!" + dataToSubmit.url);
         }

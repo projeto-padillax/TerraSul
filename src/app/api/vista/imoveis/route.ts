@@ -433,7 +433,6 @@ const photosToCreate = Object.values(details.Foto || {})
       },
     });
 
-    console.log(`Imóvel ${code} processado e upserted com sucesso.`);
   } catch (error: any) {
     console.error(`Erro ao processar imóvel ${code}:`, error.message);
   }
@@ -443,7 +442,6 @@ export async function POST() {
   try {
     // 1. Busca a primeira página para determinar o total de páginas
     const firstPageUrl: string = buildListingsUrl(1);
-    console.log(firstPageUrl);
     const firstPageData: VistaApiResponse = await fetchData<VistaApiResponse>(
       firstPageUrl
     );
@@ -473,11 +471,7 @@ export async function POST() {
     const CONCURRENCY_LIMIT = 5; // ✨ Ajuste este valor conforme a capacidade do seu DB
     const limit = pLimit(CONCURRENCY_LIMIT);
 
-    console.log(
-      `Iniciando processamento de ${
-        Object.keys(allProperties).length
-      } imóveis com limite de concorrência de ${CONCURRENCY_LIMIT}.`
-    );
+
 
     const propertyProcessingPromises: PromiseSettledResult<void>[] =
       await Promise.allSettled(

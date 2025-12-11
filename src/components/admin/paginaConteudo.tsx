@@ -64,7 +64,6 @@ export default function PaginaConteudo({ initialContentPages }: Props) {
   });
 
   useEffect(() => {
-    console.log(initialContentPages)
     const combinedData = [...pages].map((item) => ({
       id: item.id,
       titulo: item.titulo,
