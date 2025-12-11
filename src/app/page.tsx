@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: secao?.titulo,
-    description: secao?.descricao,
+    description: secao?.descricao || "Terrasul, imoveis para alugar",
     keywords: secao?.palavrasChave,
   };
 }
