@@ -48,7 +48,7 @@ export default async function Footer() {
                   <a
                     href={siteConfig.facebookUrl}
                     className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
-                    aria-label="Instagram"
+                    aria-label="Facebook"
                   >
                     <FaFacebook className="w-7 h-7 text-site-primary" />
                   </a>

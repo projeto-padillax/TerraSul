@@ -12,6 +12,7 @@ interface ChamadasNaHomeSectionProps {
 
 export default async function CategoryCards() {
   const categories = await getAllChamadas();
+  console.log(categories)
   if (categories.length == 0) return null;
   return (
     <section className="py-8 justify-items-center">
@@ -34,6 +35,7 @@ export default async function CategoryCards() {
                       fill
                       className="object-cover"
                       sizes="(max-width: 768px) 50vw, 20vw"
+                      placeholder="empty"
                     />
 
                     {/* Gradiente inferior mais forte e responsivo */}

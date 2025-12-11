@@ -15,6 +15,7 @@ export default function WhatsAppButton() {
         rel="noopener noreferrer"
         className="whatsapp-float"
         id="form_whats_flutuante"
+        aria-label="WhatsApp Button"
       >
         <FaWhatsapp size={32} color="#fff" />
       </button>

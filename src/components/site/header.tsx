@@ -29,12 +29,12 @@ export default async function Header() {
             </div>
             <div className="flex items-center space-x-4">
               <div className="inline-block sm:hidden">
-                <Link href={"/favoritos"}>
+                <Link aria-label="Favoritos" href={"/favoritos"}>
                   <FavoriteIcon />
                 </Link>
               </div>
               <div className="hidden sm:flex items-center space-x-4 text-sm text-site-secondary">
-                <Link href={"/favoritos"}>
+                <Link aria-label="Favoritos" href={"/favoritos"}>
                   <FavoriteIcon />
                 </Link>
                 <Link

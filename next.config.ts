@@ -1,13 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    optimizePackageImports: ["react", "react-dom"],
+  },
   async headers() {
     return [
       {
         source: "/favicon.ico",
-        headers: [
-          { key: "X-Content-Type-Options", value: "nosniff" },
-        ],
+        headers: [{ key: "X-Content-Type-Options", value: "nosniff" }],
       },
     ];
   },

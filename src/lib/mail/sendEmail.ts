@@ -54,7 +54,7 @@ export async function sendEmailFormulario(data: FormularioInput, isCodigo78?: bo
       subject: 'Lead TerraSul',
       html: htmlBody,
     });
-
+    console.log(result)
   } catch (error) {
     console.error('Erro ao enviar e-mail:', error);
   }
