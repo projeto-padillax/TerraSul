@@ -5,7 +5,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import WhatsAppButton from "@/components/site/whatsapp";
 import { ModalProvider } from "@/utils/ModalContext";
-import GoogleTagManager from "@/components/GoogleTagManager";
+// import GoogleTagManager from "@/components/GoogleTagManager";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
   verification: {
     google: "Zpz5JJ2ZL7dcNOMPR5VcmDbVRxLHByfCMF_OzC443RQ",
   },
-   alternates: {
-    canonical: "https://www.terrasulimoveis.com.br",
-  },
+  //  alternates: {
+  //   canonical: "https://terrasulimoveis.com.br",
+  // },
 };
 
 export default function RootLayout({
@@ -34,15 +34,15 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} antialiased font-[montserrat, sans-serif]`}
       >
-        <GoogleTagManager />
-        <noscript>
+        {/* <GoogleTagManager /> */}
+        {/* <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-5ZF3W4BG"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           />
-        </noscript>
+        </noscript> */}
         <ModalProvider>
           {children}
           <Toaster richColors position="top-center" />
