@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Imovel } from "@prisma/client";
 import Image from "next/image";
-import { cloudinaryLoader } from "@/utils/cloudinaryLoader";
+
 
 interface HeroSectionProps {
   imageUrl: string;
@@ -213,13 +213,14 @@ export function HeroSection(banner: HeroSectionProps) {
   return (
     <div className="relative">
       <Image
+        src={banner.imageUrl.replace(
+          "/upload/",
+          "/upload/f_auto,q_auto,w_1200,dpr_2/"
+        )}
         alt="Imagem do banner"
-        src={banner.imageUrl}
-        loader={cloudinaryLoader}
-        quality={70}
         fill
         priority
-        sizes="100vw"
+        fetchPriority="high"
         className="object-cover"
       />
       <section
