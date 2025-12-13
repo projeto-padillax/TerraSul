@@ -757,8 +757,98 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// -------------------- sync cidades/bairros (Vista listarConteudo) --------------------
+
+interface VistaListarConteudoResponse {
+  Cidade?: string[];
+  Bairro?: string[];
+  [key: string]: any;
+}
+
+const LISTAR_CONTEUDO_URL = `${VISTA_BASE_URL}/listarConteudo`;
+
+const buildListarConteudoUrl = (pesquisa: unknown): string => {
+  const params = new URLSearchParams({
+    key: process.env.VISTA_KEY!,
+    pesquisa: JSON.stringify(pesquisa),
+  });
+  return `${LISTAR_CONTEUDO_URL}?${params}`;
+};
+
+const fetchVistaListarConteudo = async <T,>(url: string): Promise<T> => {
+  const res = await fetch(url, { method: "GET", headers: { Accept: "application/json" } });
+  if (!res.ok) throw new Error(`Falha ao buscar ${url}. Status: ${res.status}`);
+  return (await res.json()) as T;
+};
+
+const normalizeBairros = (raw: unknown): string[] => {
+  const arr = Array.isArray(raw) ? raw : [];
+  return arr
+    .flatMap((b) =>
+      String(b ?? "")
+        .split(",")
+        .map((n) => n.trim())
+        .filter(Boolean)
+    )
+    .filter(Boolean);
+};
+
+const syncCidadesEBairros = async (): Promise<{
+  totalCidades: number;
+  totalBairrosInseridos: number;
+}> => {
+  const cidadesUrl = buildListarConteudoUrl({ fields: ["Cidade"] });
+  const cidadesData = await fetchVistaListarConteudo<VistaListarConteudoResponse>(cidadesUrl);
+
+  const cidades = Array.isArray(cidadesData?.Cidade) ? cidadesData.Cidade : [];
+  if (cidades.length === 0) throw new Error("Nenhuma cidade encontrada");
+
+  let totalBairrosInseridos = 0;
+
+  for (const cidadeNome of cidades) {
+    const nome = String(cidadeNome ?? "").trim();
+    if (!nome) continue;
+
+    const bairrosUrl = buildListarConteudoUrl({
+      fields: ["Cidade", "Bairro"],
+      filter: { Cidade: nome },
+    });
+
+    let bairrosData: VistaListarConteudoResponse;
+    try {
+      bairrosData = await fetchVistaListarConteudo<VistaListarConteudoResponse>(bairrosUrl);
+    } catch (e) {
+      console.warn(`Falha ao buscar bairros da cidade: ${nome}`);
+      continue;
+    }
+
+    const bairrosUnicos = [...new Set(normalizeBairros(bairrosData?.Bairro))];
+
+    const cidade = await prisma.cidade.upsert({
+      where: { nome },
+      update: {},
+      create: { nome },
+    });
+
+    await prisma.bairro.deleteMany({ where: { cidadeId: cidade.id } });
+
+    if (bairrosUnicos.length > 0) {
+      const r = await prisma.bairro.createMany({
+        data: bairrosUnicos.map((b) => ({ nome: b, cidadeId: cidade.id })),
+        skipDuplicates: true,
+      });
+      totalBairrosInseridos += r.count;
+    }
+  }
+
+  return { totalCidades: cidades.length, totalBairrosInseridos };
+};
+
 export async function PUT() {
   try {
+    // ALWAYS sync cities/bairros first
+    const cidadesResult = await syncCidadesEBairros();
+
     // 1. Fetch first page to determine total pages
     const firstPageUrl: string = buildListingsUrl(1);
     const firstPageData: VistaApiResponse = await fetchData<VistaApiResponse>(
@@ -781,14 +871,14 @@ export async function PUT() {
       );
     }
 
-    const results: Record<string, any>[] = await Promise.all(pagePromises);
+    const results = await Promise.all(pagePromises);
     results.forEach((pageProperties) => {
       allProperties = { ...allProperties, ...pageProperties };
     });
 
-    const apiIds = Object.keys(allProperties).map((id) => String(id));
+    const apiIds = Object.keys(allProperties).map(String);
 
-    // 3. Get all existing IDs from database
+    // 3. Existing IDs
     const existingImoveis = await prisma.imovel.findMany({
       select: { id: true, DataHoraAtualizacao: true },
     });
@@ -796,12 +886,12 @@ export async function PUT() {
     // 4. Concurrency limit
     const limit = pLimit(5);
 
-    // 5. Add or update properties from API
+    // 5. Upsert
     const upsertPromises = apiIds.map((code) =>
       limit(async () => {
         const property = allProperties[code];
         const existing = existingImoveis.find(
-          (i) => String(i.id) === String(code)
+          (i) => String(i.id) === code
         );
 
         const apiDate = getTimeSafe(property.DataHoraAtualizacao);
@@ -809,26 +899,17 @@ export async function PUT() {
 
         if (!existing || apiDate > dbDate) {
           await processAndUpsertProperty(code, property);
-          if (existing) {
-            console.log(`Imóvel ${code} atualizado.`);
-          } else {
-            console.log(`Imóvel ${code} criado.`);
-          }
         }
       })
     );
 
-    // 6. Delete properties not in API
+    // 6. Delete missing
     const deletePromises = existingImoveis
       .filter((i) => !apiIds.includes(String(i.id)))
       .map((i) =>
-        limit(async () => {
-          await prisma.imovel.delete({ where: { id: i.id } });
-          console.log(`Imóvel ${i.id} deletado.`);
-        })
+        limit(() => prisma.imovel.delete({ where: { id: i.id } }))
       );
 
-    // 7. Wait for all operations
     const [upsertResults, deleteResults] = await Promise.all([
       Promise.allSettled(upsertPromises),
       Promise.allSettled(deletePromises),
@@ -836,18 +917,16 @@ export async function PUT() {
 
     return NextResponse.json({
       message: "Sincronização concluída.",
-      addedOrUpdated: upsertResults.filter((r) => r.status === "fulfilled")
-        .length,
+      cidades: cidadesResult,
+      addedOrUpdated: upsertResults.filter((r) => r.status === "fulfilled").length,
       deleted: deleteResults.filter((r) => r.status === "fulfilled").length,
-      failedUpserts: upsertResults.filter((r) => r.status === "rejected")
-        .length,
-      failedDeletes: deleteResults.filter((r) => r.status === "rejected")
-        .length,
+      failedUpserts: upsertResults.filter((r) => r.status === "rejected").length,
+      failedDeletes: deleteResults.filter((r) => r.status === "rejected").length,
     });
   } catch (error: any) {
-    console.error("Erro ao sincronizar imóveis:", error.message);
+    console.error("Erro ao sincronizar:", error.message);
     return NextResponse.json(
-      { error: "Erro interno ao sincronizar imóveis" },
+      { error: "Erro interno ao sincronizar" },
       { status: 500 }
     );
   } finally {
