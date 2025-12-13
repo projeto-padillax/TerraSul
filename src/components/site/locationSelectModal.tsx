@@ -316,13 +316,23 @@ export function LocationSelectModal({
                   );
                 };
 
-                return (
-                  <>
-                    {renderSecao("Principais Bairros", principaisFiltrados)}
-                    {outros.length > 0 && renderSecao("Outros Bairros", outros)}
-                  </>
-                );
+              return (
+                <>
+                  {selectedCidade.toLowerCase() === "PORTO ALEGRE" ? (
+                    <>
+                      {renderSecao("Principais Bairros", principaisFiltrados)}
+                      {outros.length > 0 && renderSecao("Outros Bairros", outros)}
+                    </>
+                  ) : (
+                    <>
+                      {outros.length > 0 && renderSecao("Bairros", outros)}
+                    </>
+                  )}
+                </>
+              );
+
               })()}
+
             </>
           )}
         </div>
