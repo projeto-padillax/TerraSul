@@ -318,7 +318,7 @@ export function LocationSelectModal({
 
               return (
                 <>
-                  {selectedCidade.toLowerCase() === "PORTO ALEGRE" ? (
+                  {selectedCidade.toLowerCase() === "porto alegre" ? (
                     <>
                       {renderSecao("Principais Bairros", principaisFiltrados)}
                       {outros.length > 0 && renderSecao("Outros Bairros", outros)}
