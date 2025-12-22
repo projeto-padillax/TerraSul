@@ -2,7 +2,6 @@ import { getAllMaisAcessados } from "@/lib/actions/links";
 import Link from "next/link";
 export async function MostSearched() {
   const links = await getAllMaisAcessados(true);
-  console.log(links);
 
   if (links.length == 0) return null;
   return (
