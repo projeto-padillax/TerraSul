@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 import bcrypt from "bcrypt";
 
 async function main() {
-  const senha = await bcrypt.hash('samurai', 10);
+  const senha = await bcrypt.hash("samurai", 10);
   // superadmin
   await prisma.user.create({
     data: {
@@ -20,8 +20,8 @@ async function main() {
   const secoes = Secoes;
 
   await prisma.secao.createMany({
-    data: secoes
-  })
+    data: secoes,
+  });
 }
 
 main()
