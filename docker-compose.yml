@@ -42,19 +42,15 @@ services:
     restart: unless-stopped
     environment:
       TZ: UTC
-    entrypoint: /bin/sh -c
-    command: |
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
       while true; do
         now=$(date +%s)
         target=$(date -d "07:00" +%s)
-        [ $target -le $now ] && target=$(date -d "tomorrow 07:00" +%s)
+        [ "$target" -le "$now" ] && target=$(date -d "tomorrow 07:00" +%s)
         sleep $((target - now))
-
         echo "[cron][UTC] PATCH daily 07:00 /api/imoveis $(date -u)"
-        curl -fsS -X PATCH \
-          -H "Content-Type: application/json" \
-          http://next:3000/api/imoveis \
-          || true
+        curl -fsS -X PATCH -H "Content-Type: application/json" http://next:3000/api/imoveis || true
       done
 
   api-cron-put-hourly:
@@ -62,17 +58,13 @@ services:
     restart: unless-stopped
     environment:
       TZ: UTC
-    entrypoint: /bin/sh -c
-    command: |
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
       while true; do
-        # alinha na virada da hora (UTC)
         sleep $((3600 - $(date +%s) % 3600))
-
         echo "[cron][UTC] PUT hourly /api/imoveis $(date -u)"
-        curl -fsS -X PUT \
-          -H "Content-Type: application/json" \
-          http://next:3000/api/imoveis \
-          || true
+        curl -fsS -X PUT -H "Content-Type: application/json" http://next:3000/api/imoveis || true
       done
+
 volumes:
   pgdata:
