@@ -12,9 +12,7 @@ interface DynamicPageProps {
 export default async function DynamicPage({ params }: DynamicPageProps) {
   const tituloOriginal = await params.then((p) => p.titulo);
   const formatPageUrl = (titulo: string) => {
-    return `${process.env.NEXT_PUBLIC_BASE_URL || ""}/pagina/${slugify(
-      titulo
-    )}`;
+    return `${process.env.INTERNAL_BASE_URL || ""}/pagina/${slugify(titulo)}`;
   };
 
   function slugify(text: string): string {
@@ -23,7 +21,7 @@ export default async function DynamicPage({ params }: DynamicPageProps) {
       .replace(/[\u0300-\u036f]/g, "") // remove acentos
       .replace(/[^a-zA-Z0-9\s-]/g, "") // remove caracteres especiais
       .trim() // remove espaços no início e fim
-      .replace(/\s+/g, "-") // troca espaços por hífens
+      .replace(/\s+/g, "-"); // troca espaços por hífens
   }
   const titulo = formatPageUrl(tituloOriginal);
   const pageData = await getPaginaByUrl(titulo);

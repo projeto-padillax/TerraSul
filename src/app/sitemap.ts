@@ -87,7 +87,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Mapear os imóveis para as rotas dinâmicas.
   const imoveisRoutes = imoveis.map((imovel: ImovelSitemap) => {
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/imovel/${toSlug(
+    const url = `${process.env.INTERNAL_BASE_URL}/imovel/${toSlug(
       gerarTitulos(imovel),
     )}/${imovel.Codigo}`;
 
@@ -121,7 +121,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const searchImoveisRoutes = cidades.flatMap((cidade) =>
     residenciaisTypes.map((tipo) => {
-      const url = `${process.env.NEXT_PUBLIC_BASE_URL}/busca/comprar/${toSlug(
+      const url = `${process.env.INTERNAL_BASE_URL}/busca/comprar/${toSlug(
         tipo,
       )}/${cidade}?${buildQuery(baseParams)}`;
 

@@ -15,14 +15,14 @@ import {
   deletePaginas,
 } from "@/lib/actions/contentPages";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
-} from "@/components/ui/table"
-import { Checkbox } from "@/components/ui/checkbox"
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useAdminListHandlers } from "@/hooks/adminHandlers";
 
 interface tableColumns {
@@ -69,7 +69,7 @@ export default function PaginaConteudo({ initialContentPages }: Props) {
       titulo: item.titulo,
       url: item.url ?? formatPageUrl(item.titulo),
       ordem: item.ordem,
-      tipo:  item.tipo,
+      tipo: item.tipo,
       isOnMenu: item.isOnMenu,
       data: item.createdAt,
       status: item.status,
@@ -79,7 +79,7 @@ export default function PaginaConteudo({ initialContentPages }: Props) {
   }, [pages]);
 
   function formatPageUrl(titulo: string) {
-    return `${process.env.NEXT_PUBLIC_BASE_URL || ""}pagina/${encodeURIComponent(titulo.toLowerCase())}`;
+    return `pagina/${encodeURIComponent(titulo.toLowerCase())}`;
   }
 
   const formattedDate = (date: Date) => {
@@ -213,7 +213,7 @@ export default function PaginaConteudo({ initialContentPages }: Props) {
                     <TableCell className="py-5 text-center">
                       <span className="text-gray-900 font-medium text-base">
                         {`${formattedDate(item.data)} ${formattedTime(
-                          item.data
+                          item.data,
                         )}`}
                       </span>
                     </TableCell>

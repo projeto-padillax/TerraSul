@@ -72,8 +72,8 @@ export default async function SemelhantesSection({
   codigo: string;
 }) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/vista/imoveis/${codigo}/semelhante`,
-    { next: { revalidate: 60 } }
+    `${process.env.INTERNAL_BASE_URL}/api/vista/imoveis/${codigo}/semelhante`,
+    { next: { revalidate: 60 } },
   );
 
   if (!res.ok) return null;
@@ -94,9 +94,7 @@ export default async function SemelhantesSection({
         {itens.map((imovel) => (
           <Link
             key={imovel.Codigo}
-            href={`/imovel/${(toSlug(gerarTitulo(imovel)))}/${
-              imovel.Codigo
-            }`}
+            href={`/imovel/${toSlug(gerarTitulo(imovel))}/${imovel.Codigo}`}
             className="block"
           >
             <ImovelCard imovel={imovel} activeTab={activeTab} />

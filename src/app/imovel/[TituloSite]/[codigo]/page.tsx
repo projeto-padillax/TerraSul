@@ -26,10 +26,10 @@ export async function generateMetadata({
   const { codigo } = await params;
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/vista/imoveis/${codigo}`,
+    `${process.env.INTERNAL_BASE_URL}/api/vista/imoveis/${codigo}`,
     {
       next: { revalidate: 60 },
-    }
+    },
   );
 
   const capitalizar = (str: string) =>
@@ -82,10 +82,10 @@ export default async function ImovelPage({
     tituloSite: p.tituloSite,
   }));
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/vista/imoveis/${parsedParams.codigo}`,
+    `${process.env.INTERNAL_BASE_URL}/api/vista/imoveis/${parsedParams.codigo}`,
     {
       next: { revalidate: 60 },
-    }
+    },
   );
 
   if (!res.ok) {
@@ -100,8 +100,6 @@ export default async function ImovelPage({
     .map((foto: { url: string }) => ({ Foto: foto.url }))
     .filter((f: FotoObj) => f.Foto !== imovel.FotoDestaque);
 
- 
-
   const hasBadges =
     imovel.Lancamento === "Sim" ||
     imovel.EstudaDacao === "Sim" ||
@@ -110,9 +108,11 @@ export default async function ImovelPage({
   function gerarTitulo() {
     const capitalizar = (str: string) => {
       const palavras = str.split(" ");
-      const novasPalavras = palavras.map((x) => x = x.charAt(0).toUpperCase() + x.slice(1).toLowerCase())
-      return novasPalavras.join(" ")
-    }
+      const novasPalavras = palavras.map(
+        (x) => (x = x.charAt(0).toUpperCase() + x.slice(1).toLowerCase()),
+      );
+      return novasPalavras.join(" ");
+    };
 
     let status = "";
     if (imovel.Status == "VENDA") {
@@ -209,7 +209,7 @@ export default async function ImovelPage({
                   ? imovel.videos
                       .filter(
                         (v: { video: string }): v is { video: string } =>
-                          typeof v.video === "string" && v.video.trim() !== ""
+                          typeof v.video === "string" && v.video.trim() !== "",
                       )
                       .map((v: { video: string }) => ({ url: v.video }))
                   : []
@@ -263,7 +263,7 @@ export default async function ImovelPage({
                             <span>
                               Cond R${" "}
                               {formatIntPtBR(
-                                parseFloat(imovel.ValorCondominio)
+                                parseFloat(imovel.ValorCondominio),
                               )}
                               /mês
                             </span>
@@ -620,7 +620,7 @@ export default async function ImovelPage({
                           .filter(
                             (v: { video: string }): v is { video: string } =>
                               typeof v.video === "string" &&
-                              v.video.trim() !== ""
+                              v.video.trim() !== "",
                           )
                           .map((v: { video: string }) => ({ url: v.video }))
                       : []

@@ -54,7 +54,7 @@ export default function PaginaDeConteudoForm({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [previewImage, setPreviewImage] = useState<string>(
-    paginaDeConteudo?.imagem ?? ""
+    paginaDeConteudo?.imagem ?? "",
   );
 
   const isEditing = mode === "edit" && paginaDeConteudo;
@@ -77,9 +77,7 @@ export default function PaginaDeConteudoForm({
   const tipoPagina = form.watch("tipo");
 
   const formatPageUrl = (titulo: string) => {
-    return `${
-      process.env.NEXT_PUBLIC_BASE_URL || ""
-    }/pagina/${slugify(titulo)}`;
+    return `pagina/${slugify(titulo)}`;
   };
 
   function slugify(text: string): string {
@@ -88,7 +86,7 @@ export default function PaginaDeConteudoForm({
       .replace(/[\u0300-\u036f]/g, "") // remove acentos
       .replace(/[^a-zA-Z0-9\s-]/g, "") // remove caracteres especiais
       .trim() // remove espaços no início e fim
-      .replace(/\s+/g, "-") // troca espaços por hífens
+      .replace(/\s+/g, "-"); // troca espaços por hífens
   }
 
   const onSubmit = (values: PaginaDeConteudoInput) => {
@@ -278,7 +276,7 @@ export default function PaginaDeConteudoForm({
                           <option key={num} value={num}>
                             {num}
                           </option>
-                        )
+                        ),
                       )}
                     </select>
                   </FormControl>
