@@ -16,12 +16,8 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             set -euo pipefail
-            cd /srv/app
-
+            cd /srv/app/TerraSul
             git fetch --prune origin
-            git checkout -f main
-            git reset --hard origin/main
-
-            /usr/bin/docker compose --env-file .env up -d --build
-
-            docker image prune -f
+            git checkout -f deploy
+            git reset --hard origin/deploy
+            docker compose --env-file .env up -d --build
