@@ -1,24 +1,27 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { getAllSecoes } from "@/lib/actions/secoes";
 import type { MetadataRoute } from "next";
 import { Imovel } from "@prisma/client";
 import { getAllImoveisForSitemap } from "@/lib/actions/imovel";
 
 function toSlug(text: string): string {
-    return (
-      text
-        .normalize("NFD") // separa acentos das letras
-        .replace(/[\u0300-\u036f]/g, "") // remove os acentos
-        .toLowerCase() // converte pra minúsculas
-        // .replace(/(?!\d\.\d)\./g, "") // remove outros pontos que não fazem parte de números
-        // remove tudo que não for letra, número, espaço, ponto ou hífen
-        .replace(/[^a-z0-9.\s-]/g, "")
-        .trim()
-        .replace(/\s+/g, "-") // troca espaços por hífen
-        .replace(/-+/g, "-") // evita múltiplos hífens
-        .replace(" ", "-")
-    ); // evita múltiplos hífens
-    // .toLowerCase();
-  }
+  return (
+    text
+      .normalize("NFD") // separa acentos das letras
+      .replace(/[\u0300-\u036f]/g, "") // remove os acentos
+      .toLowerCase() // converte pra minúsculas
+      // .replace(/(?!\d\.\d)\./g, "") // remove outros pontos que não fazem parte de números
+      // remove tudo que não for letra, número, espaço, ponto ou hífen
+      .replace(/[^a-z0-9.\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-") // troca espaços por hífen
+      .replace(/-+/g, "-") // evita múltiplos hífens
+      .replace(" ", "-")
+  ); // evita múltiplos hífens
+  // .toLowerCase();
+}
 
 type ImovelSitemap = Pick<
   Imovel,
@@ -55,7 +58,6 @@ function gerarTitulos(imovel: ImovelSitemap) {
       ? `${imovel.Suites} suíte${imovel.Suites === "1" ? "" : "s"}`
       : "";
 
-
   const bairro = imovel.Bairro ? `${capitalizar(imovel.Bairro)}` : "";
   const cidade = imovel.Cidade ? `em ${capitalizar(imovel.Cidade)}` : "";
 
@@ -86,7 +88,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Mapear os imóveis para as rotas dinâmicas.
   const imoveisRoutes = imoveis.map((imovel: ImovelSitemap) => {
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/imovel/${toSlug(
-      gerarTitulos(imovel)
+      gerarTitulos(imovel),
     )}/${imovel.Codigo}`;
 
     return {
@@ -120,7 +122,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const searchImoveisRoutes = cidades.flatMap((cidade) =>
     residenciaisTypes.map((tipo) => {
       const url = `${process.env.NEXT_PUBLIC_BASE_URL}/busca/comprar/${toSlug(
-        tipo
+        tipo,
       )}/${cidade}?${buildQuery(baseParams)}`;
 
       return {
@@ -128,12 +130,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "daily" as const,
         priority: 0.8,
       };
-    })
+    }),
   );
 
-  return [
-    ...secoesRoutes,
-    ...imoveisRoutes,
-    ...searchImoveisRoutes
-  ];
+  return [...secoesRoutes, ...imoveisRoutes, ...searchImoveisRoutes];
 }
