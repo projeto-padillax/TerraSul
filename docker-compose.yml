@@ -40,31 +40,16 @@ services:
   api-cron-patch-daily-0700:
     image: curlimages/curl:8.5.0
     restart: unless-stopped
-    environment:
-      TZ: UTC
-    entrypoint: ["/bin/sh", "-c"]
-    command: >
-      while true; do
-        now=$(date +%s)
-        target=$(date -d "07:00" +%s)
-        [ "$target" -le "$now" ] && target=$(date -d "tomorrow 07:00" +%s)
-        sleep $((target - now))
-        echo "[cron][UTC] PATCH daily 07:00 /api/imoveis $(date -u)"
-        curl -fsS -X PATCH -H "Content-Type: application/json" http://next:3000/api/imoveis || true
-      done
+    volumes:
+      - ./docker/cron:/cron:ro
+    command: ["/bin/sh", "/cron/patch_daily_0700_utc.sh"]
 
   api-cron-put-hourly:
     image: curlimages/curl:8.5.0
     restart: unless-stopped
-    environment:
-      TZ: UTC
-    entrypoint: ["/bin/sh", "-c"]
-    command: >
-      while true; do
-        sleep $((3600 - $(date +%s) % 3600))
-        echo "[cron][UTC] PUT hourly /api/imoveis $(date -u)"
-        curl -fsS -X PUT -H "Content-Type: application/json" http://next:3000/api/imoveis || true
-      done
+    volumes:
+      - ./docker/cron:/cron:ro
+    command: ["/bin/sh", "/cron/put_hourly_utc.sh"]
 
 volumes:
   pgdata:
