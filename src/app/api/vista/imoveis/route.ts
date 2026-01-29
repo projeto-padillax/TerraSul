@@ -32,7 +32,7 @@ interface VistaPropertyDetailPhoto {
   Codigo?: string;
   Foto?: string;
   FotoPequena?: string;
-  Ordem?: string
+  Ordem?: string;
 }
 
 interface VistaPropertyDetailVideo {
@@ -89,7 +89,7 @@ const base: string[] = [
   "AreaUtil",
   "EstudaDacao",
   "Exclusivo",
-  "Desconto"
+  "Desconto",
 ];
 
 const LISTING_RESEARCH_FIELDS = [
@@ -198,7 +198,7 @@ async function fetchData<T>(url: string): Promise<T> {
   });
   if (!response.ok) {
     throw new Error(
-      `Falha ao buscar dados de ${url}. Status: ${response.status}`
+      `Falha ao buscar dados de ${url}. Status: ${response.status}`,
     );
   }
   return response.json() as Promise<T>;
@@ -224,12 +224,11 @@ interface VistaPropertyData {
   CodigoImobiliaria?: string; // ✨ Add CodigoImobiliaria to the interface to be safe
   Corretor_Codigo?: string;
   Corretor?: Record<string, any>;
-  Exclusivo?: string; 
+  Exclusivo?: string;
   EstudaDacao?: string;
   Desconto?: string;
   [key: string]: any; // Permite outros campos dinâmicos da API Vista
 }
-
 
 function parseSimNao(value: string | null): "Sim" | "Nao" | null {
   if (!value) return null;
@@ -270,7 +269,7 @@ const normalizeVistaDate = (value: string | null | undefined): string => {
 
 const processAndUpsertProperty = async (
   code: string,
-  propertyData: VistaPropertyData
+  propertyData: VistaPropertyData,
 ): Promise<void> => {
   try {
     const {
@@ -285,28 +284,27 @@ const processAndUpsertProperty = async (
       ...restOfProperty
     } = propertyData || {};
 
-    const validDataHoraAtualizacao: string = normalizeVistaDate(
-      DataHoraAtualizacao
-    );
+    const validDataHoraAtualizacao: string =
+      normalizeVistaDate(DataHoraAtualizacao);
 
     const details: VistaPropertyDetails = await fetchData<VistaPropertyDetails>(
-      buildDetailsUrl(code)
+      buildDetailsUrl(code),
     ).catch((err) => {
       console.warn(
-        `Não foi possível buscar detalhes para o imóvel ${code}: ${err.message}`
+        `Não foi possível buscar detalhes para o imóvel ${code}: ${err.message}`,
       );
       return {};
     });
 
     // Fotos
-const photosToCreate = Object.values(details.Foto || {})
-  .sort((a, b) => parseInt(a.Ordem ?? "9999") - parseInt(b.Ordem ?? "9999"))
-  .map(photo => ({
-    destaque: photo.Destaque != null ? String(photo.Destaque) : null,
-    codigo: photo.Codigo ?? null,
-    url: photo.Foto ?? null,
-    urlPequena: photo.FotoPequena ?? null,
-  }));
+    const photosToCreate = Object.values(details.Foto || {})
+      .sort((a, b) => parseInt(a.Ordem ?? "9999") - parseInt(b.Ordem ?? "9999"))
+      .map((photo) => ({
+        destaque: photo.Destaque != null ? String(photo.Destaque) : null,
+        codigo: photo.Codigo ?? null,
+        url: photo.Foto ?? null,
+        urlPequena: photo.FotoPequena ?? null,
+      }));
 
     // Videos
     const VideosToCreate = Object.values(details.Video || {}).map(
@@ -316,7 +314,7 @@ const photosToCreate = Object.values(details.Foto || {})
             ? String(video.Destaque)
             : null,
         video: video.Video ?? null,
-      })
+      }),
     );
 
     // Características
@@ -324,7 +322,7 @@ const photosToCreate = Object.values(details.Foto || {})
       ([key, value]: [string, any]) => ({
         nome: key,
         valor: String(value),
-      })
+      }),
     );
 
     // Infraestrutura
@@ -332,7 +330,7 @@ const photosToCreate = Object.values(details.Foto || {})
       ([key, value]) => ({
         nome: key,
         valor: String(value),
-      })
+      }),
     );
 
     const valorVendaInt = parseToInt(restOfProperty.ValorVenda);
@@ -432,7 +430,6 @@ const photosToCreate = Object.values(details.Foto || {})
         infraestrutura: { create: infraToCreate },
       },
     });
-
   } catch (error: any) {
     console.error(`Erro ao processar imóvel ${code}:`, error.message);
   }
@@ -442,9 +439,8 @@ export async function POST() {
   try {
     // 1. Busca a primeira página para determinar o total de páginas
     const firstPageUrl: string = buildListingsUrl(1);
-    const firstPageData: VistaApiResponse = await fetchData<VistaApiResponse>(
-      firstPageUrl
-    );
+    const firstPageData: VistaApiResponse =
+      await fetchData<VistaApiResponse>(firstPageUrl);
     const totalPages: number = Number(firstPageData.paginas) || 1;
     let allProperties: Record<string, any> = extractProperties(firstPageData);
 
@@ -457,7 +453,7 @@ export async function POST() {
           .catch((err) => {
             console.warn(`Falha ao buscar página ${page}: ${err.message}`);
             return {};
-          })
+          }),
       );
     }
 
@@ -471,14 +467,12 @@ export async function POST() {
     const CONCURRENCY_LIMIT = 5; // ✨ Ajuste este valor conforme a capacidade do seu DB
     const limit = pLimit(CONCURRENCY_LIMIT);
 
-
-
     const propertyProcessingPromises: PromiseSettledResult<void>[] =
       await Promise.allSettled(
         Object.entries(allProperties).map(
           ([code, property]) =>
-            limit(() => processAndUpsertProperty(code, property)) // ✨ Usa 'limit' para envolver a função
-        )
+            limit(() => processAndUpsertProperty(code, property)), // ✨ Usa 'limit' para envolver a função
+        ),
       );
 
     propertyProcessingPromises.forEach((result, index) => {
@@ -486,7 +480,7 @@ export async function POST() {
       if (result.status === "rejected") {
         console.error(
           `A promessa para o imóvel ${propertyCode} foi rejeitada durante o processamento:`,
-          result.reason
+          result.reason,
         );
       } else {
         // Você pode remover este console.log se quiser, já que processAndUpsertProperty já loga sucesso.
@@ -499,7 +493,7 @@ export async function POST() {
         "Sincronização de imóveis e detalhes concluída. Verifique os logs do servidor para o status de cada imóvel.",
       totalPropertiesAttempted: Object.keys(allProperties).length,
       successful: propertyProcessingPromises.filter(
-        (p) => p.status === "fulfilled"
+        (p) => p.status === "fulfilled",
       ).length,
       failed: propertyProcessingPromises.filter((p) => p.status === "rejected")
         .length,
@@ -507,11 +501,11 @@ export async function POST() {
   } catch (error: any) {
     console.error(
       "Erro crítico durante o processo de sincronização de imóveis:",
-      error.message
+      error.message,
     );
     return NextResponse.json(
       { error: "Erro interno do servidor durante a sincronização de imóveis" },
-      { status: 500 }
+      { status: 500 },
     );
   } finally {
     // É importante desconectar o Prisma apenas quando todas as operações estão realmente concluídas.
@@ -548,7 +542,6 @@ export async function GET(request: NextRequest) {
             select: { nome: true, valor: true },
           },
           corretor: true, // ✅ Inclui o corretor
-          
         },
       });
 
@@ -569,7 +562,7 @@ export async function GET(request: NextRequest) {
             totalItems: 0,
             imoveis: [],
           },
-          { status: 404 }
+          { status: 404 },
         );
       }
     }
@@ -594,6 +587,8 @@ export async function GET(request: NextRequest) {
     const suites = searchParams.get("suites") || null;
     const vagas = searchParams.get("vagas") || null;
     const caracteristicas =
+      searchParams.get("caracteristicas")?.split(",").filter(Boolean) || [];
+    const infraestrutura =
       searchParams.get("caracteristicas")?.split(",").filter(Boolean) || [];
     const lancamentosFilterValue = parseSimNao(searchParams.get("lancamentos"));
     const empreendimento = searchParams.get("empreendimento") || null;
@@ -624,7 +619,8 @@ export async function GET(request: NextRequest) {
       };
     if (cidade) whereClause.Cidade = { equals: cidade, mode: "insensitive" };
     if (
-      bairros && bairros.length > 0 &&
+      bairros &&
+      bairros.length > 0 &&
       !(bairros.length === 1 && bairros[0].toLowerCase() === "all")
     ) {
       whereClause.Bairro = { in: bairros, mode: "insensitive" };
@@ -665,13 +661,13 @@ export async function GET(request: NextRequest) {
             ...(min !== undefined ? { gte: min } : {}),
             ...(max !== undefined ? { lte: max } : {}),
           },
-        }
+        },
       ];
     }
 
     // --- Características ---
-    if (caracteristicas && caracteristicas.length > 0) {
-      whereClause.caracteristicas = {
+    if (caracteristicas?.length > 0) {
+      const filtro = {
         some: {
           AND: caracteristicas.map((carac) => ({
             nome: { equals: carac, mode: "insensitive" },
@@ -679,6 +675,11 @@ export async function GET(request: NextRequest) {
           })),
         },
       };
+
+      whereClause.OR = [
+        { caracteristicas: filtro },
+        { infraestrutura: filtro },
+      ];
     }
 
     whereClause.AND = [
@@ -762,7 +763,7 @@ export async function GET(request: NextRequest) {
       imoveis: imoveis,
     });
   } catch (error: any) {
-        console.error("[IMOVEIS] ERROR", {
+    console.error("[IMOVEIS] ERROR", {
       message: error.message,
       name: error.name,
       stack: error.stack,
@@ -770,7 +771,7 @@ export async function GET(request: NextRequest) {
     console.error("Erro ao buscar imóveis:", error.message);
     return NextResponse.json(
       { error: "Erro interno no servidor ao buscar imóveis" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -793,8 +794,11 @@ const buildListarConteudoUrl = (pesquisa: unknown): string => {
   return `${LISTAR_CONTEUDO_URL}?${params}`;
 };
 
-const fetchVistaListarConteudo = async <T,>(url: string): Promise<T> => {
-  const res = await fetch(url, { method: "GET", headers: { Accept: "application/json" } });
+const fetchVistaListarConteudo = async <T>(url: string): Promise<T> => {
+  const res = await fetch(url, {
+    method: "GET",
+    headers: { Accept: "application/json" },
+  });
   if (!res.ok) throw new Error(`Falha ao buscar ${url}. Status: ${res.status}`);
   return (await res.json()) as T;
 };
@@ -806,7 +810,7 @@ const normalizeBairros = (raw: unknown): string[] => {
       String(b ?? "")
         .split(",")
         .map((n) => n.trim())
-        .filter(Boolean)
+        .filter(Boolean),
     )
     .filter(Boolean);
 };
@@ -816,7 +820,8 @@ const syncCidadesEBairros = async (): Promise<{
   totalBairrosInseridos: number;
 }> => {
   const cidadesUrl = buildListarConteudoUrl({ fields: ["Cidade"] });
-  const cidadesData = await fetchVistaListarConteudo<VistaListarConteudoResponse>(cidadesUrl);
+  const cidadesData =
+    await fetchVistaListarConteudo<VistaListarConteudoResponse>(cidadesUrl);
 
   const cidades = Array.isArray(cidadesData?.Cidade) ? cidadesData.Cidade : [];
   if (cidades.length === 0) throw new Error("Nenhuma cidade encontrada");
@@ -834,7 +839,8 @@ const syncCidadesEBairros = async (): Promise<{
 
     let bairrosData: VistaListarConteudoResponse;
     try {
-      bairrosData = await fetchVistaListarConteudo<VistaListarConteudoResponse>(bairrosUrl);
+      bairrosData =
+        await fetchVistaListarConteudo<VistaListarConteudoResponse>(bairrosUrl);
     } catch (e) {
       console.warn(`Falha ao buscar bairros da cidade: ${nome}`);
       continue;
@@ -869,9 +875,8 @@ export async function PUT() {
 
     // 1. Fetch first page to determine total pages
     const firstPageUrl: string = buildListingsUrl(1);
-    const firstPageData: VistaApiResponse = await fetchData<VistaApiResponse>(
-      firstPageUrl
-    );
+    const firstPageData: VistaApiResponse =
+      await fetchData<VistaApiResponse>(firstPageUrl);
     const totalPages: number = Number(firstPageData.paginas) || 1;
 
     let allProperties: Record<string, any> = extractProperties(firstPageData);
@@ -885,7 +890,7 @@ export async function PUT() {
           .catch((err) => {
             console.warn(`Falha ao buscar página ${page}: ${err.message}`);
             return {};
-          })
+          }),
       );
     }
 
@@ -908,9 +913,7 @@ export async function PUT() {
     const upsertPromises = apiIds.map((code) =>
       limit(async () => {
         const property = allProperties[code];
-        const existing = existingImoveis.find(
-          (i) => String(i.id) === code
-        );
+        const existing = existingImoveis.find((i) => String(i.id) === code);
 
         const apiDate = getTimeSafe(property.DataHoraAtualizacao);
         const dbDate = getTimeSafe(existing?.DataHoraAtualizacao);
@@ -918,15 +921,13 @@ export async function PUT() {
         if (!existing || apiDate > dbDate) {
           await processAndUpsertProperty(code, property);
         }
-      })
+      }),
     );
 
     // 6. Delete missing
     const deletePromises = existingImoveis
       .filter((i) => !apiIds.includes(String(i.id)))
-      .map((i) =>
-        limit(() => prisma.imovel.delete({ where: { id: i.id } }))
-      );
+      .map((i) => limit(() => prisma.imovel.delete({ where: { id: i.id } })));
 
     const [upsertResults, deleteResults] = await Promise.all([
       Promise.allSettled(upsertPromises),
@@ -936,16 +937,19 @@ export async function PUT() {
     return NextResponse.json({
       message: "Sincronização concluída.",
       cidades: cidadesResult,
-      addedOrUpdated: upsertResults.filter((r) => r.status === "fulfilled").length,
+      addedOrUpdated: upsertResults.filter((r) => r.status === "fulfilled")
+        .length,
       deleted: deleteResults.filter((r) => r.status === "fulfilled").length,
-      failedUpserts: upsertResults.filter((r) => r.status === "rejected").length,
-      failedDeletes: deleteResults.filter((r) => r.status === "rejected").length,
+      failedUpserts: upsertResults.filter((r) => r.status === "rejected")
+        .length,
+      failedDeletes: deleteResults.filter((r) => r.status === "rejected")
+        .length,
     });
   } catch (error: any) {
     console.error("Erro ao sincronizar:", error.message);
     return NextResponse.json(
       { error: "Erro interno ao sincronizar" },
-      { status: 500 }
+      { status: 500 },
     );
   } finally {
     await prisma.$disconnect();
@@ -1006,10 +1010,10 @@ const updatePhotosForProperty = async (code: string) => {
   }
 
   const details: VistaPropertyDetails = await fetchData<VistaPropertyDetails>(
-    buildDetailsUrl(code)
+    buildDetailsUrl(code),
   ).catch((err) => {
     throw new Error(
-      `Não foi possível buscar detalhes para o imóvel ${code}: ${err.message}`
+      `Não foi possível buscar detalhes para o imóvel ${code}: ${err.message}`,
     );
   });
 
@@ -1022,7 +1026,7 @@ const updatePhotosForProperty = async (code: string) => {
       codigo: photo.Codigo ?? null,
       url: photo.Foto ?? null,
       urlPequena: photo.FotoPequena ?? null,
-    })
+    }),
   );
 
   const videosToCreate = Object.values(details.Video || {}).map(
@@ -1032,7 +1036,7 @@ const updatePhotosForProperty = async (code: string) => {
           ? String(video.Destaque)
           : null,
       video: video.Video ?? null,
-    })
+    }),
   );
 
   const fotosData: any = { deleteMany: {} };
@@ -1084,9 +1088,7 @@ export async function PATCH(request: NextRequest) {
     const limit = pLimit(5);
 
     const results = await Promise.allSettled(
-      imoveis.map((i) =>
-        limit(() => updatePhotosForProperty(String(i.id)))
-      )
+      imoveis.map((i) => limit(() => updatePhotosForProperty(String(i.id)))),
     );
 
     const successful = results.filter((r) => r.status === "fulfilled").length;
@@ -1102,7 +1104,7 @@ export async function PATCH(request: NextRequest) {
     console.error("Erro ao atualizar fotos:", error.message);
     return NextResponse.json(
       { error: "Erro interno ao atualizar fotos dos imóveis" },
-      { status: 500 }
+      { status: 500 },
     );
   } finally {
     await prisma.$disconnect();
