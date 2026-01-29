@@ -522,6 +522,7 @@ export async function POST() {
 
 export async function GET(request: NextRequest) {
   try {
+    console.log("[IMOVEIS] request", request.nextUrl.searchParams.toString());
     const searchParams = request.nextUrl.searchParams;
     const codigo = searchParams.get("codigo") || null;
 
@@ -575,10 +576,18 @@ export async function GET(request: NextRequest) {
 
     // --- Params gerais ---
     const action = searchParams.get("action") ?? "comprar";
+    console.log("[IMOVEIS] action", action);
+
     const tipos = searchParams.get("tipos")?.split(",").filter(Boolean) || [];
+    console.log("[IMOVEIS] tipos", tipos);
+
     const bairros =
       searchParams.get("bairro")?.split(",").filter(Boolean) || [];
+    console.log("[IMOVEIS] bairros", bairros);
+
     const cidade = searchParams.get("cidade") ?? "porto alegre";
+    console.log("[IMOVEIS] cidades", cidade);
+
     const valorMin = Number(searchParams.get("valorMin")) || null;
     const valorMax = Number(searchParams.get("valorMax")) || null;
     const quartos = searchParams.get("quartos") || null;
@@ -615,12 +624,12 @@ export async function GET(request: NextRequest) {
       };
     if (cidade) whereClause.Cidade = { equals: cidade, mode: "insensitive" };
     if (
-      bairros.length > 0 &&
+      bairros && bairros.length > 0 &&
       !(bairros.length === 1 && bairros[0].toLowerCase() === "all")
     ) {
       whereClause.Bairro = { in: bairros, mode: "insensitive" };
     }
-    if (tipos.length > 0)
+    if (tipos && tipos.length > 0)
       whereClause.Categoria = { in: tipos, mode: "insensitive" };
     if (quartos) whereClause.Dormitorios = { gte: String(quartos) };
     if (suites) whereClause.Suites = { gte: String(suites) };
@@ -630,6 +639,7 @@ export async function GET(request: NextRequest) {
         equals: lancamentosFilterValue,
         mode: "insensitive",
       };
+    console.log("[IMOVEIS] passou if de cidade pairros");
 
     // --- Valor com margem de 5% ---
     if (valorMin !== null || valorMax !== null) {
@@ -660,7 +670,7 @@ export async function GET(request: NextRequest) {
     }
 
     // --- Características ---
-    if (caracteristicas.length > 0) {
+    if (caracteristicas && caracteristicas.length > 0) {
       whereClause.caracteristicas = {
         some: {
           AND: caracteristicas.map((carac) => ({
@@ -738,7 +748,10 @@ export async function GET(request: NextRequest) {
       }),
       prisma.imovel.count({ where: whereClause }),
     ]);
-
+    console.log("[IMOVEIS] query OK", {
+      imoveis: imoveis.length,
+      totalCount,
+    });
     const totalPages = Math.ceil(totalCount / pageSize);
 
     return NextResponse.json({
@@ -749,6 +762,11 @@ export async function GET(request: NextRequest) {
       imoveis: imoveis,
     });
   } catch (error: any) {
+        console.error("[IMOVEIS] ERROR", {
+      message: error.message,
+      name: error.name,
+      stack: error.stack,
+    });
     console.error("Erro ao buscar imóveis:", error.message);
     return NextResponse.json(
       { error: "Erro interno no servidor ao buscar imóveis" },
