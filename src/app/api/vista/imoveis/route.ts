@@ -639,8 +639,8 @@ export async function GET(request: NextRequest) {
 
     // --- Valor com margem de 5% ---
     if (valorMin !== null || valorMax !== null) {
-      const min = valorMin ? valorMin * 0.95 : undefined;
-      const max = valorMax ? valorMax * 1.05 : undefined;
+      const min = valorMin ? valorMin * 0.9 : undefined;
+      const max = valorMax ? valorMax * 1.1 : undefined;
 
       whereClause[valorField] = {
         ...(min !== undefined ? { gte: min } : {}),
