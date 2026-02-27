@@ -29,7 +29,7 @@ export async function generateMetadata({
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/vista/imoveis/${codigo}`,
     {
       next: { revalidate: 60 },
-    }
+    },
   );
 
   const capitalizar = (str: string) =>
@@ -85,7 +85,7 @@ export default async function ImovelPage({
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/vista/imoveis/${parsedParams.codigo}`,
     {
       next: { revalidate: 60 },
-    }
+    },
   );
 
   if (!res.ok) {
@@ -100,8 +100,6 @@ export default async function ImovelPage({
     .map((foto: { url: string }) => ({ Foto: foto.url }))
     .filter((f: FotoObj) => f.Foto !== imovel.FotoDestaque);
 
- 
-
   const hasBadges =
     imovel.Lancamento === "Sim" ||
     imovel.EstudaDacao === "Sim" ||
@@ -110,9 +108,11 @@ export default async function ImovelPage({
   function gerarTitulo() {
     const capitalizar = (str: string) => {
       const palavras = str.split(" ");
-      const novasPalavras = palavras.map((x) => x = x.charAt(0).toUpperCase() + x.slice(1).toLowerCase())
-      return novasPalavras.join(" ")
-    }
+      const novasPalavras = palavras.map(
+        (x) => (x = x.charAt(0).toUpperCase() + x.slice(1).toLowerCase()),
+      );
+      return novasPalavras.join(" ");
+    };
 
     let status = "";
     if (imovel.Status == "VENDA") {
@@ -209,7 +209,7 @@ export default async function ImovelPage({
                   ? imovel.videos
                       .filter(
                         (v: { video: string }): v is { video: string } =>
-                          typeof v.video === "string" && v.video.trim() !== ""
+                          typeof v.video === "string" && v.video.trim() !== "",
                       )
                       .map((v: { video: string }) => ({ url: v.video }))
                   : []
@@ -217,7 +217,7 @@ export default async function ImovelPage({
             />
           </section>
 
-          <section className="px-8 sm:px-10 md:px-0 w-full max-w-7xl mb-8">
+          <section className="px-8 sm:px-10 md:px-0 w-full max-w-7xl mb-8 mt-4 sm:mt-0">
             <div className="grid grid-cols-1 lg:grid-cols-[3fr_1.25fr] gap-6 lg:gap-8">
               <div className="space-y-8">
                 <div className="space-y-4">
@@ -263,7 +263,7 @@ export default async function ImovelPage({
                             <span>
                               Cond R${" "}
                               {formatIntPtBR(
-                                parseFloat(imovel.ValorCondominio)
+                                parseFloat(imovel.ValorCondominio),
                               )}
                               /mês
                             </span>
@@ -567,6 +567,13 @@ export default async function ImovelPage({
                 </div>
 
                 <div className="sm:hidden my-4">
+                  {imovel.Bairro && (
+                    <div className="w-full text-center mb-3">
+                      <span className="text-2xl font-semibold text-[#303030]">
+                        {imovel.Bairro}
+                      </span>
+                    </div>
+                  )}
                   <div className="border-t border-gray-200 mb-3" />
                   <div className="w-full flex items-baseline justify-center gap-3 text-center">
                     {typeof valorAnterior === "number" &&
@@ -620,7 +627,7 @@ export default async function ImovelPage({
                           .filter(
                             (v: { video: string }): v is { video: string } =>
                               typeof v.video === "string" &&
-                              v.video.trim() !== ""
+                              v.video.trim() !== "",
                           )
                           .map((v: { video: string }) => ({ url: v.video }))
                       : []

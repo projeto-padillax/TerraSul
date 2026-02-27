@@ -16,7 +16,11 @@ interface GaleriaImagensProps {
   video: { url: string }[];
 }
 
-export default function GaleriaImagens({ imagens, principal, video }: GaleriaImagensProps) {
+export default function GaleriaImagens({
+  imagens,
+  principal,
+  video,
+}: GaleriaImagensProps) {
   const [videoAberto, setVideoAberto] = useState(false);
 
   const [mostrarTodas, setMostrarTodas] = useState(false);
@@ -34,7 +38,6 @@ export default function GaleriaImagens({ imagens, principal, video }: GaleriaIma
   }, [principal, imagens, video]);
 
   const fotos = midias.filter((m) => m.type === "image");
-  const temMaisDe1Foto = fotos.length > 1;
 
   const temVideo = midias.some((m) => m.type === "video");
 
@@ -71,7 +74,7 @@ export default function GaleriaImagens({ imagens, principal, video }: GaleriaIma
   return (
     <div className="space-y-4">
       <div className="flex flex-col md:flex-row gap-4 md:h-[448px]">
-        <div className="w-full aspect-square md:aspect-auto md:w-4/7 md:h-full relative rounded-md overflow-hidden">
+        <div className="w-full aspect-[3/2] md:aspect-auto md:w-4/7 md:h-full relative rounded-md overflow-hidden">
           {videoAberto && video.length > 0 ? (
             <iframe
               src={`https://www.youtube.com/embed/${video[0].url}?rel=0&controls=1&autoplay=1`}
@@ -115,38 +118,27 @@ export default function GaleriaImagens({ imagens, principal, video }: GaleriaIma
                   className={`bg-white text-black font-semibold px-4 py-2 rounded-md flex items-center gap-2 shadow-md ${
                     videoAberto ? "opacity-50" : ""
                   }`}
-                  onClick={() => setVideoAberto(false)}
+                  onClick={() => {
+                    setVideoAberto(false);
+                    if (window.innerWidth < 768) {
+                      toggleMaisFotos();
+                    }
+                  }}
                 >
                   <Camera size={16} />
-                  <span>{imagens.length} Fotos</span>
+                  <span className="flex items-center gap-2">
+                    {imagens.length} Fotos
+                    <span className="md:hidden">
+                      {mostrarTodas ? (
+                        <ChevronUp size={16} />
+                      ) : (
+                        <ChevronDown size={16} />
+                      )}
+                    </span>
+                  </span>
                 </button>
               )}
             </div>
-          )}
-
-          {temMaisDe1Foto && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleMaisFotos();
-              }}
-              className="
-                md:hidden
-                absolute
-                top-1/2 left-1/2
-                -translate-x-1/2 -translate-y-1/2
-                bg-white/90 backdrop-blur-sm
-                text-black font-semibold
-                px-4 py-2
-                rounded-md
-                shadow-lg
-                flex items-center gap-2
-              "
-            >
-              <span>Mais fotos</span>
-              {mostrarTodas ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-            </button>
           )}
         </div>
 
@@ -196,7 +188,11 @@ export default function GaleriaImagens({ imagens, principal, video }: GaleriaIma
                       "
                     >
                       <span>Mais fotos</span>
-                      {mostrarTodas ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                      {mostrarTodas ? (
+                        <ChevronUp size={18} />
+                      ) : (
+                        <ChevronDown size={18} />
+                      )}
                     </button>
                   </>
                 )}
@@ -216,7 +212,13 @@ export default function GaleriaImagens({ imagens, principal, video }: GaleriaIma
                 className="relative w-full aspect-[4/3] rounded-md overflow-hidden cursor-pointer"
                 onClick={() => abrirViewerPorSrc(m.src)}
               >
-                <Image src={m.src} alt={`Foto extra ${idx + 1}`} fill className="object-cover" sizes="25vw" />
+                <Image
+                  src={m.src}
+                  alt={`Foto extra ${idx + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="25vw"
+                />
               </div>
             ))}
         </div>
