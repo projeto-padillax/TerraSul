@@ -51,7 +51,7 @@ export async function sendEmailFormulario(data: FormularioInput, isCodigo78?: bo
       from: `TerraSul <${from}>`,
       to: to!,
       cc: data.email,
-      subject: 'Lead TerraSul',
+      subject: `${data.tipo} ${data.nome}`,
       html: htmlBody,
     });
     console.log(result)
