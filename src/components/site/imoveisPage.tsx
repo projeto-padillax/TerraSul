@@ -78,11 +78,11 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     { id: "academia", label: "Academia" },
     { id: "elevador", label: "Elevador" },
     { id: "piscina", label: "Piscina" },
-    { id: "playground", label: "Playground" },
-    { id: "portaria", label: "Portaira" },
-    { id: "quadra", label: "Quadra de esportes" },
+    { id: "brinquedoteca", label: "Playground" },
+    { id: "portaria", label: "Portaria" },
+    { id: "quadra poli esportiva", label: "Quadra de esportes" },
     { id: "sacada", label: "Sacada" },
-    { id: "saloa", label: "Salão de festa" },
+    { id: "salao festas", label: "Salão de festas" },
   ];
 
   useEffect(() => {

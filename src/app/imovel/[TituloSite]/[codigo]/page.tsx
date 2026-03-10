@@ -217,7 +217,7 @@ export default async function ImovelPage({
             />
           </section>
 
-          <section className="px-8 sm:px-10 md:px-0 w-full max-w-7xl mb-8">
+          <section className="px-8 sm:px-10 md:px-0 w-full max-w-7xl mb-8 mt-4 sm:mt-0">
             <div className="grid grid-cols-1 lg:grid-cols-[3fr_1.25fr] gap-6 lg:gap-8">
               <div className="space-y-8">
                 <div className="space-y-4">
@@ -567,6 +567,13 @@ export default async function ImovelPage({
                 </div>
 
                 <div className="sm:hidden my-4">
+                  {imovel.Bairro && (
+                    <div className="w-full text-center mb-3">
+                      <span className="text-2xl font-semibold text-[#303030]">
+                        {imovel.Bairro}
+                      </span>
+                    </div>
+                  )}
                   <div className="border-t border-gray-200 mb-3" />
                   <div className="w-full flex items-baseline justify-center gap-3 text-center">
                     {typeof valorAnterior === "number" &&
