@@ -27,7 +27,7 @@ export default async function CategoryCards() {
                 >
                   <div className="relative w-full h-full">
                     <Image
-                      src={`${category.imagem.replace(
+                      src={`${(category.imagem ?? "").replace(
                         "/upload/",
                         "/upload/f_auto,q_auto,w_600,c_fill/"
                       )}`}

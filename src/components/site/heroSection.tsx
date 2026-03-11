@@ -213,7 +213,7 @@ export function HeroSection(banner: HeroSectionProps) {
   return (
     <div className="relative">
       <Image
-        src={banner.imageUrl.replace(
+        src={(banner.imageUrl ?? "").replace(
           "/upload/",
           "/upload/f_auto,q_auto,w_1200,dpr_2/"
         )}
