@@ -13,6 +13,7 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
+    restart: unless-stopped
     # REMOVA isso em produção
     # ports:
     #   - "5432:5432"
@@ -24,6 +25,7 @@ services:
       postgres:
         condition: service_healthy
     expose: ["3000"]
+    restart: unless-stopped
 
   nginx:
     image: nginx:1.27-alpine
@@ -40,6 +42,7 @@ services:
   api-cron-patch-daily-0700:
     image: curlimages/curl:8.5.0
     restart: unless-stopped
+    depends_on: [next]
     volumes:
       - ./docker/cron:/cron:ro
     command: ["/bin/sh", "/cron/patch_daily_0700_utc.sh"]
@@ -47,6 +50,7 @@ services:
   api-cron-put-hourly:
     image: curlimages/curl:8.5.0
     restart: unless-stopped
+    depends_on: [next]
     volumes:
       - ./docker/cron:/cron:ro
     command: ["/bin/sh", "/cron/put_hourly_utc.sh"]

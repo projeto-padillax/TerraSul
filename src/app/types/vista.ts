@@ -34,6 +34,7 @@ export type VistaImovel = {
   EstudaDacao?: string;
   Exclusivo?: string;
   Desconto?: string;
+  DataHoraAtualizacao?: string;
 
   Foto?: Record<
     string,

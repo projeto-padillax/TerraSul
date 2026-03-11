@@ -1,6 +1,15 @@
 import { prisma } from "@/lib/neon/db";
+import { getSession } from "@/lib/auth/session";
 
 export async function POST() {
+  const session = await getSession();
+  if (!session || !["ADMIN", "SUPERADMIN"].includes(session.role)) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const basePesquisa = {
       fields: ["Categoria"],
@@ -72,7 +81,8 @@ export async function POST() {
       JSON.stringify({ error: "Erro interno no servidor" }),
       { status: 500, headers: { "Content-Type": "application/json" } }
     );
-  } finally {
-    await prisma.$disconnect(); // Desconecta o Prisma Client no final da requisição
   }
 }
+
+// suppress unused import warning — prisma kept for future use
+void prisma;

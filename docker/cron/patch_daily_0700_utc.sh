@@ -4,12 +4,12 @@ set -eu
 while true; do
   now=$(date -u +%s)
 
-  today_0700=$(date -u +%Y-%m-%d)T07:00:00
-  target=$(date -u -d "$today_0700" +%s)
+  # Calculate next 07:00 UTC using pure arithmetic (BusyBox-compatible, no date -d)
+  secs_since_midnight=$((now % 86400))
+  target=$((now - secs_since_midnight + 25200))  # 07:00 UTC = 7*3600 = 25200s
 
   if [ "$target" -le "$now" ]; then
-    tomorrow=$(date -u -d "@$((now + 86400))" +%Y-%m-%d)
-    target=$(date -u -d "${tomorrow}T07:00:00" +%s)
+    target=$((target + 86400))
   fi
 
   sleep $((target - now))

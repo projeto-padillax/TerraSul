@@ -507,10 +507,6 @@ export async function POST() {
       { error: "Erro interno do servidor durante a sincronização de imóveis" },
       { status: 500 },
     );
-  } finally {
-    // É importante desconectar o Prisma apenas quando todas as operações estão realmente concluídas.
-    // O `Promise.allSettled` garante que todas as promessas foram resolvidas (sucesso ou falha).
-    await prisma.$disconnect();
   }
 }
 
@@ -589,7 +585,7 @@ export async function GET(request: NextRequest) {
     const caracteristicas =
       searchParams.get("caracteristicas")?.split(",").filter(Boolean) || [];
     const infraestrutura =
-      searchParams.get("caracteristicas")?.split(",").filter(Boolean) || [];
+      searchParams.get("infraestrutura")?.split(",").filter(Boolean) || [];
     const lancamentosFilterValue = parseSimNao(searchParams.get("lancamentos"));
     const empreendimento = searchParams.get("empreendimento") || null;
 
@@ -649,20 +645,16 @@ export async function GET(request: NextRequest) {
     }
 
     // --- Área com margem de 5% ---
-    // --- Área com margem de 5% ---
     if (areaMin !== null || areaMax !== null) {
       const min = areaMin ? areaMin * 0.95 : undefined;
       const max = areaMax ? areaMax * 1.05 : undefined;
 
-      whereClause.OR = [
-        {
-          // Prioriza AreaTotal
-          AreaUtil: {
-            ...(min !== undefined ? { gte: min } : {}),
-            ...(max !== undefined ? { lte: max } : {}),
-          },
+      (whereClause.AND ??= []).push({
+        AreaUtil: {
+          ...(min !== undefined ? { gte: min } : {}),
+          ...(max !== undefined ? { lte: max } : {}),
         },
-      ];
+      });
     }
 
     // --- Características ---
@@ -676,21 +668,21 @@ export async function GET(request: NextRequest) {
         },
       };
 
-      whereClause.OR = [
-        { caracteristicas: filtro },
-        { infraestrutura: filtro },
-      ];
+      (whereClause.AND ??= []).push({
+        OR: [
+          { caracteristicas: filtro },
+          { infraestrutura: filtro },
+        ],
+      });
     }
 
-    whereClause.AND = [
-      {
-        OR: [
-          { [valorField]: { gt: 0 } },
-          { [valorField]: null },
-          { [valorField]: 0 },
-        ],
-      },
-    ];
+    (whereClause.AND ??= []).push({
+      OR: [
+        { [valorField]: { gt: 0 } },
+        { [valorField]: null },
+        { [valorField]: 0 },
+      ],
+    });
 
     let sortByClause: any = {};
     switch (sort) {
@@ -951,8 +943,6 @@ export async function PUT() {
       { error: "Erro interno ao sincronizar" },
       { status: 500 },
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -1106,7 +1096,5 @@ export async function PATCH(request: NextRequest) {
       { error: "Erro interno ao atualizar fotos dos imóveis" },
       { status: 500 },
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }

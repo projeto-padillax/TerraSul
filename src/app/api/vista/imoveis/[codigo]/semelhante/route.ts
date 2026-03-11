@@ -70,7 +70,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ codigo: 
     const base: Imovel = baseImovel as Imovel; // Cast to your Imovel type for consistency with decideModalidade
 
     const modalidade = decideModalidade(base, explicitModalidade ?? undefined);
-    const priceField = "ValorVenda";
+    const priceField = modalidade === "aluguel" ? "ValorLocacao" : "ValorVenda";
     const basePrice = base[priceField]; // Access directly, it's already a number or null
 
     if (basePrice === null || basePrice === undefined || basePrice <= 0) {
@@ -166,7 +166,5 @@ export async function GET(req: Request, { params }: { params: Promise<{ codigo: 
   } catch (err) {
     if (err instanceof Error) console.error("Erro ao buscar imóveis semelhantes:", err.message);
     return NextResponse.json({ error: "Erro interno do servidor" }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }

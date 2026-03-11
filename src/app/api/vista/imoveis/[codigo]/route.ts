@@ -1,6 +1,7 @@
 import { VistaImovel } from "@/app/types/vista";
 import { prisma } from "@/lib/neon/db";
 import { NextResponse } from "next/server";
+import { getSession } from "@/lib/auth/session";
 
 export async function GET(
   _: Request,
@@ -104,16 +105,13 @@ export async function GET(
 
     return NextResponse.json(imovel); // Return the found property
   } catch (error) {
-    // Add type annotation for error
     if (error instanceof Error) {
-      console.error("Erro ao buscar imóvel:", error.message); // Log error message
+      console.error("Erro ao buscar imóvel:", error.message);
     }
     return NextResponse.json(
       { error: "Erro interno do servidor" },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect(); // Disconnect Prisma client after the request
   }
 }
 
@@ -194,6 +192,10 @@ export async function PUT(
   _: Request,
   { params }: { params: Promise<{ codigo: string }> }
 ) {
+  const session = await getSession();
+  if (!session || !["ADMIN", "SUPERADMIN"].includes(session.role)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const { codigo } = await params;
     const codigoUppercase = codigo.toUpperCase();
@@ -282,8 +284,6 @@ export async function PUT(
   } catch (err) {
     console.error("PUT /api/vista/imoveis/[codigo] error:", err);
     return NextResponse.json({ error: "Erro interno do servidor" }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -310,14 +310,14 @@ function mapVistaToDb(v: VistaImovel) {
     Categoria: v.Categoria,
     Bairro: v.Bairro,
     Cidade: v.Cidade,
-    ValorVenda: v.ValorVenda ? Number(v.ValorVenda) : 0,
-    ValorLocacao: v.ValorLocacao ? Number(v.ValorLocacao) : 0,
+    ValorVenda: v.ValorVenda ? Number(v.ValorVenda) : null,
+    ValorLocacao: v.ValorLocacao ? Number(v.ValorLocacao) : null,
     Dormitorios: v.Dormitorios,
     Suites: v.Suites,
     Vagas: v.Vagas,
-    AreaTotal: v.AreaTotal ? parseFloat(v.AreaTotal) : 0,
-    AreaUtil: v.AreaUtil ? parseFloat(v.AreaUtil) : 0,
-    DataHoraAtualizacao: new Date(),
+    AreaTotal: v.AreaTotal ? parseFloat(v.AreaTotal) : null,
+    AreaUtil: v.AreaUtil ? parseFloat(v.AreaUtil) : null,
+    DataHoraAtualizacao: v.DataHoraAtualizacao ? new Date(v.DataHoraAtualizacao) : new Date(),
     Desconto: v.Desconto,
     ValorIptu: v.ValorIptu,
     ValorCondominio: v.ValorCondominio,
