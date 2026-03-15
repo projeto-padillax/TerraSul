@@ -82,34 +82,26 @@ export async function updateCorretor(corretor: Omit<CorretorORM, "createdAt">) {
 }
 
 export async function activateCorretores(ids: string[]) {
-    // Validar IDs
     const validIds = idsSchema.parse(ids);
-
-    await prisma.$transaction(
-        validIds.map((id) =>
-            prisma.corretor.update({ where: { id }, data: { status: true } })
-        )
-    );
+    await prisma.corretor.updateMany({
+        where: { id: { in: validIds } },
+        data: { status: true },
+    });
 }
 
 export async function deactivateCorretores(ids: string[]) {
-    // Validar IDs
     const validIds = idsSchema.parse(ids);
-
-    await prisma.$transaction(
-        validIds.map((id) =>
-            prisma.corretor.update({ where: { id }, data: { status: false } })
-        )
-    );
+    await prisma.corretor.updateMany({
+        where: { id: { in: validIds } },
+        data: { status: false },
+    });
 }
 
 export async function deleteCorretores(ids: string[]) {
-    // Validar IDs
     const validIds = idsSchema.parse(ids);
-
-    await Promise.all(
-        validIds.map((id) => prisma.corretor.deleteMany({ where: { id } }))
-    );
+    await prisma.corretor.deleteMany({
+        where: { id: { in: validIds } },
+    });
 }
 
 export async function getCorretoresAtivosParaSelect(): Promise<{ id: string; name: string }[]> {

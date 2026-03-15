@@ -8,15 +8,16 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./docker/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 3s
       retries: 20
     restart: unless-stopped
-    # REMOVA isso em produção
-    # ports:
-    #   - "5432:5432"
+    mem_limit: 256m
+    cpus: 0.5
 
   next:
     build: .
@@ -26,10 +27,22 @@ services:
         condition: service_healthy
     expose: ["3000"]
     restart: unless-stopped
+    mem_limit: 512m
+    cpus: 1.0
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health').then(r=>{if(!r.ok)throw 1})"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
   nginx:
     image: nginx:1.27-alpine
-    depends_on: [next]
+    depends_on:
+      next:
+        condition: service_healthy
+    mem_limit: 64m
+    cpus: 0.25
     ports:
       - "80:80"
       - "443:443"

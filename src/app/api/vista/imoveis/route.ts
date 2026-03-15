@@ -193,15 +193,22 @@ const extractProperties = (apiData: VistaApiResponse): Record<string, any> => {
  * @throws {Error} Se a requisição de rede falhar ou a resposta não for OK.
  */
 async function fetchData<T>(url: string): Promise<T> {
-  const response = await fetch(url, {
-    headers: { Accept: "application/json" },
-  });
-  if (!response.ok) {
-    throw new Error(
-      `Falha ao buscar dados de ${url}. Status: ${response.status}`,
-    );
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15_000);
+  try {
+    const response = await fetch(url, {
+      headers: { Accept: "application/json" },
+      signal: controller.signal,
+    });
+    if (!response.ok) {
+      throw new Error(
+        `Falha ao buscar dados de ${url}. Status: ${response.status}`,
+      );
+    }
+    return response.json() as Promise<T>;
+  } finally {
+    clearTimeout(timeout);
   }
-  return response.json() as Promise<T>;
 }
 
 interface VistaPropertyData {
@@ -753,6 +760,10 @@ export async function GET(request: NextRequest) {
       totalPages: totalPages,
       totalItems: totalCount,
       imoveis: imoveis,
+    }, {
+      headers: {
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=600",
+      },
     });
   } catch (error: any) {
     console.error("[IMOVEIS] ERROR", {
@@ -787,12 +798,19 @@ const buildListarConteudoUrl = (pesquisa: unknown): string => {
 };
 
 const fetchVistaListarConteudo = async <T>(url: string): Promise<T> => {
-  const res = await fetch(url, {
-    method: "GET",
-    headers: { Accept: "application/json" },
-  });
-  if (!res.ok) throw new Error(`Falha ao buscar ${url}. Status: ${res.status}`);
-  return (await res.json()) as T;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15_000);
+  try {
+    const res = await fetch(url, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+      signal: controller.signal,
+    });
+    if (!res.ok) throw new Error(`Falha ao buscar ${url}. Status: ${res.status}`);
+    return (await res.json()) as T;
+  } finally {
+    clearTimeout(timeout);
+  }
 };
 
 const normalizeBairros = (raw: unknown): string[] => {

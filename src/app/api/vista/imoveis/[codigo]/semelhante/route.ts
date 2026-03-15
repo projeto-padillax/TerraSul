@@ -90,35 +90,44 @@ export async function GET(req: Request, { params }: { params: Promise<{ codigo: 
     // Ensure types for Prisma where clause are correct
     const statusCompat = STATUS_COMPATIVEIS[modalidade] as readonly ("VENDA" | "ALUGUEL" | "VENDA E ALUGUEL")[];
 
-    // 2. Build the Prisma query for similar properties
+    // 2. Build the Prisma query for similar properties — sort by price proximity in DB
     const similarImoveis = await prisma.imovel.findMany({
       where: {
-        AND: [ // Use AND to combine all conditions
-          { Codigo: { not: base.Codigo } }, // Exclude the base property itself
-          cidade ? { Cidade: cidade } : {}, // Only apply if cidade exists
+        AND: [
+          { Codigo: { not: base.Codigo } },
+          cidade ? { Cidade: cidade } : {},
           categoria ? { Categoria: categoria } : {},
-          { Status: { in: statusCompat as string[] } }, // Cast to string[] for Prisma 'in' operator
+          { Status: { in: statusCompat as string[] } },
           {
-            [priceField]: { // Dynamically set the price field
+            [priceField]: {
               gte: minPrice,
               lte: maxPrice,
             },
           },
-          // You could add `Categoria` here if it's a hard filter for similarity
-          // For now, it's not a hard filter in the original Firebase query
-          // { Categoria: categoria },
         ],
       },
-      // You might fetch more than 4 initially to sort and then slice in memory
-      // if sorting by `delta` (absolute difference) is critical and not supported directly by DB
-      take: 20, // Fetch a reasonable number of candidates to ensure we find 4 good ones
-      // Prisma can order by a specific field, but not by computed `delta` directly.
-      // We will sort by `delta` in application code.
-      // orderBy: {
-      //   [priceField]: 'asc', // Or 'desc' depending on your preference for initial sort
-      // },
-      include: {
-        fotos: { // Include related photos for similar properties
+      take: 4,
+      orderBy: {
+        [priceField]: 'asc',
+      },
+      select: {
+        id: true,
+        Codigo: true,
+        Cidade: true,
+        Categoria: true,
+        Status: true,
+        ValorVenda: true,
+        ValorLocacao: true,
+        Bairro: true,
+        Dormitorios: true,
+        Suites: true,
+        Vagas: true,
+        AreaUtil: true,
+        AreaTotal: true,
+        FotoDestaque: true,
+        Lancamento: true,
+        Endereco: true,
+        fotos: {
           select: {
             id: true,
             destaque: true,
@@ -126,42 +135,21 @@ export async function GET(req: Request, { params }: { params: Promise<{ codigo: 
             url: true,
             urlPequena: true,
           },
-          orderBy: {
-            id: 'asc'
-          }
+          orderBy: { id: 'asc' },
+          take: 5,
         },
-        caracteristicas: { // Include related characteristics
-          select: {
-            nome: true,
-            valor: true
-          }
-        }
-      }
+      },
     });
 
-    const candidatos: Array<{ imovel: Imovel; preco: number; delta: number }> = [];
-
-    similarImoveis.forEach((imovelData) => {
-      // Re-cast to your Imovel type if necessary, or refine your Imovel type to match Prisma's output
-      const candidato: Imovel = imovelData as Imovel;
-
-      const p = candidato[priceField];
-      if (p === null || p === undefined || p <= 0) return;
-
-      // The price range filtering is mostly done by the Prisma query,
-      // but this check acts as a safeguard and is good for conceptual clarity.
-      if (p < minPrice || p > maxPrice) return;
-
-      const delta = Math.abs(p - basePrice);
-      candidatos.push({ imovel: candidato, preco: p, delta });
-    });
-
-    candidatos.sort((a, b) => a.delta - b.delta);
-    const top4 = candidatos.slice(0, 4).map((c) => c.imovel);
+    const top4 = similarImoveis;
 
     return NextResponse.json({
       base: { codigo: base.Codigo, modalidade, priceField, basePrice },
       semelhantes: top4,
+    }, {
+      headers: {
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=600",
+      },
     });
   } catch (err) {
     if (err instanceof Error) console.error("Erro ao buscar imóveis semelhantes:", err.message);

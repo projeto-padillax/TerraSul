@@ -101,25 +101,19 @@ export async function updateBanner(banner: Omit<BannerORM, "createdAt">) {
 }
 
 export async function activateBanners(ids: number[]) {
-  // Validar IDs
   const validIds = idsSchema.parse(ids);
-
-  await prisma.$transaction(
-    validIds.map((id) =>
-      prisma.banners.update({ where: { id }, data: { status: true } })
-    )
-  );
+  await prisma.banners.updateMany({
+    where: { id: { in: validIds } },
+    data: { status: true },
+  });
 }
 
 export async function deactivateBanners(ids: number[]) {
-  // Validar IDs
   const validIds = idsSchema.parse(ids);
-
-  await prisma.$transaction(
-    validIds.map((id) =>
-      prisma.banners.update({ where: { id }, data: { status: false } })
-    )
-  );
+  await prisma.banners.updateMany({
+    where: { id: { in: validIds } },
+    data: { status: false },
+  });
 }
 
 export async function deleteBanners(ids: number[]) {
@@ -155,15 +149,15 @@ export async function getRandomBannerImage(): Promise<{
   subtitulo: string;
   url: string;
 }> {
-  const banners = await prisma.banners.findMany({
-    where: { status: true }, // Remova essa linha se quiser qualquer banner, ativo ou não
-    select: { imagem: true,
-      titulo: true,
-      subtitulo: true,
-      url: true,
-     },
+  const count = await prisma.banners.count({ where: { status: true } });
+  if (count === 0) {
+    return { imagem: "", titulo: "", subtitulo: "", url: "" };
+  }
+  const skip = Math.floor(Math.random() * count);
+  const banner = await prisma.banners.findFirst({
+    where: { status: true },
+    select: { imagem: true, titulo: true, subtitulo: true, url: true },
+    skip,
   });
-
-  const randomIndex = Math.floor(Math.random() * banners.length);
-  return banners[randomIndex];
+  return banner ?? { imagem: "", titulo: "", subtitulo: "", url: "" };
 }

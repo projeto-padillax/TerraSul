@@ -29,6 +29,11 @@ function probe() {
 })();
 NODE
 
-npx prisma migrate deploy
-exec npm run start
+echo "[entrypoint] Running migrations..."
+if npx prisma migrate deploy; then
+  echo "[entrypoint] Migrations completed successfully"
+else
+  echo "[entrypoint] WARNING: Migration failed (exit=$?), starting anyway..." >&2
+fi
 
+exec npm run start

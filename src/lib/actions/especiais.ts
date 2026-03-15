@@ -85,34 +85,26 @@ export async function updateEspecial(especial: Omit<ImoveisCorretorORM, "created
 }
 
 export async function activateEspeciais(ids: string[]) {
-    // Validar IDs
     const validIds = idsSchema.parse(ids);
-
-    await prisma.$transaction(
-        validIds.map((id) =>
-            prisma.imoveisCorretor.update({ where: { id }, data: { status: true } })
-        )
-    );
+    await prisma.imoveisCorretor.updateMany({
+        where: { id: { in: validIds } },
+        data: { status: true },
+    });
 }
 
 export async function deactivateEspeciais(ids: string[]) {
-    // Validar IDs
     const validIds = idsSchema.parse(ids);
-
-    await prisma.$transaction(
-        validIds.map((id) =>
-            prisma.imoveisCorretor.update({ where: { id }, data: { status: false } })
-        )
-    );
+    await prisma.imoveisCorretor.updateMany({
+        where: { id: { in: validIds } },
+        data: { status: false },
+    });
 }
 
 export async function deleteEspeciais(ids: string[]) {
-    // Validar IDs
     const validIds = idsSchema.parse(ids);
-
-    await Promise.all(
-        validIds.map((id) => prisma.imoveisCorretor.deleteMany({ where: { id } }))
-    );
+    await prisma.imoveisCorretor.deleteMany({
+        where: { id: { in: validIds } },
+    });
 }
 
 

@@ -12,7 +12,7 @@ import ClientLayout from "@/components/client-layout";
 import { Metadata } from "next/types";
 import { getSecao } from "@/lib/actions/secoes";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // 5 min ISR
 
 export async function generateMetadata(): Promise<Metadata> {
   const secao = await getSecao(1);

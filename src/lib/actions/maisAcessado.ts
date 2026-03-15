@@ -25,24 +25,22 @@ export async function findMaisAcessado(
 // }
 
 export async function activateMaisAcessados(ids: number[]) {
-  await Promise.all(
-    ids.map((id) =>
-      prisma.maisAcessado.update({ where: { id }, data: { status: true } }),
-    ),
-  );
+  await prisma.maisAcessado.updateMany({
+    where: { id: { in: ids } },
+    data: { status: true },
+  });
 }
 
 export async function deactivateMaisAcessados(ids: number[]) {
-  await Promise.all(
-    ids.map((id) =>
-      prisma.maisAcessado.update({ where: { id }, data: { status: false } }),
-    ),
-  );
+  await prisma.maisAcessado.updateMany({
+    where: { id: { in: ids } },
+    data: { status: false },
+  });
 }
 
 export async function deleteMaisAcessados(ids: number[]) {
-  await Promise.all(
-    ids.map((id) => prisma.maisAcessado.deleteMany({ where: { id } })),
-  );
+  await prisma.maisAcessado.deleteMany({
+    where: { id: { in: ids } },
+  });
 }
 

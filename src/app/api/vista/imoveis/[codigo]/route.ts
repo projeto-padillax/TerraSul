@@ -103,7 +103,11 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(imovel); // Return the found property
+    return NextResponse.json(imovel, {
+      headers: {
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=600",
+      },
+    });
   } catch (error) {
     if (error instanceof Error) {
       console.error("Erro ao buscar imóvel:", error.message);

@@ -15,7 +15,11 @@ while true; do
   sleep $((target - now))
 
   echo "[cron][UTC] PATCH daily 07:00 /api/imoveis $(date -u)"
-  curl -fsS -X PATCH \
+  if curl -fsS -X PATCH \
     -H "Content-Type: application/json" \
-    http://next:3000/api/vista/imoveis || true
+    http://next:3000/api/vista/imoveis; then
+    echo "[cron][UTC] PATCH daily OK $(date -u)"
+  else
+    echo "[cron][UTC] PATCH daily FAILED (exit=$?) $(date -u)" >&2
+  fi
 done

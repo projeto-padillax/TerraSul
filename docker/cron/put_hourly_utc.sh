@@ -6,7 +6,11 @@ while true; do
   sleep $((3600 - ($(date -u +%s) % 3600)))
 
   echo "[cron][UTC] PUT hourly /api/imoveis $(date -u)"
-  curl -fsS -X PUT \
+  if curl -fsS -X PUT \
     -H "Content-Type: application/json" \
-    http://next:3000/api/vista/imoveis || true
+    http://next:3000/api/vista/imoveis; then
+    echo "[cron][UTC] PUT hourly OK $(date -u)"
+  else
+    echo "[cron][UTC] PUT hourly FAILED (exit=$?) $(date -u)" >&2
+  fi
 done

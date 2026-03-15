@@ -17,6 +17,16 @@ import { formatBRL0, formatIntPtBR, lower } from "@/utils/format";
 import "./page.css";
 import FixedForm from "@/components/site/fixedForm";
 import NewForm from "@/components/site/newForm";
+import { cache } from "react";
+
+const getImovel = cache(async (codigo: string) => {
+  const res = await fetch(
+    `${process.env.INTERNAL_BASE_URL}/api/vista/imoveis/${codigo}`,
+    { next: { revalidate: 60 } },
+  );
+  if (!res.ok) return null;
+  return res.json();
+});
 
 export async function generateMetadata({
   params,
@@ -25,17 +35,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { codigo } = await params;
 
-  const res = await fetch(
-    `${process.env.INTERNAL_BASE_URL}/api/vista/imoveis/${codigo}`,
-    {
-      next: { revalidate: 60 },
-    },
-  );
+  const imovel = await getImovel(codigo);
+  if (!imovel) return { title: "Imóvel não encontrado" };
 
   const capitalizar = (str: string) =>
     str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-
-  const imovel = await res.json();
   let title = "";
   if (imovel.Categoria) {
     title += `${capitalizar(imovel.Categoria)} `;
@@ -77,22 +81,12 @@ export default async function ImovelPage({
 }: {
   params: Promise<{ tituloSite: string; codigo: string }>;
 }) {
-  const parsedParams = await params.then((p) => ({
-    codigo: p.codigo,
-    tituloSite: p.tituloSite,
-  }));
-  const res = await fetch(
-    `${process.env.INTERNAL_BASE_URL}/api/vista/imoveis/${parsedParams.codigo}`,
-    {
-      next: { revalidate: 60 },
-    },
-  );
+  const { codigo } = await params;
+  const imovel = await getImovel(codigo);
 
-  if (!res.ok) {
+  if (!imovel) {
     return notFound();
   }
-
-  const imovel = await res.json();
 
   type FotoObj = { Foto: string };
 

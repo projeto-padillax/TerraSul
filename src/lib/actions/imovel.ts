@@ -17,6 +17,10 @@ type ImovelSitemap = Pick<
 export async function getAllImoveisForSitemap(): Promise<ImovelSitemap[]> {
   try {
     const imoveis = await prisma.imovel.findMany({
+      where: {
+        Status: { not: null },
+        Codigo: { not: null },
+      },
       select: {
         Categoria: true,
         Cidade: true,
@@ -26,7 +30,7 @@ export async function getAllImoveisForSitemap(): Promise<ImovelSitemap[]> {
         Bairro: true,
         AreaUtil: true,
         AreaTotal: true,
-        Dormitorios: true
+        Dormitorios: true,
       },
     });
 

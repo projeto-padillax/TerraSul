@@ -10,6 +10,7 @@ generator client {
   // output   = "../src/generated/prisma"
 }
 
+// TIP: Add ?connection_limit=20 to DATABASE_URL for connection pooling
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -192,6 +193,8 @@ model Formulario {
   condominio    String?
   assunto       String?
   valorDesejado Decimal?
+
+  @@index([dataEnvio])
 }
 
 enum tipoFormulario {
@@ -279,6 +282,7 @@ model Imovel {
   @@index([ValorLocacao])
   @@index([DataHoraAtualizacao])
   @@index([Lancamento])
+  @@index([DestaqueWeb, Lancamento, Status])
   @@map("imoveis")
 }
 
@@ -345,4 +349,6 @@ model Bairro {
   nome     String
   cidadeId Int
   cidade   Cidade @relation(fields: [cidadeId], references: [id])
+
+  @@index([cidadeId])
 }

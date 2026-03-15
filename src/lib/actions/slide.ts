@@ -142,10 +142,10 @@ export async function updateSlide(slide: Omit<SlideORM, "createdAt">) {
 export async function activateSlides(ids: number[]) {
     try {
         const validIds = idsSchema.parse(ids);
-
-        await prisma.$transaction(
-            validIds.map(id => prisma.slides.update({ where: { id }, data: { status: true } }))
-        );
+        await prisma.slides.updateMany({
+            where: { id: { in: validIds } },
+            data: { status: true },
+        });
     } catch (error) {
         if (error instanceof z.ZodError) {
             throw new Error("IDs inválidos");
@@ -158,10 +158,10 @@ export async function activateSlides(ids: number[]) {
 export async function deactivateSlides(ids: number[]) {
     try {
         const validIds = idsSchema.parse(ids);
-
-        await prisma.$transaction(
-            validIds.map(id => prisma.slides.update({ where: { id }, data: { status: false } }))
-        );
+        await prisma.slides.updateMany({
+            where: { id: { in: validIds } },
+            data: { status: false },
+        });
     } catch (error) {
         if (error instanceof z.ZodError) {
             throw new Error("IDs inválidos");
