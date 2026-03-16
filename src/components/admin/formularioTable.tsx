@@ -61,7 +61,6 @@ export function FormulariosTable({
         { key: "telefone", label: "Telefone" },
         { key: "url", label: "URL" },
         { key: "formulario", label: "Formulário" },
-        { key: "origem", label: "Origem" },
         // { key: "interesse", label: "Interesse" },
         { key: "data", label: "Data" },
     ] as const;
@@ -113,14 +112,20 @@ export function FormulariosTable({
                             <TableCell className="py-5 text-center">
                                 <Link
                                     href={`/admin/leads/${item.id}`}
-                                    className="text-blue-600 hover:underline text-base font-medium"
+                                    className="text-blue-600 hover:underline text-base font-medium block max-w-[180px] mx-auto truncate"
+                                    title={item.nome}
                                 >
                                     {item.nome}
                                 </Link>
                             </TableCell>
 
                             <TableCell className="py-5 text-center">
-                                <span className="text-gray-900 text-base">{item.email}</span>
+                                <span
+                                    className="text-gray-900 text-base block max-w-[180px] mx-auto truncate"
+                                    title={item.email}
+                                >
+                                    {item.email}
+                                </span>
                             </TableCell>
 
                             <TableCell className="py-5 text-center">
@@ -149,9 +154,6 @@ export function FormulariosTable({
                                 </Badge>
                             </TableCell>
 
-                            <TableCell className="py-5 text-center">
-                                <span className="text-gray-900 text-base">{humanizeEnum(item.origem)}</span>
-                            </TableCell>
 
                             {/* <TableCell className="py-5 text-center">
                                 <span className="text-gray-900 text-base">
