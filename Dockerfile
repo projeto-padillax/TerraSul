@@ -39,6 +39,9 @@ COPY --from=builder /app/prisma ./prisma
 # IMPORTANT: include Next config in runtime
 COPY --from=builder /app/next.config.* ./
 
+# reinstall sharp for the runtime platform (avoids CPU mismatch)
+RUN npm install --os=linux --cpu=x64 --libc=musl sharp
+
 RUN mkdir -p /app/.next/cache \
   && chown -R nextjs:nodejs /app/.next
 
