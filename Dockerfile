@@ -16,7 +16,7 @@ COPY . .
 # Prisma client for alpine (musl + openssl3)
 # Requires schema.prisma generator binaryTargets to include linux-musl-openssl-3.0.x
 RUN npx prisma generate
-RUN npm run build
+RUN --mount=type=cache,target=/app/.next/cache npm run build
 
 # -------- runtime --------
 FROM node:20-alpine AS runner
@@ -25,6 +25,9 @@ ENV NODE_ENV=production
 
 # minimal hardening
 RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
+
+# reinstall sharp for the runtime platform (avoids CPU mismatch)
+RUN npm install --os=linux --cpu=x64 --libc=musl sharp
 
 # app
 COPY --from=builder /app/package*.json ./
