@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useCallback, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -37,15 +37,15 @@ export function useAdminListHandlers<
   const del =
     actionsInput?.delete ?? (async () => { });
 
-  const handleSelectAll = (checked: boolean) => {
+  const handleSelectAll = useCallback((checked: boolean) => {
     setSelectedIds(checked ? items.map((item) => item.id) : []);
-  };
+  }, [items]);
 
-  const handleSelectOne = (itemId: IdType, checked: boolean) => {
+  const handleSelectOne = useCallback((itemId: IdType, checked: boolean) => {
     setSelectedIds((prev) =>
       checked ? [...prev, itemId] : prev.filter((id) => id !== itemId)
     );
-  };
+  }, []);
 
   const handleEdit = (itemId?: IdType) => {
     const targetId = itemId || (selectedIds.length === 1 ? selectedIds[0] : null);
@@ -64,7 +64,7 @@ export function useAdminListHandlers<
     router.push(`${routeBase}/${targetId}/edit`);
   };
 
-  const handleDelete = async (itemId?: IdType) => {
+  const handleDelete = useCallback(async (itemId?: IdType) => {
     const targetIds = itemId ? [itemId] : selectedIds;
 
     if (targetIds.length === 0) {
@@ -105,7 +105,7 @@ export function useAdminListHandlers<
         });
       }
     });
-  };
+  }, [selectedIds, del, items, setItems, itemNameSingular, startTransition]);
 
   const handleActivate = async () => {
     if (selectedIds.length === 0) {

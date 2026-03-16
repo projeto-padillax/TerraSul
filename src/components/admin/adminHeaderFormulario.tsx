@@ -1,7 +1,7 @@
 "use client"
 
 import { CalendarRange, Filter } from "lucide-react"
-import { useMemo } from "react"
+import React, { useMemo } from "react"
 
 type TipoFormulario =
   | "WHATSAPP"
@@ -21,26 +21,30 @@ interface AdminHeaderFormulariosProps {
   selecionados: number
 
   tipoValue: TipoFormulario | "ALL"
+  codigoImovel: string
   startDate?: string // "YYYY-MM-DD"
   endDate?: string   // "YYYY-MM-DD"
 
   onChangeTipo: (value: TipoFormulario | "ALL") => void
+  onChangeCodigoImovel: (value: string) => void
   onChangeStartDate: (value: string) => void
   onChangeEndDate: (value: string) => void
   onApply?: () => void
   onClear?: () => void
 }
 
-export function AdminHeaderFormularios({
+export const AdminHeaderFormularios = React.memo(function AdminHeaderFormularios({
   title,
   subtitle,
   totalLabel,
   total,
   selecionados,
   tipoValue,
+  codigoImovel,
   startDate,
   endDate,
   onChangeTipo,
+  onChangeCodigoImovel,
   onChangeStartDate,
   onChangeEndDate,
   onApply,
@@ -93,7 +97,18 @@ export function AdminHeaderFormularios({
           </div>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-2">Cód. Imóvel</label>
+            <input
+              type="text"
+              placeholder="Ex: 123"
+              className="h-11 rounded-lg border border-gray-300 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={codigoImovel}
+              onChange={(e) => onChangeCodigoImovel(e.target.value)}
+            />
+          </div>
+
           <div className="flex flex-col">
             <label className="text-sm font-medium text-gray-700 mb-2">Formulário</label>
             <select
@@ -150,4 +165,4 @@ export function AdminHeaderFormularios({
       </div>
     </div>
   )
-}
+});

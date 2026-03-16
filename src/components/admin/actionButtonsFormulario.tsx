@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { FileDown, Trash2 } from "lucide-react";
 import { FormularioPlain } from "@/lib/actions/formularios";
@@ -33,7 +33,7 @@ function fmtDate(d?: Date | string | null): string {
   )}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 }
 
-export function ActionButtonsFormularios({
+export const ActionButtonsFormularios = React.memo(function ActionButtonsFormularios({
   data,
   onExcluir,
   filename = "formularios",
@@ -126,4 +126,4 @@ export function ActionButtonsFormularios({
       </Button>
     </div>
   );
-}
+});
