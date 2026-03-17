@@ -20,6 +20,7 @@ export type Destaque = {
   Descricao: string;
   DataHoraAtualizacao: Date;
   Lancamento: string;
+  OfertaEspecial: string;
   Status: string;
   Empreendimento: string;
   Endereco: string;

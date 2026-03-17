@@ -246,6 +246,7 @@ model Imovel {
   Descricao                  String?
   DataHoraAtualizacao        DateTime? @map("dataHoraAtualizacao")
   Lancamento                 String?
+  OfertaEspecial             String?
   Status                     String?
   Empreendimento             String?
   Endereco                   String?

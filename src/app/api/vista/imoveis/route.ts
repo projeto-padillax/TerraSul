@@ -73,6 +73,7 @@ const base: string[] = [
   "Descricao",
   "DataHoraAtualizacao",
   "Lancamento",
+"  OfertaEspecial",
   "Status",
   "Empreendimento",
   "Endereco",
@@ -217,6 +218,7 @@ interface VistaPropertyData {
   AreaTerreno?: string;
   DataHoraAtualizacao?: string;
   Lancamento?: string;
+  OfertaEspecial?: string;
   InfraEstrutura?: Record<string, any>;
   Caracteristicas?: Record<string, any>;
   Foto?: Record<string, VistaPropertyDetailPhoto>;

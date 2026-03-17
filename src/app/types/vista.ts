@@ -18,6 +18,7 @@ export type VistaImovel = {
   GMapsLatitude?: string;
   GMapsLongitude?: string;
   Lancamento?: string;
+  OfertaEspecial?: string;
   Status?: string;
   Empreendimento?: string;
   Endereco?: string;
