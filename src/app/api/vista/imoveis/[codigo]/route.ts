@@ -147,6 +147,7 @@ async function fetchFromVista(codigo: string): Promise<VistaImovel | null> {
       "Descricao",
       "DataHoraAtualizacao",
       "Lancamento",
+      "OfertaEspecial",
       "Status",
       "Empreendimento",
       "Endereco",

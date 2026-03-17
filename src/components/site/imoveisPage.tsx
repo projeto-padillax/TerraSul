@@ -790,6 +790,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="ImovelRecente">Mais recentes</SelectItem>
+                  <SelectItem value="MaisRelevantes">Mais relevantes</SelectItem>
                   <SelectItem value="MenorValor">Menor valor</SelectItem>
                   <SelectItem value="MaiorValor">Maior valor</SelectItem>
                 </SelectContent>

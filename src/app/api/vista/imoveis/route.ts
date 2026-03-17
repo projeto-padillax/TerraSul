@@ -73,6 +73,7 @@ const base: string[] = [
   "Descricao",
   "DataHoraAtualizacao",
   "Lancamento",
+  "OfertaEspecial",
   "Status",
   "Empreendimento",
   "Endereco",
@@ -224,6 +225,7 @@ interface VistaPropertyData {
   AreaTerreno?: string;
   DataHoraAtualizacao?: string;
   Lancamento?: string;
+  OfertaEspecial?: string;
   InfraEstrutura?: Record<string, any>;
   Caracteristicas?: Record<string, any>;
   Foto?: Record<string, VistaPropertyDetailPhoto>;
@@ -707,13 +709,20 @@ export async function GET(request: NextRequest) {
         ];
         break;
 
+      case "MaisRelevantes":
+        sortByClause = [
+          { OfertaEspecial: { sort: "desc", nulls: "last" } },
+          { DataHoraAtualizacao: "desc" },
+        ];
+        break;
+
       case "ImovelRecente":
         sortByClause = [{ DataHoraAtualizacao: "desc" }];
         break;
 
       default:
         sortByClause = [
-          { [valorField]: { sort: "asc", nulls: "last" } },
+          { OfertaEspecial: { sort: "desc", nulls: "last" } },
           { DataHoraAtualizacao: "desc" },
         ];
         break;
