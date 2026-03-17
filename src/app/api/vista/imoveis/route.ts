@@ -73,7 +73,7 @@ const base: string[] = [
   "Descricao",
   "DataHoraAtualizacao",
   "Lancamento",
-"  OfertaEspecial",
+  "OfertaEspecial",
   "Status",
   "Empreendimento",
   "Endereco",
@@ -710,13 +710,20 @@ export async function GET(request: NextRequest) {
         ];
         break;
 
+      case "MaisRelevantes":
+        sortByClause = [
+          { OfertaEspecial: { sort: "desc", nulls: "last" } },
+          { DataHoraAtualizacao: "desc" },
+        ];
+        break;
+
       case "ImovelRecente":
         sortByClause = [{ DataHoraAtualizacao: "desc" }];
         break;
 
       default:
         sortByClause = [
-          { [valorField]: { sort: "asc", nulls: "last" } },
+          { OfertaEspecial: { sort: "desc", nulls: "last" } },
           { DataHoraAtualizacao: "desc" },
         ];
         break;
