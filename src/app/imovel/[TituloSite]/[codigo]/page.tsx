@@ -557,6 +557,18 @@ export default async function ImovelPage({
                         </p>
                       </div>
                     </div>
+
+                    {imovel.Codigo && (
+                      <div className="hidden sm:flex items-end sm:ml-2">
+                        <Dot
+                          size={25}
+                          className="text-site-primary mx-2"
+                        />
+                        <span className="text-sm leading-5">
+                          CÓDIGO {imovel.Codigo}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -581,6 +593,11 @@ export default async function ImovelPage({
                       {formatBRL0(valorAtual)}
                     </span>
                   </div>
+                  {imovel.Codigo && (
+                    <p className="text-sm text-center mt-2">
+                      CÓDIGO {imovel.Codigo}
+                    </p>
+                  )}
                 </div>
 
                 <div className="border-t"></div>
