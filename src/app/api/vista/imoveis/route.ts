@@ -668,30 +668,28 @@ export async function GET(request: NextRequest) {
 
     // --- Características ---
     if (caracteristicas?.length > 0) {
-      const filtro = {
-        some: {
-          AND: caracteristicas.map((carac) => ({
-            nome: { equals: carac, mode: "insensitive" },
-            valor: { equals: "sim", mode: "insensitive" },
-          })),
-        },
-      };
+      for (const carac of caracteristicas) {
+        const filtro = {
+          some: {
+            nome: { equals: carac, mode: "insensitive" as const },
+            valor: { equals: "sim", mode: "insensitive" as const },
+          },
+        };
 
-      (whereClause.AND ??= []).push({
-        OR: [
-          { caracteristicas: filtro },
-          { infraestrutura: filtro },
-        ],
-      });
+        (whereClause.AND ??= []).push({
+          OR: [
+            { caracteristicas: filtro },
+            { infraestrutura: filtro },
+          ],
+        });
+      }
     }
 
-    (whereClause.AND ??= []).push({
-      OR: [
-        { [valorField]: { gt: 0 } },
-        { [valorField]: null },
-        { [valorField]: 0 },
-      ],
-    });
+    // Only include properties with a valid price (> 0)
+    whereClause[valorField] = {
+      ...whereClause[valorField],
+      gt: 0,
+    };
 
     let sortByClause: any = {};
     switch (sort) {
@@ -745,6 +743,7 @@ export async function GET(request: NextRequest) {
               urlPequena: true,
             },
             orderBy: { id: "asc" },
+            take: 5,
           },
           caracteristicas: {
             select: { nome: true, valor: true },
