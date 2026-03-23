@@ -18,14 +18,24 @@ import "./page.css";
 import FixedForm from "@/components/site/fixedForm";
 import NewForm from "@/components/site/newForm";
 import { cache } from "react";
+import { prisma } from "@/lib/neon/db";
 
 const getImovel = cache(async (codigo: string) => {
-  const res = await fetch(
-    `${process.env.INTERNAL_BASE_URL}/api/vista/imoveis/${codigo}`,
-    { next: { revalidate: 60 } },
-  );
-  if (!res.ok) return null;
-  return res.json();
+  const codigoUppercase = codigo.toUpperCase();
+  const imovel = await prisma.imovel.findUnique({
+    where: { id: codigoUppercase },
+    include: {
+      fotos: {
+        select: { id: true, destaque: true, codigo: true, url: true, urlPequena: true },
+        orderBy: { id: "asc" },
+      },
+      videos: { select: { id: true, destaque: true, video: true } },
+      caracteristicas: { select: { nome: true, valor: true } },
+      infraestrutura: { select: { nome: true, valor: true } },
+      corretor: true,
+    },
+  });
+  return imovel;
 });
 
 export async function generateMetadata({

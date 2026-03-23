@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ImovelCard } from "./imovelcard";
 import { Destaque } from "@/lib/types/destaque";
 import { Imovel } from "@prisma/client";
+import { prisma } from "@/lib/neon/db";
 
 type ApiSemelhantes = {
   base?: {
@@ -71,19 +72,46 @@ export default async function SemelhantesSection({
 }: {
   codigo: string;
 }) {
-  const res = await fetch(
-    `${process.env.INTERNAL_BASE_URL}/api/vista/imoveis/${codigo}/semelhante`,
-    { next: { revalidate: 60 } },
-  );
+  const base = await prisma.imovel.findUnique({
+    where: { id: codigo },
+    select: { id: true, Codigo: true, Cidade: true, Categoria: true, Status: true, ValorVenda: true, ValorLocacao: true },
+  });
 
-  if (!res.ok) return null;
+  if (!base) return null;
 
-  const data: ApiSemelhantes = await res.json();
-  const itens = (data.semelhantes ?? []).slice(0, 4);
+  const modalidade = (base.ValorVenda && base.ValorVenda > 0) ? "venda" as const
+    : (base.ValorLocacao && base.ValorLocacao > 0) ? "aluguel" as const
+    : base.Status === "ALUGUEL" ? "aluguel" as const : "venda" as const;
+
+  const priceField = modalidade === "aluguel" ? "ValorLocacao" : "ValorVenda";
+  const basePrice = base[priceField];
+
+  if (!basePrice || basePrice <= 0) return null;
+
+  const itens = await prisma.imovel.findMany({
+    where: {
+      AND: [
+        { Codigo: { not: base.Codigo } },
+        base.Cidade ? { Cidade: base.Cidade } : {},
+        base.Categoria ? { Categoria: base.Categoria } : {},
+        { Status: modalidade === "aluguel" ? { in: ["ALUGUEL", "VENDA E ALUGUEL"] } : { in: ["VENDA", "VENDA E ALUGUEL"] } },
+        { [priceField]: { gte: Math.floor(basePrice * 0.85), lte: Math.ceil(basePrice * 1.15) } },
+      ],
+    },
+    take: 4,
+    orderBy: { [priceField]: "asc" },
+    select: {
+      id: true, Codigo: true, Cidade: true, Categoria: true, Status: true,
+      ValorVenda: true, ValorLocacao: true, Bairro: true, Dormitorios: true,
+      Suites: true, Vagas: true, AreaUtil: true, AreaTotal: true,
+      FotoDestaque: true, Lancamento: true, Endereco: true,
+      fotos: { select: { id: true, destaque: true, codigo: true, url: true, urlPequena: true }, orderBy: { id: "asc" }, take: 5 },
+    },
+  }) as unknown as Destaque[];
 
   if (!itens.length) return null;
 
-  const activeTab = data.base?.modalidade === "aluguel" ? "Alugar" : "Comprar";
+  const activeTab = modalidade === "aluguel" ? "Alugar" : "Comprar";
 
   return (
     <section className="mt-10">
