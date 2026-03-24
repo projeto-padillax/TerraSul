@@ -44,7 +44,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
   const [totalPages, setTotalPages] = useState(0);
   const [totalImoveis, setTotalImoveis] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [sortOrder, setSortOrder] = useState(filtros.sort || "ImovelRecente");
+  const [sortOrder, setSortOrder] = useState(filtros.sort || "MaisRelevantes");
   const [titulo, setTitulo] = useState("");
   const location =
     filtros.bairro?.map((i) => `${filtros.cidade}:${i.replaceAll("-", " ")}`) ??
@@ -786,10 +786,9 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                 onValueChange={(value) => setSortOrder(value)}
               >
                 <SelectTrigger className="lg:data-[size=default]:h-10 border w-full has-[>svg]:px-3 md:w-fit shadow-none cursor-pointer">
-                  <SelectValue placeholder={"Mais recentes"} />
+                  <SelectValue placeholder={"Mais relevantes"} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ImovelRecente">Mais recentes</SelectItem>
                   <SelectItem value="MaisRelevantes">Mais relevantes</SelectItem>
                   <SelectItem value="MenorValor">Menor valor</SelectItem>
                   <SelectItem value="MaiorValor">Maior valor</SelectItem>
