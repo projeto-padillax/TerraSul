@@ -31,7 +31,7 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
-    formats: ["image/webp", "image/avif"],
+    formats: ["image/webp"],
     // 31 days (seconds)
     minimumCacheTTL: 2_678_400,
     remotePatterns: [
