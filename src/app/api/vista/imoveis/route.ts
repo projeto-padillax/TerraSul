@@ -602,7 +602,7 @@ export async function GET(request: NextRequest) {
     const areaMin = Number(searchParams.get("areaMinima")) || null;
     const areaMax = Number(searchParams.get("areaMaxima")) || null;
 
-    const sort = searchParams.get("sort") || "ImovelRecente";
+    const sort = searchParams.get("sort") || "MaisRelevantes";
 
     // --- Paginação ---
     const pageSize = Number(searchParams.get("pageSize")) || 12;

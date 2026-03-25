@@ -115,7 +115,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     };
     setSearchData(newData);
     setPage(Number(searchParams.get("page") ?? 1));
-    setSortOrder(searchParams.get("sort") ?? "");
+    setSortOrder(searchParams.get("sort") || "MaisRelevantes");
   }, [searchParams]);
 
   useEffect(() => {
