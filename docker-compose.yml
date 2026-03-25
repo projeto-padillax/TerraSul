@@ -27,7 +27,7 @@ services:
         condition: service_healthy
     expose: ["3000"]
     restart: unless-stopped
-    mem_limit: 512m
+    mem_limit: 768m
     cpus: 1.0
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health').then(r=>{if(!r.ok)throw 1})"]
