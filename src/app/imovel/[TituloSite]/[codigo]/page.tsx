@@ -14,6 +14,7 @@ import BreadCrumb from "@/components/site/filteredBreadcrumb";
 import LocalizacaoBox from "@/components/site/localizacaobox";
 import { Metadata } from "next/dist/types";
 import { formatBRL0, formatIntPtBR, lower } from "@/utils/format";
+import { Destaque } from "@/lib/types/destaque";
 import "./page.css";
 import FixedForm from "@/components/site/fixedForm";
 import NewForm from "@/components/site/newForm";
@@ -48,8 +49,8 @@ export async function generateMetadata({
   const imovel = await getImovel(codigo);
   if (!imovel) return { title: "Imóvel não encontrado" };
 
-  const capitalizar = (str: string) =>
-    str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  const capitalizar = (str: string | null) =>
+    str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
   let title = "";
   if (imovel.Categoria) {
     title += `${capitalizar(imovel.Categoria)} `;
@@ -77,7 +78,7 @@ export async function generateMetadata({
     openGraph: {
       images: [
         {
-          url: imovel.FotoDestaque,
+          url: imovel.FotoDestaque ?? "",
           width: 1200,
           height: 630,
         },
@@ -92,16 +93,18 @@ export default async function ImovelPage({
   params: Promise<{ tituloSite: string; codigo: string }>;
 }) {
   const { codigo } = await params;
-  const imovel = await getImovel(codigo);
+  const imovelResult = await getImovel(codigo);
 
-  if (!imovel) {
+  if (!imovelResult) {
     return notFound();
   }
+
+  const imovel = imovelResult;
 
   type FotoObj = { Foto: string };
 
   const imagensGaleria: { Foto: string }[] = (imovel.fotos ?? [])
-    .map((foto: { url: string }) => ({ Foto: foto.url }))
+    .map((foto: { url: string | null }) => ({ Foto: foto.url ?? "" }))
     .filter((f: FotoObj) => f.Foto !== imovel.FotoDestaque);
 
   const hasBadges =
@@ -182,7 +185,7 @@ export default async function ImovelPage({
     return Number.isFinite(n) ? n : undefined;
   };
 
-  const valorAtual = parseFloat(imovel.ValorVenda || imovel.ValorLocacao);
+  const valorAtual = imovel.ValorVenda || imovel.ValorLocacao || 0;
   const valorAnterior = parsePtBrCurrency(imovel.Desconto);
   const isRelease = imovel.Lancamento === "Sim";
 
@@ -207,15 +210,15 @@ export default async function ImovelPage({
           >
             <GaleriaImagens
               imagens={imagensGaleria}
-              principal={imovel.FotoDestaque}
+              principal={imovel.FotoDestaque ?? ""}
               video={
                 Array.isArray(imovel?.videos)
                   ? imovel.videos
                       .filter(
-                        (v: { video: string }): v is { video: string } =>
+                        (v: { video: string | null }) =>
                           typeof v.video === "string" && v.video.trim() !== "",
                       )
-                      .map((v: { video: string }) => ({ url: v.video }))
+                      .map((v) => ({ url: v.video! }))
                   : []
               }
             />
@@ -255,7 +258,7 @@ export default async function ImovelPage({
                       parseFloat(imovel.ValorCondominio) > 0.1) ||
                     (imovel.ValorIptu && parseFloat(imovel.ValorIptu) > 0) ? (
                       <div className="flex items-center gap-0 sm:gap-2 text-xs text-black whitespace-nowrap">
-                        {imovel.ValorCondominio && imovel.Codigo > 0 && (
+                        {imovel.ValorCondominio && imovel.Codigo && (
                           <span>Código {imovel.Codigo}</span>
                         )}
                         <Dot
@@ -304,7 +307,7 @@ export default async function ImovelPage({
                           : "ml-4"
                       }`}
                     >
-                      <FavoriteButton property={imovel} />
+                      <FavoriteButton property={imovel as unknown as Destaque} />
                       <span>Salvar</span>
                     </div>
                   </div>
@@ -323,7 +326,7 @@ export default async function ImovelPage({
                       </div>
                     )}
 
-                    {imovel.Dormitorios > 0 && (
+                    {Number(imovel.Dormitorios) > 0 && (
                       <div className="flex flex-col sm:flex-row sm:items-end sm:ml-2">
                         {" "}
                         <Dot
@@ -345,10 +348,10 @@ export default async function ImovelPage({
                           </svg>
                           <span className="mt-1 sm:mt-2 text-center leading-5">
                             {imovel.Dormitorios} quarto
-                            {imovel.Dormitorios > 1 ? "s" : ""}
-                            {imovel.Suites > 0
+                            {Number(imovel.Dormitorios) > 1 ? "s" : ""}
+                            {Number(imovel.Suites) > 0
                               ? ` (${imovel.Suites} suíte${
-                                  imovel.Suites > 1 ? "s" : ""
+                                  Number(imovel.Suites) > 1 ? "s" : ""
                                 })`
                               : ""}
                           </span>
@@ -356,7 +359,7 @@ export default async function ImovelPage({
                       </div>
                     )}
 
-                    {imovel.AreaPrivativa > 0 && (
+                    {(imovel.AreaTerreno ?? 0) > 0 && (
                       <div className="flex flex-col sm:flex-row sm:items-end sm:ml-2">
                         <Dot
                           size={25}
@@ -425,13 +428,13 @@ export default async function ImovelPage({
                             />
                           </svg>
                           <span className="mt-1 sm:mt-2 text-center leading-5">
-                            {imovel.AreaPrivativa} m² privativos
+                            {imovel.AreaTerreno} m² privativos
                           </span>
                         </div>
                       </div>
                     )}
 
-                    {imovel.AreaUtil > 0 && (
+                    {(imovel.AreaUtil ?? 0) > 0 && (
                       <div className="flex flex-col sm:flex-row sm:items-end sm:ml-2">
                         <Dot
                           size={25}
@@ -506,7 +509,7 @@ export default async function ImovelPage({
                       </div>
                     )}
 
-                    {imovel.Vagas > 0 && (
+                    {Number(imovel.Vagas) > 0 && (
                       <div className="flex flex-col sm:flex-row sm:items-end sm:ml-2">
                         <Dot
                           size={25}
@@ -526,7 +529,7 @@ export default async function ImovelPage({
                             />
                           </svg>
                           <span className="mt-1 sm:mt-2 text-center leading-5">
-                            {imovel.Vagas} vaga{imovel.Vagas > 1 ? "s" : ""}
+                            {imovel.Vagas} vaga{Number(imovel.Vagas) > 1 ? "s" : ""}
                           </span>
                         </div>
                       </div>
@@ -623,21 +626,21 @@ export default async function ImovelPage({
                 ></CaracteristicasBox>
 
                 <EmpreendimentoBox
-                  empreendimento={imovel.Empreendimento}
-                  imagem={imovel.FotoDestaque}
+                  empreendimento={imovel.Empreendimento ?? ""}
+                  imagem={imovel.FotoDestaque ?? ""}
                   infraestrutura={imovel.infraestrutura}
                 />
 
                 <AgendamentoForm
-                  codigo={imovel.Codigo}
-                  codigoCorretor={imovel.corretor?.codigo}
+                  codigo={imovel.Codigo ?? ""}
+                  codigoCorretor={imovel.corretor?.codigo ?? ""}
                 />
 
                 <NewForm
                   className="flex sm:hidden"
-                  codigoImovel={imovel.Codigo}
-                  valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
-                  corretor={imovel.corretor}
+                  codigoImovel={imovel.Codigo ?? ""}
+                  valor={imovel.ValorVenda || imovel.ValorLocacao || 0}
+                  corretor={imovel.corretor ?? undefined}
                 ></NewForm>
 
                 <MidiaBox
@@ -646,22 +649,22 @@ export default async function ImovelPage({
                     Array.isArray(imovel?.videos)
                       ? imovel.videos
                           .filter(
-                            (v: { video: string }): v is { video: string } =>
+                            (v: { video: string | null }) =>
                               typeof v.video === "string" &&
                               v.video.trim() !== "",
                           )
-                          .map((v: { video: string }) => ({ url: v.video }))
+                          .map((v) => ({ url: v.video! }))
                       : []
                   }
                 />
 
                 <LocalizacaoBox
-                  bairro={imovel.Bairro}
-                  cidade={imovel.Cidade}
-                  endereco={imovel.endereco}
-                  numero={imovel.numero}
-                  uf={imovel.uf}
-                  cep={imovel.cep}
+                  bairro={imovel.Bairro ?? ""}
+                  cidade={imovel.Cidade ?? ""}
+                  endereco={imovel.Endereco ?? ""}
+                  numero={imovel.Numero ?? ""}
+                  uf={imovel.UF ?? ""}
+                  cep={imovel.CEP ?? ""}
                 />
               </div>
               <div className="block scroll-mt-6">
@@ -671,24 +674,24 @@ export default async function ImovelPage({
                       imovel.Status === "VENDA" ||
                       imovel.Status === "VENDA E ALUGUEL"
                     }
-                    codigoImovel={imovel.Codigo}
-                    valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
+                    codigoImovel={imovel.Codigo ?? ""}
+                    valor={imovel.ValorVenda || imovel.ValorLocacao || 0}
                     valorAnterior={valorAnterior ?? undefined}
-                    corretor={imovel.corretor}
+                    corretor={imovel.corretor ?? undefined}
                     isRelease={imovel.Lancamento == "Sim"}
                   />
                 </div>
                 <NewForm
                   className="hidden sm:flex"
-                  codigoImovel={imovel.Codigo}
-                  valor={parseFloat(imovel.ValorVenda || imovel.ValorLocacao)}
-                  corretor={imovel.corretor}
+                  codigoImovel={imovel.Codigo ?? ""}
+                  valor={imovel.ValorVenda || imovel.ValorLocacao || 0}
+                  corretor={imovel.corretor ?? undefined}
                 ></NewForm>
               </div>
             </div>
 
             <div>
-              <SemelhantesSection codigo={imovel.Codigo} />
+              <SemelhantesSection codigo={imovel.Codigo ?? ""} />
             </div>
           </section>
         </div>

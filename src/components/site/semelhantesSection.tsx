@@ -4,16 +4,6 @@ import { Destaque } from "@/lib/types/destaque";
 import { Imovel } from "@prisma/client";
 import { prisma } from "@/lib/neon/db";
 
-type ApiSemelhantes = {
-  base?: {
-    codigo: string;
-    modalidade?: "aluguel" | "venda";
-    priceField?: "ValorLocacao" | "ValorVenda";
-    basePrice?: number;
-  };
-  semelhantes: Destaque[];
-};
-
 function toSlug(text: string): string {
   return (
     text
