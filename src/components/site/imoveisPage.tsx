@@ -448,35 +448,6 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                 <ChevronDown className="h-4 w-4 text-muted-foreground opacity-50" />
               </Button>
 
-              <div className="flex items-center gap-2 sm:gap-4 w-full md:w-fit h-9 lg:h-12 justify-between">
-                <span className="text-sm font-medium">Quartos</span>
-                <div className="flex items-center gap-2">
-                  {[1, 2, 3].map((num) => (
-                    <button
-                      key={num}
-                      onClick={() => {
-                        setSearchData({
-                          ...searchData,
-                          quartos:
-                            searchData.quartos === num.toString()
-                              ? ""
-                              : num.toString(),
-                        });
-                        setPage(1);
-                        setEmpreendimento("");
-                      }}
-                      className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${
-                        searchData.quartos === num.toString()
-                          ? "bg-site-primary text-white font-bold"
-                          : "bg-white text-black font-normal"
-                      }  hover:bg-site-primary hover:text-white hover:font-bold`}
-                    >
-                      {num}+
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               <Select
                 value={searchData.valueRange.min}
                 onValueChange={
@@ -550,6 +521,35 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
                   <SelectItem value="999999999">+ R$ 4.000.000</SelectItem>
                 </SelectContent>
               </Select>
+              <div className="flex items-center gap-2 sm:gap-4 w-full md:w-fit h-9 lg:h-12 justify-between">
+                <span className="text-sm font-medium">Quartos</span>
+                <div className="flex items-center gap-2">
+                  {[1, 2, 3].map((num) => (
+                    <button
+                      key={num}
+                      onClick={() => {
+                        setSearchData({
+                          ...searchData,
+                          quartos:
+                            searchData.quartos === num.toString()
+                              ? ""
+                              : num.toString(),
+                        });
+                        setPage(1);
+                        setEmpreendimento("");
+                      }}
+                      className={`w-[30px] h-[30px] border border-gray-300 rounded-[4px] cursor-pointer ${
+                        searchData.quartos === num.toString()
+                          ? "bg-site-primary text-white font-bold"
+                          : "bg-white text-black font-normal"
+                      }  hover:bg-site-primary hover:text-white hover:font-bold`}
+                    >
+                      {num}+
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Botão Filtros */}
               <Button
                 variant="outline"
