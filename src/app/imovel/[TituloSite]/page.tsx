@@ -54,10 +54,10 @@ function gerarTitulo(imovel: Imovel) {
 export default async function ImovelRedirectPage({
   params,
 }: {
-  params: Promise<{ codigo: string }>;
+  params: Promise<{ TituloSite: string }>;
 }) {
-  const { codigo } = await params;
-  const codigoUppercase = codigo.toUpperCase();
+  const { TituloSite } = await params;
+  const codigoUppercase = TituloSite.toUpperCase();
 
   const imovel = await prisma.imovel.findUnique({
     where: { id: codigoUppercase },
