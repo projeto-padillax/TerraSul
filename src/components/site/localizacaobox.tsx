@@ -8,8 +8,6 @@ interface LocalizacaoBoxProps {
   cidade?: string;
   uf?: string;
   endereco?: string;
-  numero?: string;
-  cep?: string;
 }
 
 export default function LocalizacaoBox({
@@ -17,8 +15,6 @@ export default function LocalizacaoBox({
   cidade = "",
   uf = "",
   endereco = "",
-  numero = "",
-  cep = "",
 }: LocalizacaoBoxProps) {
   const [mapaAberto, setMapaAberto] = useState(true);
 

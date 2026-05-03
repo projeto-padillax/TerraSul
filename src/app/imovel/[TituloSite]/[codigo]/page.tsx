@@ -662,9 +662,7 @@ export default async function ImovelPage({
                   bairro={imovel.Bairro ?? ""}
                   cidade={imovel.Cidade ?? ""}
                   endereco={imovel.Endereco ?? ""}
-                  numero={imovel.Numero ?? ""}
                   uf={imovel.UF ?? ""}
-                  cep={imovel.CEP ?? ""}
                 />
               </div>
               <div className="block scroll-mt-6">
