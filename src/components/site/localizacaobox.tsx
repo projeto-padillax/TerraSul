@@ -29,7 +29,7 @@ export default function LocalizacaoBox({
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
       .join(" ");
 
-  const partesEndereco = [endereco, bairro, cidade, numero, uf, cep].filter(
+  const partesEndereco = [endereco, bairro, cidade].filter(
     (part) => part && part.trim() !== ""
   );
   const enderecoTextoFormatado = partesEndereco.map((part) =>
