@@ -56,10 +56,10 @@ function SelectContent({
   position = "popper",
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Content>) {
+  const viewportRef = React.useRef<HTMLDivElement>(null);
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
-      
         data-slot="select-content"
         className={cn(
           "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border shadow-md",
@@ -70,8 +70,9 @@ function SelectContent({
         position={position}
         {...props}
       >
-        <SelectScrollUpButton />
+        <SlowScrollButton direction="up" viewportRef={viewportRef} />
         <SelectPrimitive.Viewport
+          ref={viewportRef}
           className={cn(
             "p-1",
             position === "popper" &&
@@ -80,7 +81,7 @@ function SelectContent({
         >
           {children}
         </SelectPrimitive.Viewport>
-        <SelectScrollDownButton />
+        <SlowScrollButton direction="down" viewportRef={viewportRef} />
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   );
@@ -133,6 +134,83 @@ function SelectSeparator({
       className={cn("bg-border pointer-events-none -mx-1 my-1 h-px", className)}
       {...props}
     />
+  );
+}
+
+const SCROLL_STEP_PX = 10;
+const SCROLL_INTERVAL_MS = 80;
+
+function SlowScrollButton({
+  direction,
+  viewportRef,
+}: {
+  direction: "up" | "down";
+  viewportRef: React.RefObject<HTMLDivElement | null>;
+}) {
+  const [visible, setVisible] = React.useState(false);
+  const intervalRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
+
+  React.useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    const update = () => {
+      const { scrollTop, scrollHeight, clientHeight } = viewport;
+      if (direction === "up") setVisible(scrollTop > 0);
+      else setVisible(scrollTop + clientHeight < scrollHeight - 1);
+    };
+    update();
+    viewport.addEventListener("scroll", update, { passive: true });
+    const ro = new ResizeObserver(update);
+    ro.observe(viewport);
+    return () => {
+      viewport.removeEventListener("scroll", update);
+      ro.disconnect();
+    };
+  }, [direction, viewportRef]);
+
+  const stop = React.useCallback(() => {
+    console.log("stop")
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, []);
+
+  const start = React.useCallback(() => {
+    console.log("start")
+    const viewport = viewportRef.current;
+    if (!viewport || intervalRef.current) return;
+    const delta = direction === "up" ? -SCROLL_STEP_PX : SCROLL_STEP_PX;
+    intervalRef.current = setInterval(() => {
+      viewport.scrollBy({ top: delta });
+    }, SCROLL_INTERVAL_MS);
+  }, [direction, viewportRef]);
+
+  React.useEffect(() => stop, [stop]);
+
+  if (!visible) {
+    stop()  
+    return null;
+  }
+
+  const Icon = direction === "up" ? ChevronUpIcon : ChevronDownIcon;
+
+  return (
+    <div
+      data-slot={`select-scroll-${direction}-button`}
+      className={cn(
+        "bg-popover sticky z-10 flex cursor-default items-center justify-center py-1",
+        direction === "up" ? "top-0" : "bottom-0"
+      )}
+      onPointerEnter={start}
+      onPointerLeave={stop}
+      onPointerDown={(e) => {
+        e.preventDefault();
+        stop();
+      }}
+    >
+      <Icon className="size-4" />
+    </div>
   );
 }
 
