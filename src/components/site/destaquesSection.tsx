@@ -5,6 +5,7 @@ import { ImovelCard } from "./imovelcard";
 import Link from "next/link";
 import { Destaque } from "@/lib/types/destaque";
 import { Imovel } from "@prisma/client";
+import { formatNumberPtBR } from "@/utils/format";
 
 interface DestaquesSectionProps {
   destaques: {
@@ -32,7 +33,7 @@ interface DestaquesSectionProps {
     const categoria = imovel.Categoria ? imovel.Categoria : "Imóvel";
     const area =
       imovel.AreaUtil || imovel.AreaTotal
-        ? `${imovel.AreaUtil || imovel.AreaTotal}m²`
+        ? `${formatNumberPtBR(Number(imovel.AreaUtil || imovel.AreaTotal))}m²`
         : "";
 
     const quartos =

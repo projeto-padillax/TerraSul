@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Imovel } from "@prisma/client";
 import Image from "next/image";
+import { formatNumberPtBR } from "@/utils/format";
 
 
 interface HeroSectionProps {
@@ -142,7 +143,7 @@ export function HeroSection(banner: HeroSectionProps) {
     categoria = categoria.replaceAll(" ", "-");
     const area =
       imovel.AreaUtil || imovel.AreaTotal
-        ? `${imovel.AreaUtil || imovel.AreaTotal}m²`
+        ? `${formatNumberPtBR(Number(imovel.AreaUtil || imovel.AreaTotal))}m²`
         : "";
 
     const quartos =

@@ -3,6 +3,8 @@ import FavoriteButton from "./favoritosButton";
 import { CodigoImobiliariaIcon } from "../ui/codigoImobiliariaIcon";
 import { Destaque } from "@/lib/types/destaque";
 import ImageBadge from "./imageBadge";
+import { formatNumberPtBR, isSitio } from "@/utils/format";
+import { AreaIcon, DormitorioIcon, VagaIcon } from "./imovelDetailIcons";
 
 interface PropertyCardProps {
   imovel: Destaque;
@@ -23,12 +25,19 @@ export function ImovelCard({ imovel, activeTab }: PropertyCardProps) {
       .join("/");
   };
 
+  const sitio = isSitio(imovel.Categoria);
+
   const areas = [imovel.AreaUtil, imovel.AreaTotal];
   const area = areas.find((a) => Number(a) > 0);
 
   const hasDormitorios = Number(imovel.Dormitorios) > 0;
-  const hasVagas = Number(imovel.Vagas) > 0;
-  const hasAnyDetail = area || hasDormitorios || hasVagas;
+  const hasAreaUtil = Number(imovel.AreaUtil) > 0;
+  const hasAreaTotal = Number(imovel.AreaTotal) > 0;
+  // Sítio destaca área útil e total e omite vagas; demais tipos mantêm vagas.
+  const hasVagas = !sitio && Number(imovel.Vagas) > 0;
+  const hasAnyDetail = sitio
+    ? hasDormitorios || hasAreaUtil || hasAreaTotal
+    : area || hasDormitorios || hasVagas;
 
   const fmtBRL = (n: number) =>
     new Intl.NumberFormat("pt-BR", {
@@ -140,15 +149,51 @@ export function ImovelCard({ imovel, activeTab }: PropertyCardProps) {
           {hasAnyDetail ? (
             <div className="flex justify-between items-center w-full border-b border-gray-200 pb-3">
               {hasDormitorios && (
-                <p className="text-sm text-[#303030]">
-                  {imovel.Dormitorios} quarto{Number(imovel.Dormitorios) > 1 ? "s" : ""}
-                </p>
+                <div className="flex flex-col items-center gap-1">
+                  <DormitorioIcon className="opacity-70 w-[18px] h-[18px]" />
+                  <span className="text-sm text-[#303030]">
+                    {imovel.Dormitorios} quarto{Number(imovel.Dormitorios) > 1 ? "s" : ""}
+                  </span>
+                </div>
               )}
-              {area && <p className="text-sm text-[#303030]">{area}m²</p>}
-              {hasVagas && (
-                <p className="text-sm text-[#303030]">
-                  {imovel.Vagas} vaga{Number(imovel.Vagas) > 1 ? "s" : ""}
-                </p>
+              {sitio ? (
+                <>
+                  {hasAreaUtil && (
+                    <div className="flex flex-col items-center gap-1">
+                      <AreaIcon className="opacity-70 w-[18px] h-[18px]" />
+                      <span className="text-sm text-[#303030]">
+                        {formatNumberPtBR(Number(imovel.AreaUtil))}m²
+                      </span>
+                    </div>
+                  )}
+                  {hasAreaTotal && (
+                    <div className="flex flex-col items-center gap-1">
+                      <AreaIcon className="opacity-70 w-[18px] h-[18px]" />
+                      <span className="text-sm text-[#303030]">
+                        {formatNumberPtBR(Number(imovel.AreaTotal))}m²
+                      </span>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  {area && (
+                    <div className="flex flex-col items-center gap-1">
+                      <AreaIcon className="opacity-70 w-[18px] h-[18px]" />
+                      <span className="text-sm text-[#303030]">
+                        {formatNumberPtBR(Number(area))}m²
+                      </span>
+                    </div>
+                  )}
+                  {hasVagas && (
+                    <div className="flex flex-col items-center gap-1">
+                      <VagaIcon className="opacity-70 w-[18px] h-[18px]" />
+                      <span className="text-sm text-[#303030]">
+                        {imovel.Vagas} vaga{Number(imovel.Vagas) > 1 ? "s" : ""}
+                      </span>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           ) : (

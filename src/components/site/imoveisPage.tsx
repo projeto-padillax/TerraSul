@@ -18,6 +18,7 @@ import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 import { ImovelCard } from "./imovelcard";
+import { formatNumberPtBR } from "@/utils/format";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Destaque } from "@/lib/types/destaque";
@@ -298,7 +299,7 @@ export default function ImoveisPage({ filtros }: { filtros: Filtros }) {
     categoria = categoria.replaceAll(" ", "-");
     const area =
       imovel.AreaUtil || imovel.AreaTotal
-        ? `${imovel.AreaUtil || imovel.AreaTotal}m²`
+        ? `${formatNumberPtBR(Number(imovel.AreaUtil || imovel.AreaTotal))}m²`
         : "";
 
     const quartos =

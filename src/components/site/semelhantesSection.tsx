@@ -3,6 +3,7 @@ import { ImovelCard } from "./imovelcard";
 import { Destaque } from "@/lib/types/destaque";
 import { Imovel } from "@prisma/client";
 import { prisma } from "@/lib/neon/db";
+import { formatNumberPtBR } from "@/utils/format";
 
 function toSlug(text: string): string {
   return (
@@ -23,7 +24,7 @@ function gerarTitulo(imovel: Imovel) {
 
   const area =
     imovel.AreaUtil || imovel.AreaTotal
-      ? `${imovel.AreaUtil || imovel.AreaTotal}m²`
+      ? `${formatNumberPtBR(Number(imovel.AreaUtil || imovel.AreaTotal))}m²`
       : "";
 
   const quartos =

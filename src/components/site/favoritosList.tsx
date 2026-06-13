@@ -5,6 +5,7 @@ import { Destaque } from "@/lib/types/destaque";
 import Link from "next/link";
 import { ImovelCard } from "./imovelcard";
 import { Imovel } from "@prisma/client";
+import { formatNumberPtBR } from "@/utils/format";
 
 export default function FavoritesList() {
   const favoritos = useFavoriteStore((state) => state.favorites);
@@ -39,7 +40,7 @@ export default function FavoritesList() {
 
     const area =
       imovel.AreaUtil || imovel.AreaTotal
-        ? `${imovel.AreaUtil || imovel.AreaTotal}m²`
+        ? `${formatNumberPtBR(Number(imovel.AreaUtil || imovel.AreaTotal))}m²`
         : "";
 
     const quartos =

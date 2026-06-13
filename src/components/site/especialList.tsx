@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Destaque } from '@/lib/types/destaque'
 import { findEspecial } from '@/lib/actions/especiais'
+import { formatNumberPtBR } from '@/utils/format'
 
 interface EspecialListProps {
   id: string
@@ -61,7 +62,7 @@ export default function EspecialList({ id }: EspecialListProps) {
     const categoria = imovel.Categoria ? capitalizar(imovel.Categoria) : 'Imóvel'
 
     const area = imovel.AreaUtil || imovel.AreaTotal
-      ? `${imovel.AreaUtil || imovel.AreaTotal}m²`
+      ? `${formatNumberPtBR(Number(imovel.AreaUtil || imovel.AreaTotal))}m²`
       : ''
 
     const quartos = imovel.Dormitorios && imovel.Dormitorios !== '0'

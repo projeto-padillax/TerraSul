@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/neon/db";
 import { Imovel } from "@prisma/client";
 import { notFound, redirect } from "next/navigation";
+import { formatNumberPtBR } from "@/utils/format";
 
 function toSlug(text: string): string {
   return text
@@ -17,7 +18,7 @@ function gerarTitulo(imovel: Imovel) {
 
   const area =
     imovel.AreaUtil || imovel.AreaTotal
-      ? `${imovel.AreaUtil || imovel.AreaTotal}m²`
+      ? `${formatNumberPtBR(Number(imovel.AreaUtil || imovel.AreaTotal))}m²`
       : "";
 
   const quartos =
