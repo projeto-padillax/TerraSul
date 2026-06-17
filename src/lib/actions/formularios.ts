@@ -9,6 +9,8 @@ import {
   Formulario,
 } from "@prisma/client";
 import { sendEmailFormulario } from "../mail/sendEmail";
+import { after } from "next/server";
+import { sendLeadToCrm, type CrmLead } from "../crm/client";
 
 const formularioServerSchema = z.object({
   tipo: z.enum(tipoFormulario),
@@ -63,7 +65,8 @@ export async function findFormulario(id: string): Promise<Formulario | null> {
 export async function createFormulario(input: FormularioInput, codigoCorretor?: string): Promise<void> {
   const validated = formularioServerSchema.parse(input);
 
-  await prisma.formulario.create({
+  // 1. Persistir primeiro: o id gerado aqui é o submission_id (chave de idempotência).
+  const registro = await prisma.formulario.create({
     data: {
       tipo: validated.tipo,
       nome: validated.nome,
@@ -82,11 +85,57 @@ export async function createFormulario(input: FormularioInput, codigoCorretor?: 
     },
   });
 
+  // 2. Encaminhar ao CRM em background (não bloqueia a resposta ao lead).
+  //    Só os formulários cobertos pelo contrato do webhook.
+  const lead = buildCrmLead(validated, registro.id);
+  if (lead) {
+    after(() => sendLeadToCrm(lead));
+  }
+
   if (codigoCorretor == "78" || codigoCorretor == undefined){
     await sendEmailFormulario(validated,true)
   }
   else{
     await sendEmailFormulario(validated,false);
+  }
+}
+
+/**
+ * Mapeia um Formulario persistido para o payload do webhook do CRM.
+ * Retorna null para tipos que não fazem parte do contrato (ex. FINANCIAMENTO,
+ * VISITA), que não devem ser encaminhados.
+ */
+function buildCrmLead(input: FormularioInput, submissionId: string): CrmLead | null {
+  const base = {
+    submission_id: submissionId,
+    name: input.nome,
+    phone: input.telefone,
+    email: input.email,
+  };
+
+  switch (input.tipo) {
+    case "WHATSAPP":
+      return {
+        ...base,
+        source: "whatsapp_btn",
+        // opcional: só no botão dentro da página de um imóvel
+        ...(input.codigoImovel ? { property_code: input.codigoImovel } : {}),
+      };
+    case "INFORMACOES":
+      return {
+        ...base,
+        source: "mais_info",
+        property_code: input.codigoImovel ?? "",
+      };
+    case "CONTATO":
+      return {
+        ...base,
+        source: "contato",
+        subject: input.assunto ?? "",
+        message: input.mensagem ?? "",
+      };
+    default:
+      return null;
   }
 }
 
