@@ -1,5 +1,5 @@
 const CRM_WEBHOOK_URL =
-  process.env.TERRASUL_WEBHOOK_URL;
+  process.env.TERRASUL_WEBHOOK_URL ?? "";
 
 // ---------------------------------------------------------------------------
 // Tipos do payload (por formulário/source)
@@ -16,13 +16,11 @@ interface CrmLeadBase {
 
 export interface WhatsappLead extends CrmLeadBase {
   source: "whatsapp_btn";
-  /** Só quando o botão está dentro da página de um imóvel; omitir no botão flutuante. */
   property_code?: string;
 }
 
 export interface MaisInfoLead extends CrmLeadBase {
   source: "mais_info";
-  /** Obrigatório. */
   property_code: string;
 }
 
