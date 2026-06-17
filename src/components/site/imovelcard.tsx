@@ -3,7 +3,7 @@ import FavoriteButton from "./favoritosButton";
 import { CodigoImobiliariaIcon } from "../ui/codigoImobiliariaIcon";
 import { Destaque } from "@/lib/types/destaque";
 import ImageBadge from "./imageBadge";
-import { formatNumberPtBR, isSitio } from "@/utils/format";
+import { formatNumberPtBR, isSitio, isTerreno } from "@/utils/format";
 import { AreaIcon, DormitorioIcon, VagaIcon } from "./imovelDetailIcons";
 
 interface PropertyCardProps {
@@ -26,16 +26,21 @@ export function ImovelCard({ imovel, activeTab }: PropertyCardProps) {
   };
 
   const sitio = isSitio(imovel.Categoria);
+  const terreno = isTerreno(imovel.Categoria);
 
   const areas = [imovel.AreaUtil, imovel.AreaTotal];
   const area = areas.find((a) => Number(a) > 0);
 
-  const hasDormitorios = Number(imovel.Dormitorios) > 0;
+  const hasAreaTerreno = Number(imovel.AreaTerreno) > 0;
+  // Terreno exibe apenas a área do terreno; oculta dormitórios, área útil e vagas.
+  const hasDormitorios = !terreno && Number(imovel.Dormitorios) > 0;
   const hasAreaUtil = Number(imovel.AreaUtil) > 0;
   const hasAreaTotal = Number(imovel.AreaTotal) > 0;
   // Sítio destaca área útil e total e omite vagas; demais tipos mantêm vagas.
-  const hasVagas = !sitio && Number(imovel.Vagas) > 0;
-  const hasAnyDetail = sitio
+  const hasVagas = !sitio && !terreno && Number(imovel.Vagas) > 0;
+  const hasAnyDetail = terreno
+    ? hasAreaTerreno
+    : sitio
     ? hasDormitorios || hasAreaUtil || hasAreaTotal
     : area || hasDormitorios || hasVagas;
 
@@ -156,7 +161,16 @@ export function ImovelCard({ imovel, activeTab }: PropertyCardProps) {
                   </span>
                 </div>
               )}
-              {sitio ? (
+              {terreno ? (
+                hasAreaTerreno && (
+                  <div className="flex flex-col items-center gap-1">
+                    <AreaIcon className="opacity-70 w-[18px] h-[18px]" />
+                    <span className="text-sm text-[#303030]">
+                      {formatNumberPtBR(Number(imovel.AreaTerreno))}m²
+                    </span>
+                  </div>
+                )
+              ) : sitio ? (
                 <>
                   {hasAreaUtil && (
                     <div className="flex flex-col items-center gap-1">

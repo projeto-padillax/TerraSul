@@ -17,6 +17,7 @@ import {
   formatBRL0,
   formatIntPtBR,
   formatNumberPtBR,
+  isTerreno,
   lower,
   usaAreaTotalComoTerreno,
 } from "@/utils/format";
@@ -205,6 +206,9 @@ export default async function ImovelPage({
     ? Number(imovel.AreaTotal ?? 0)
     : Number(imovel.AreaTerreno ?? 0);
 
+  // Terreno exibe somente a área do terreno (sem dormitórios, área útil ou vagas).
+  const terreno = isTerreno(imovel.Categoria);
+
   return (
     <div className="min-h-screen flex flex-col scroll-smooth">
       <div className="shadow-lg">
@@ -342,7 +346,7 @@ export default async function ImovelPage({
                       </div>
                     )}
 
-                    {Number(imovel.Dormitorios) > 0 && (
+                    {!terreno && Number(imovel.Dormitorios) > 0 && (
                       <div className="flex flex-col sm:flex-row sm:items-end sm:ml-2">
                         {" "}
                         <Dot
@@ -379,7 +383,7 @@ export default async function ImovelPage({
                       </div>
                     )}
 
-                    {(imovel.AreaUtil ?? 0) > 0 && (
+                    {!terreno && (imovel.AreaUtil ?? 0) > 0 && (
                       <div className="flex flex-col sm:flex-row sm:items-end sm:ml-2">
                         <Dot
                           size={25}
@@ -394,7 +398,7 @@ export default async function ImovelPage({
                       </div>
                     )}
 
-                    {Number(imovel.Vagas) > 0 && (
+                    {!terreno && Number(imovel.Vagas) > 0 && (
                       <div className="flex flex-col sm:flex-row sm:items-end sm:ml-2">
                         <Dot
                           size={25}
