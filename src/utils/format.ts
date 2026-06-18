@@ -28,12 +28,6 @@ export const isSitio = (categoria?: string | null) =>
 export const isTerreno = (categoria?: string | null) =>
   normalizeCategoria(categoria).includes("terreno");
 
-// Detecta "casa em condomínio" (ex.: "Casa em Condomínio", "Casa de Condomínio")
-export const isCasaCondominio = (categoria?: string | null) => {
-  const c = normalizeCategoria(categoria);
-  return c.includes("casa") && c.includes("condominio");
-};
-
 // Detecta imóveis do tipo "cobertura"
 export const isCobertura = (categoria?: string | null) =>
   normalizeCategoria(categoria).includes("cobertura");
@@ -44,7 +38,4 @@ export const isApartamento = (categoria?: string | null) =>
 
 // Tipos cujo terreno deve vir de AreaTotal (não de AreaTerreno)
 export const usaAreaTotalComoTerreno = (categoria?: string | null) =>
-  isSitio(categoria) ||
-  isCasaCondominio(categoria) ||
-  isCobertura(categoria) ||
-  isApartamento(categoria);
+  isSitio(categoria) || isCobertura(categoria) || isApartamento(categoria);
