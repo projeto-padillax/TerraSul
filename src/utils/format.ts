@@ -38,4 +38,4 @@ export const isApartamento = (categoria?: string | null) =>
 
 // Tipos cujo terreno deve vir de AreaTotal (não de AreaTerreno)
 export const usaAreaTotalComoTerreno = (categoria?: string | null) =>
-  isSitio(categoria) || isCobertura(categoria) || isApartamento(categoria);
+  isSitio(categoria) || isCobertura(categoria);

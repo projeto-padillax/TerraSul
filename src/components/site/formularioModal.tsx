@@ -73,11 +73,6 @@ export default function FormularioModal({
   const onSubmit = (data: FormInput) => {
     startTransition(async () => {
       try {
-        const mensagemFinal =
-          tipo === "financiamento"
-            ? `${data.mensagem ?? ""}\nValor de entrada: ${data.valorEntrada}`
-            : data.mensagem;
-
         await createFormulario(
           {
             tipo: tipo === "whatsapp" ? "WHATSAPP" : "FINANCIAMENTO",
@@ -88,7 +83,12 @@ export default function FormularioModal({
               typeof window !== "undefined" ? window.location.href : "",
             codigoImovel:
               codigoImovel || getCodigoImovelFromUrl(window.location.href),
-            mensagem: mensagemFinal,
+            mensagem: data.mensagem,
+            // Financiamento: valor do imóvel (property_price) e valor de
+            // entrada (entry_value) vão como campos próprios ao CRM.
+            ...(tipo === "financiamento"
+              ? { valorImovel, valorDesejado: data.valorEntrada }
+              : {}),
           },
           codigoCorretor
         );

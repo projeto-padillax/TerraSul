@@ -244,6 +244,7 @@ model Imovel {
   Dormitorios                String?
   Suites                     String?
   Vagas                      String?
+  Elevador                   String?
   AreaTotal                  Float?    @map("areaTotal")
   AreaTerreno                Float?    @map("areaTerreno")
   AreaUtil                   Float?    @map("areaUtil")

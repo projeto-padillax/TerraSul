@@ -66,6 +66,7 @@ const base: string[] = [
   "Dormitorios",
   "Suites",
   "Vagas",
+  "Elevador",
   "AreaTotal",
   "AreaUtil",
   "Caracteristicas",
@@ -667,12 +668,40 @@ export async function GET(request: NextRequest) {
     }
 
     // --- Características ---
+    // Alguns filtros do site têm um rótulo diferente do nome real como o item
+    // chega no feed da Vista (ex.: "Academia" -> "Sala Fitness", "Portaria" ->
+    // "Portaria24 Hrs"). Para esses, casamos por palavra-chave com `contains`,
+    // tolerando variações de grafia/espaçamento. Os demais mantêm o `equals`.
+    const CARAC_KEYWORDS: Record<string, string[]> = {
+      academia: ["academia", "fitness"],
+      portaria: ["portaria"],
+    };
+
     if (caracteristicas?.length > 0) {
       for (const carac of caracteristicas) {
+        const id = carac.toLowerCase();
+
+        // "Elevador" é um campo do próprio imóvel (vem do Vista), não da
+        // InfraEstrutura/Características. Filtra direto na coluna.
+        if (id === "elevador") {
+          (whereClause.AND ??= []).push({
+            Elevador: { equals: "sim", mode: "insensitive" as const },
+          });
+          continue;
+        }
+
+        const keywords = CARAC_KEYWORDS[id];
+
+        const nomeOR = keywords
+          ? keywords.map((k) => ({
+              nome: { contains: k, mode: "insensitive" as const },
+            }))
+          : [{ nome: { equals: carac, mode: "insensitive" as const } }];
+
         const filtro = {
           some: {
-            nome: { equals: carac, mode: "insensitive" as const },
             valor: { equals: "sim", mode: "insensitive" as const },
+            OR: nomeOR,
           },
         };
 

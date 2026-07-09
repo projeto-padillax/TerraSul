@@ -17,6 +17,7 @@ import {
   formatBRL0,
   formatIntPtBR,
   formatNumberPtBR,
+  isApartamento,
   isTerreno,
   lower,
   usaAreaTotalComoTerreno,
@@ -209,6 +210,9 @@ export default async function ImovelPage({
   // Terreno exibe somente a área do terreno (sem dormitórios, área útil ou vagas).
   const terreno = isTerreno(imovel.Categoria);
 
+  // Apartamento não exibe terreno; mostra apenas a área útil.
+  const apartamento = isApartamento(imovel.Categoria);
+
   return (
     <div className="min-h-screen flex flex-col scroll-smooth">
       <div className="shadow-lg">
@@ -368,7 +372,7 @@ export default async function ImovelPage({
                       </div>
                     )}
 
-                    {areaTerreno > 0 && (
+                    {!apartamento && areaTerreno > 0 && (
                       <div className="flex flex-col sm:flex-row sm:items-end sm:ml-2">
                         <Dot
                           size={25}

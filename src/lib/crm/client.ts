@@ -5,7 +5,12 @@ const CRM_WEBHOOK_URL =
 // Tipos do payload (por formulário/source)
 // ---------------------------------------------------------------------------
 
-export type CrmSource = "whatsapp_btn" | "mais_info" | "contato";
+export type CrmSource =
+  | "whatsapp_btn"
+  | "mais_info"
+  | "contato"
+  | "solicitar_visita"
+  | "simular_financiamento";
 
 interface CrmLeadBase {
   submission_id: string;
@@ -30,7 +35,27 @@ export interface ContatoLead extends CrmLeadBase {
   message: string;
 }
 
-export type CrmLead = WhatsappLead | MaisInfoLead | ContatoLead;
+export interface SolicitarVisitaLead extends CrmLeadBase {
+  source: "solicitar_visita";
+  property_code: string;
+  preferred_date: string; // YYYY-MM-DD
+  message?: string;
+}
+
+export interface SimularFinanciamentoLead extends CrmLeadBase {
+  source: "simular_financiamento";
+  property_code: string;
+  property_price: string;
+  entry_value: string;
+  message?: string;
+}
+
+export type CrmLead =
+  | WhatsappLead
+  | MaisInfoLead
+  | ContatoLead
+  | SolicitarVisitaLead
+  | SimularFinanciamentoLead;
 
 // ---------------------------------------------------------------------------
 // Configuração de confiabilidade
@@ -86,7 +111,15 @@ class CrmValidationError extends Error {
 function buildPayload(lead: CrmLead): Record<string, unknown> {
   const errors: string[] = [];
 
-  if (!["whatsapp_btn", "mais_info", "contato"].includes(lead.source)) {
+  if (
+    ![
+      "whatsapp_btn",
+      "mais_info",
+      "contato",
+      "solicitar_visita",
+      "simular_financiamento",
+    ].includes(lead.source)
+  ) {
     errors.push("source inválido");
   }
   if (!lead.submission_id?.trim()) errors.push("submission_id ausente");
@@ -126,6 +159,31 @@ function buildPayload(lead: CrmLead): Record<string, unknown> {
       if (!lead.message?.trim()) errors.push("message obrigatório em contato");
       payload.subject = lead.subject;
       payload.message = lead.message;
+      break;
+    case "solicitar_visita":
+      if (!lead.property_code?.trim())
+        errors.push("property_code obrigatório em solicitar_visita");
+      if (!lead.preferred_date?.trim())
+        errors.push("preferred_date obrigatório em solicitar_visita");
+      else if (!/^\d{4}-\d{2}-\d{2}$/.test(lead.preferred_date))
+        errors.push("preferred_date deve estar em YYYY-MM-DD");
+      payload.property_code = lead.property_code;
+      payload.preferred_date = lead.preferred_date;
+      // message é opcional: só inclui quando presente
+      if (lead.message?.trim()) payload.message = lead.message;
+      break;
+    case "simular_financiamento":
+      if (!lead.property_code?.trim())
+        errors.push("property_code obrigatório em simular_financiamento");
+      if (!lead.property_price?.trim())
+        errors.push("property_price obrigatório em simular_financiamento");
+      if (!lead.entry_value?.trim())
+        errors.push("entry_value obrigatório em simular_financiamento");
+      payload.property_code = lead.property_code;
+      payload.property_price = lead.property_price;
+      payload.entry_value = lead.entry_value;
+      // message é opcional: só inclui quando presente
+      if (lead.message?.trim()) payload.message = lead.message;
       break;
   }
 

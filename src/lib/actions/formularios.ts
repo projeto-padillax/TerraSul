@@ -27,6 +27,9 @@ const formularioServerSchema = z.object({
   condominio: z.string().optional(),
   assunto: z.string().optional(),
   valorDesejado: z.number().positive().optional(),
+  // valor do imóvel exibido no modal de financiamento (property_price no CRM).
+  // Usado apenas no payload do webhook; não é persistido.
+  valorImovel: z.number().positive().optional(),
 });
 
 const idsSchema = z.array(z.cuid());
@@ -134,9 +137,40 @@ function buildCrmLead(input: FormularioInput, submissionId: string): CrmLead | n
         subject: input.assunto ?? "",
         message: input.mensagem ?? "",
       };
+    case "VISITA":
+      return {
+        ...base,
+        source: "solicitar_visita",
+        property_code: input.codigoImovel ?? "",
+        preferred_date: input.DataVisita ? toPreferredDate(input.DataVisita) : "",
+        ...(input.mensagem?.trim() ? { message: input.mensagem } : {}),
+      };
+    case "FINANCIAMENTO":
+      return {
+        ...base,
+        source: "simular_financiamento",
+        property_code: input.codigoImovel ?? "",
+        property_price: formatBRL(input.valorImovel),
+        entry_value: formatBRL(input.valorDesejado),
+        ...(input.mensagem?.trim() ? { message: input.mensagem } : {}),
+      };
     default:
       return null;
   }
+}
+
+/** Formata a data (fuso do site, Brasil) como YYYY-MM-DD, independente do fuso do servidor. */
+function toPreferredDate(d: Date): string {
+  // en-CA usa o formato ISO YYYY-MM-DD.
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+  }).format(d);
+}
+
+/** Formata um número como "R$ 2.465.000" (vazio quando ausente). */
+function formatBRL(v?: number): string {
+  if (v === undefined || v === null) return "";
+  return `R$ ${v.toLocaleString("pt-BR")}`;
 }
 
 export async function deleteFormularios(ids: string[]): Promise<void> {

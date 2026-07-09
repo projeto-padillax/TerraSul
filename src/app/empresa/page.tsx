@@ -21,9 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function PaginaDinamicaSecao() {
   const secao = await getSecao(2);
-  const sobreNos = await getSobreNos();
-
   if (!secao) return null;
+
+  // Conteúdo da página vem da própria Seção (mesmo padrão de /contato e
+  // /anuncie-seu-imovel). Mantém fallback para o "Sobre nós" da configuração
+  // enquanto o campo "Texto da Página" da Seção 2 não estiver preenchido.
+  const textoPagina = secao.textoPagina?.trim();
+  const sobreNos = textoPagina ? "" : (await getSobreNos())?.trim();
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -72,7 +76,9 @@ export default async function PaginaDinamicaSecao() {
             </h1>
 
             <p className="text-lg text-[#444] leading-relaxed whitespace-pre-line">
-              {sobreNos?.trim()?.length ? (
+              {textoPagina ? (
+                textoPagina
+              ) : sobreNos?.length ? (
                 <span dangerouslySetInnerHTML={{ __html: sobreNos }} />
               ) : (
                 "Conteúdo indisponível no momento."
