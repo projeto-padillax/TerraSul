@@ -22,11 +22,13 @@ interface CrmLeadBase {
 export interface WhatsappLead extends CrmLeadBase {
   source: "whatsapp_btn";
   property_code?: string;
+  message?: string;
 }
 
 export interface MaisInfoLead extends CrmLeadBase {
   source: "mais_info";
   property_code: string;
+  message?: string;
 }
 
 export interface ContatoLead extends CrmLeadBase {
@@ -149,10 +151,14 @@ function buildPayload(lead: CrmLead): Record<string, unknown> {
     case "mais_info":
       if (!lead.property_code?.trim()) errors.push("property_code obrigatório em mais_info");
       payload.property_code = lead.property_code;
+      // message é opcional: só inclui quando presente
+      if (lead.message?.trim()) payload.message = lead.message;
       break;
     case "whatsapp_btn":
       // opcional: só inclui quando presente (botão dentro da página do imóvel)
       if (lead.property_code?.trim()) payload.property_code = lead.property_code;
+      // message é opcional: só inclui quando presente
+      if (lead.message?.trim()) payload.message = lead.message;
       break;
     case "contato":
       if (!lead.subject?.trim()) errors.push("subject obrigatório em contato");

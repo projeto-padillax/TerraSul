@@ -123,12 +123,14 @@ function buildCrmLead(input: FormularioInput, submissionId: string): CrmLead | n
         source: "whatsapp_btn",
         // opcional: só no botão dentro da página de um imóvel
         ...(input.codigoImovel ? { property_code: input.codigoImovel } : {}),
+        ...(input.mensagem?.trim() ? { message: input.mensagem } : {}),
       };
     case "INFORMACOES":
       return {
         ...base,
         source: "mais_info",
         property_code: input.codigoImovel ?? "",
+        ...(input.mensagem?.trim() ? { message: input.mensagem } : {}),
       };
     case "CONTATO":
       return {
