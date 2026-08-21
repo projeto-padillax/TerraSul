@@ -235,7 +235,7 @@ export function HeroSection(banner: HeroSectionProps) {
             {/* H1 visível para SEO */}
             <Link
               href={banner.url ?? ""}
-              className="text-4xl md:text-5xl font-semibold text-white mb-4 leading-tight font-[Montserrat, sans-serif]"
+              className="text-[1.9125rem] md:text-5xl font-semibold text-white mb-4 leading-tight font-[Montserrat, sans-serif]"
             >
               <h1 className="inline">
                 {banner.titulo ||
@@ -244,7 +244,7 @@ export function HeroSection(banner: HeroSectionProps) {
             </Link>
 
             {banner.subtitulo && (
-              <p className="text-xl text-white mb-8 md:mb-[160px]">
+              <p className="text-[1.0625rem] md:text-xl text-white mb-8 md:mb-[160px]">
                 {banner.subtitulo}
               </p>
             )}
@@ -252,36 +252,36 @@ export function HeroSection(banner: HeroSectionProps) {
             {/* Search Form */}
             <div className="bg-white rounded-lg p-4 shadow-lg w-full lg:max-w-4xl mt-4 md:w-fit">
               <div className="flex flex-col md:flex-row w-full justify-start items-center md:gap-2">
-                <div className="flex flex-col gap-y-4 w-full md:grid md:grid-cols-4 md:gap-2">
+                <div className="grid grid-cols-2 gap-x-1 gap-y-2 w-full md:grid-cols-4 md:gap-2">
                   <Button
                     variant="outline"
                     onClick={() => openModal("type")}
-                    className="justify-between bg-transparent font-normal lg:h-12 border-0 shadow-none cursor-pointer"
+                    className="justify-between bg-transparent font-normal lg:h-12 border-0 shadow-none cursor-pointer min-w-0 px-2 md:px-4"
                     aria-label="Selecionar tipo de imóvel"
                   >
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-black">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="font-medium text-black truncate">
                         {getTypeDisplayText()}
                       </span>
                     </div>
-                    <ChevronDown className="h-4 w-4 text-muted-foreground opacity-50" />
+                    <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground opacity-50" />
                   </Button>
 
                   <Button
                     variant="outline"
                     onClick={() => openModal("location")}
-                    className="justify-between bg-transparent font-normal lg:h-12 border-0 shadow-none cursor-pointer"
+                    className="justify-between bg-transparent font-normal lg:h-12 border-0 shadow-none cursor-pointer min-w-0 px-2 md:px-4"
                     aria-label="Selecionar localização"
                   >
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-black">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="font-medium text-black truncate">
                         Localização
                         {searchData.locations.length > 0
                           ? `(${searchData.locations.length})`
                           : ""}
                       </span>
                     </div>
-                    <ChevronDown className="h-4 w-4 text-muted-foreground opacity-50" />
+                    <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground opacity-50" />
                   </Button>
 
                   <Select
@@ -294,7 +294,7 @@ export function HeroSection(banner: HeroSectionProps) {
                     }
                   >
                     <SelectTrigger
-                      className="lg:data-[size=default]:h-12 w-full border-0 shadow-none cursor-pointer font-medium"
+                      className="lg:data-[size=default]:h-12 w-full border-0 shadow-none cursor-pointer font-medium px-2 md:px-3"
                       title="Valor de"
                     >
                       <SelectValue placeholder="Valor de" />
@@ -333,7 +333,7 @@ export function HeroSection(banner: HeroSectionProps) {
                     }
                   >
                     <SelectTrigger
-                      className="lg:data-[size=default]:h-12 w-full border-0 shadow-none cursor-pointer font-medium"
+                      className="lg:data-[size=default]:h-12 w-full border-0 shadow-none cursor-pointer font-medium px-2 md:px-3"
                       title="Valor até"
                     >
                       <SelectValue placeholder="Valor até" />
