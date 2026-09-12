@@ -10,6 +10,10 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 ENV NODE_ENV=production
 
+# NEXT_PUBLIC_* is baked into the client bundle at build time, not read at runtime.
+ARG NEXT_PUBLIC_MAPS_API_KEY
+ENV NEXT_PUBLIC_MAPS_API_KEY=$NEXT_PUBLIC_MAPS_API_KEY
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
